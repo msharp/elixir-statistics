@@ -82,4 +82,31 @@ defmodule Math do
     :math.sqrt(num)
   end
 
+
+  @doc """
+  Calculate variance from a list of numbers
+
+  ## Examples
+
+    iex> Math.variance([1,2,3,4])
+    1.25
+  """
+  def variance(list) do
+    mean = mean(list)
+    squared_diffs = Enum.map(list, fn(x) -> (mean - x) * (mean - x) end)
+    sum(squared_diffs) / Enum.count(list)
+  end
+
+  @doc """
+  Calculate the standard deviation of a list
+
+  ## Examples
+
+    iex> Math.stdev([1,2])
+    0.5
+  """
+  def stdev(list) do
+    sqrt(variance(list))
+  end
+
 end
