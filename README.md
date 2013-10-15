@@ -1,3 +1,3 @@
 # Math
 
-** TODO: Add description **
+Implementing some math (particularly stats) functions.
