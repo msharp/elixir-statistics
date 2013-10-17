@@ -8,7 +8,7 @@ defmodule Math do
   end
 
   @moduledoc """
-  Provides som helpful mathematical functions
+  Provides some helpful mathematical/statistics functions
   """
   
   @doc """
@@ -16,8 +16,9 @@ defmodule Math do
 
   ## Examples
 
-    iex> Math.sum([1,2,3])
-    6
+      iex> Math.sum([1,2,3])
+      6
+
   """
   def sum(list) do
     List.foldl(list, 0, fn (x, acc) -> x + acc end)
@@ -28,8 +29,9 @@ defmodule Math do
 
   ## Examples
     
-    iex> Math.mean([1,2,3])
-    2
+      iex> Math.mean([1,2,3])
+      2
+
   """
   def mean(list) do
     sum(list) / Enum.count(list)
@@ -40,10 +42,10 @@ defmodule Math do
 
   ## Examples
   
-    iex> Math.median([1,2,3])
-    2
-    iex> Math.median([1,2,3,4])
-    2.5
+      iex> Math.median([1,2,3])
+      2
+      iex> Math.median([1,2,3,4])
+      2.5
 
   """
   def median(list) do
@@ -77,6 +79,12 @@ defmodule Math do
 
   @doc """
   Get square root from Erlang
+
+  ## Examples
+
+      iex> Math.sqrt(64)
+      8.0
+
   """
   def sqrt(num) do
     :math.sqrt(num)
@@ -88,8 +96,9 @@ defmodule Math do
 
   ## Examples
 
-    iex> Math.variance([1,2,3,4])
-    1.25
+      iex> Math.variance([1,2,3,4])
+      1.25
+
   """
   def variance(list) do
     mean = mean(list)
@@ -102,8 +111,9 @@ defmodule Math do
 
   ## Examples
 
-    iex> Math.stdev([1,2])
-    0.5
+      iex> Math.stdev([1,2])
+      0.5
+
   """
   def stdev(list) do
     sqrt(variance(list))
