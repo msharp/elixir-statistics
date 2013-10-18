@@ -75,7 +75,75 @@ defmodule Math do
     pos = pos + 1
     median(tail, middle, pos, [head])
   end
-  
+
+  @doc """
+  Get the minimum value from a list
+
+  ## Examples
+      
+      iex> Math.min([3,4,2,1,2,3,5,2])
+      1
+
+  """
+  def min(list) do
+    hd(Enum.sort(list))
+  end
+
+  @doc """
+  Get the maximum value from a list
+
+  ## Examples
+      
+      iex> Math.max([3,4,2,1,2,3,5,2])
+      5
+
+  """
+  def max(list) do
+    l = Enum.sort(list)
+    hd(Enum.reverse(l))
+  end
+
+  @doc """
+  Get the quartile cutoff value from a list
+  """
+  def quartile(list,quartile) when quartile == :first do
+    {l,_} = split_list(list)
+    median(l)
+  end
+  def quartile(list,quartile) when quartile == :third do
+    {_,l} = split_list(list)
+    median(l)
+  end
+
+  @doc """
+  Split a list into two equal lists.
+  Needed for getting the quartiles.
+  """
+  defp split_list(list) do
+    lst = Enum.sort(list)
+    split_list(lst,[],[])
+  end
+  defp split_list([],lower,upper) do
+    {lower,upper}
+  end
+  defp split_list([h|t],[],[]) do
+    lower = [h]
+    split_list(t,lower,[])
+  end
+  defp split_list([h|t],lower,upper) do
+    cond do
+      Enum.count(lower) < Enum.count(t) ->
+        lower = [h|lower]
+      Enum.count(lower) == Enum.count(t) ->
+        lower = [h|lower]
+        upper = [h]
+      upper == [] ->
+        upper = [h]
+      true ->
+        upper = [h|upper]
+    end
+    split_list(t,lower,upper)
+  end
 
   @doc """
   Get square root from Erlang

@@ -15,6 +15,24 @@ defmodule MathTest do
     assert Math.median([1,2,3,4,5,6,7,8]) == 4.5
   end
 
+  test "get maximum" do
+    assert Math.max([2,4,3,5,4,6,99,1,7,3,6]) == 99
+  end
+
+  test "get minimum" do
+    assert Math.min([23,45,34,53,44,65,99,1,74,32,69]) == 1
+  end
+
+  test "get first quartile point" do
+    assert Math.quartile([1,2,3,4,5,5,6,7,8,9],:first) == 3
+    assert Math.quartile([1,2,3,4,5,6,7,8,9],:first) == 3
+  end
+
+  test "get third quartile point" do
+    assert Math.quartile([1,2,3,4,5,5,6,7,8,9],:third) == 7
+    assert Math.quartile([1,2,3,4,5,6,7,8,9],:third) == 7
+  end
+
   test "calculate square root" do
     assert Math.sqrt(64) == 8
   end
