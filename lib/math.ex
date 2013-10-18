@@ -54,26 +54,22 @@ defmodule Math do
     median(sorted, middle, 0, [])
   end
   # for when we haven't reached the mid-point(s)
-  defp median(list, middle, pos, acc) when pos < :erlang.trunc(middle) do
-    [_|tail] = list
+  defp median([_|t], middle, pos, acc) when pos < :erlang.trunc(middle) do
     pos = pos + 1
-    median(tail, middle, pos, acc)
+    median(t, middle, pos, acc)
   end
   # for the case when there is a definite middle point
-  defp median(list, middle, pos, _) when pos == middle do
-    [head|_] = list
-    head
+  defp median([h|_], middle, pos, _) when pos == middle do
+    h
   end
   # we've passed the midpoint for a two-item median
-  defp median(list, middle, pos, acc) when pos > middle do
-    [head|_] = list
-    mean([head|acc])
+  defp median([h|_], middle, pos, acc) when pos > middle do
+    mean([h|acc])
   end
   # we've reached the first of the two middle values
-  defp median(list, middle, pos, _) when pos == :erlang.trunc(middle) do
-    [head|tail] = list
+  defp median([h|t], middle, pos, _) when pos == :erlang.trunc(middle) do
     pos = pos + 1
-    median(tail, middle, pos, [head])
+    median(t, middle, pos, [h])
   end
 
   @doc """
