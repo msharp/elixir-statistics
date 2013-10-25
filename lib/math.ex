@@ -112,6 +112,20 @@ defmodule Math do
   end
 
   @doc """
+  Get range of data
+  """
+  def range(list) do
+    max(list) - min(list)
+  end
+
+  @doc """
+  Calculate the inter-quartile range
+  """
+  def iqr(list) do
+    quartile(list,:third) - quartile(list,:first)
+  end
+
+  @doc """
   Split a list into two equal lists.
   Needed for getting the quartiles.
   """

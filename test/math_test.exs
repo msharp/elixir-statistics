@@ -33,6 +33,15 @@ defmodule MathTest do
     assert Math.quartile([1,2,3,4,5,6,7,8,9],:third) == 7
   end
 
+  test "get range" do
+    assert Math.range([1,2,3,4,5,6,7,8,9]) == 8
+  end
+
+  test "get inter-quartile range" do
+    assert Math.iqr([1,2,3,4,5,6,7,8,9]) == 4
+  end
+
+
   test "calculate square root" do
     assert Math.sqrt(64) == 8
   end
