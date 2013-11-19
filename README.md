@@ -1,3 +1,3 @@
-# Math
+# Elixir Statistics
 
-Implementing some math (particularly stats) functions.
+Implementing some stats functions in [Elixir](https://github.com/elixir-lang/elixir) (just for fun).

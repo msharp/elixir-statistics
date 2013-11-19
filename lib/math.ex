@@ -1,10 +1,10 @@
-defmodule Math do
+defmodule Statistics do
   use Application.Behaviour
 
   # See http://elixir-lang.org/docs/stable/Application.Behaviour.html
   # for more information on OTP Applications
   def start(_type, _args) do
-    Math.Supervisor.start_link
+    Statistics.Supervisor.start_link
   end
 
   @moduledoc """
@@ -16,7 +16,7 @@ defmodule Math do
 
   ## Examples
 
-      iex> Math.sum([1,2,3])
+      iex> Statistics.sum([1,2,3])
       6
 
   """
@@ -29,7 +29,7 @@ defmodule Math do
 
   ## Examples
     
-      iex> Math.mean([1,2,3])
+      iex> Statistics.mean([1,2,3])
       2
 
   """
@@ -42,9 +42,9 @@ defmodule Math do
 
   ## Examples
   
-      iex> Math.median([1,2,3])
+      iex> Statistics.median([1,2,3])
       2
-      iex> Math.median([1,2,3,4])
+      iex> Statistics.median([1,2,3,4])
       2.5
 
   """
@@ -77,7 +77,7 @@ defmodule Math do
 
   ## Examples
       
-      iex> Math.min([3,4,2,1,2,3,5,2])
+      iex> Statistics.min([3,4,2,1,2,3,5,2])
       1
 
   """
@@ -90,7 +90,7 @@ defmodule Math do
 
   ## Examples
       
-      iex> Math.max([3,4,2,1,2,3,5,2])
+      iex> Statistics.max([3,4,2,1,2,3,5,2])
       5
 
   """
@@ -160,7 +160,7 @@ defmodule Math do
 
   ## Examples
 
-      iex> Math.sqrt(64)
+      iex> Statistics.sqrt(64)
       8.0
 
   """
@@ -174,7 +174,7 @@ defmodule Math do
 
   ## Examples
 
-      iex> Math.variance([1,2,3,4])
+      iex> Statistics.variance([1,2,3,4])
       1.25
 
   """
@@ -189,7 +189,7 @@ defmodule Math do
 
   ## Examples
 
-      iex> Math.stdev([1,2])
+      iex> Statistics.stdev([1,2])
       0.5
 
   """

@@ -1,4 +1,4 @@
-defmodule Math.Supervisor do
+defmodule Statistics.Supervisor do
   use Supervisor.Behaviour
 
   def start_link do
@@ -8,7 +8,7 @@ defmodule Math.Supervisor do
   def init([]) do
     children = [
       # Define workers and child supervisors to be supervised
-      # worker(Math.Worker, [])
+      # worker(Statistics.Worker, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/Supervisor.Behaviour.html

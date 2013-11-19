@@ -1,8 +1,8 @@
-defmodule Math.Mixfile do
+defmodule Statistics.Mixfile do
   use Mix.Project
 
   def project do
-    [ app: :math,
+    [ app: :statistics,
       version: "0.0.1",
       elixir: "~> 0.10.3",
       deps: deps ]
@@ -10,7 +10,7 @@ defmodule Math.Mixfile do
 
   # Configuration for the OTP application
   def application do
-    [mod: { Math, [] }]
+    [mod: { Statistics, [] }]
   end
 
   # Returns the list of dependencies in the format:
