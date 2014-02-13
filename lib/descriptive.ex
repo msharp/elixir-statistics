@@ -16,7 +16,7 @@ defmodule Statistics.Descriptive do
 
   ## Examples
 
-      iex> Statistics.sum([1,2,3])
+      iex> Statistics.Descriptive.sum([1,2,3])
       6
 
   """
@@ -29,7 +29,7 @@ defmodule Statistics.Descriptive do
 
   ## Examples
     
-      iex> Statistics.mean([1,2,3])
+      iex> Statistics.Descriptive.mean([1,2,3])
       2
 
   """
@@ -42,9 +42,9 @@ defmodule Statistics.Descriptive do
 
   ## Examples
   
-      iex> Statistics.median([1,2,3])
+      iex> Statistics.Descriptive.median([1,2,3])
       2
-      iex> Statistics.median([1,2,3,4])
+      iex> Statistics.Descriptive.median([1,2,3,4])
       2.5
 
   """
@@ -73,11 +73,51 @@ defmodule Statistics.Descriptive do
   end
 
   @doc """
+  Get the mode
+  
+  ## Examples
+
+    iex> Statistics.Descriptive.mode([1,2,3,2,4,5,2,6,7,2,8,9]) 
+    2
+
+  """
+  def mode(list) do
+    mode(list,{0,0})
+  end
+  defp mode([],champ) do
+    {val,_} = champ
+    val
+  end
+  defp mode([h|t],champ) do
+    {count,list} = mode_count_and_remove(h,t)
+    {_,champ_count} = champ
+    {_,new_count} = count
+    if new_count > champ_count do
+      champ = count
+    end
+    mode(list,champ)
+  end
+  defp mode_count_and_remove(val,list) do
+    {count,new_list} = mode_count_and_remove(val,1,list,[])
+    {{val,count},new_list}
+  end
+  defp mode_count_and_remove(val, count, [h|t], new_list) do
+    if val == h do
+      mode_count_and_remove(val,count+1,t,new_list)
+    else
+      mode_count_and_remove(val,count,t,[h|new_list])
+    end
+  end
+  defp mode_count_and_remove(_, count, [], new_list) do
+    {count,new_list}
+  end
+
+  @doc """
   Get the minimum value from a list
 
   ## Examples
       
-      iex> Statistics.min([3,4,2,1,2,3,5,2])
+      iex> Statistics.Descriptive.min([3,4,2,1,2,3,5,2])
       1
 
   """
@@ -90,7 +130,7 @@ defmodule Statistics.Descriptive do
 
   ## Examples
       
-      iex> Statistics.max([3,4,2,1,2,3,5,2])
+      iex> Statistics.Descriptive.max([3,4,2,1,2,3,5,2])
       5
 
   """
@@ -160,7 +200,7 @@ defmodule Statistics.Descriptive do
 
   ## Examples
 
-      iex> Statistics.sqrt(64)
+      iex> Statistics.Descriptive.sqrt(64)
       8.0
 
   """
@@ -174,7 +214,7 @@ defmodule Statistics.Descriptive do
 
   ## Examples
 
-      iex> Statistics.variance([1,2,3,4])
+      iex> Statistics.Descriptive.variance([1,2,3,4])
       1.25
 
   """
@@ -189,7 +229,7 @@ defmodule Statistics.Descriptive do
 
   ## Examples
 
-      iex> Statistics.stdev([1,2])
+      iex> Statistics.Descriptive.stdev([1,2])
       0.5
 
   """

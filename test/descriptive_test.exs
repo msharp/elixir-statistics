@@ -10,6 +10,10 @@ defmodule DescriptiveTest do
     assert Statistics.Descriptive.mean([1,2,3,4,5,6,7,8,9]) == 5
   end
 
+  test "get mode" do 
+    assert Statistics.Descriptive.mode([1,2,3,2,4,5,2,6,7,2,8,9]) == 2
+  end
+
   test "calculate median" do
     assert Statistics.Descriptive.median([1,2,3,4,5,6,7,8,9]) == 5
     assert Statistics.Descriptive.median([1,2,3,4,5,6,7,8]) == 4.5
