@@ -1,4 +1,4 @@
-defmodule Statistics do
+defmodule Statistics.Descriptive do
   use Application.Behaviour
 
   # See http://elixir-lang.org/docs/stable/Application.Behaviour.html
