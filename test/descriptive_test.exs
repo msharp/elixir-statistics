@@ -58,12 +58,21 @@ defmodule DescriptiveTest do
     assert Statistics.Descriptive.stdev([4,3,3,4,5,6,7,6,5]) == 1.314684396244359
   end
 
+  # moment/skew/kurtosis numbers match python/scipy
 
   test "calculate moment about the mean" do
     a = [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3]
     assert Statistics.Descriptive.moment(a,1) == 0.0
     assert Statistics.Descriptive.moment(a,2) == 5.2266666666666675 
     assert Statistics.Descriptive.moment(a,3) == -1.3440000000000025
+  end
+
+  test "calculate skewness" do
+    assert Statistics.Descriptive.skew([1,2,3,2,1]) == 0.3436215967445454
+  end
+
+  test "calculate kurtosis (fisher)" do
+    assert Statistics.Descriptive.kurtosis([1,2,3,2,1]) == -1.1530612244897964
   end
 
 end

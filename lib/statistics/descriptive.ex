@@ -169,7 +169,7 @@ defmodule Statistics.Descriptive do
   Split a list into two equal lists.
   Needed for getting the quartiles.
   """
-  defp split_list(list) do
+  def split_list(list) do
     lst = Enum.sort(list)
     split_list(lst,[],[])
   end
@@ -260,6 +260,43 @@ defmodule Statistics.Descriptive do
       s = Enum.map(list, fn(x) -> :math.pow((x - mn), moment) end)
       mean(s)
     end
+  end
+
+  @doc """
+  Computes the skewness of a data set.
+
+  For normally distributed data, the skewness should be about 0. A skewness
+  value > 0 means that there is more weight in the left tail of the
+  distribution.
+
+  ## Examples 
+
+    iex> Statistics.Descriptive.skew([1,2,3,2,1])  
+    0.3436215967445454
+
+  """
+  def skew(list) do
+    m2 = moment(list, 2)
+    m3 = moment(list, 3)
+    m3 / :math.pow(m2, 1.5)
+  end
+
+  @doc """
+  Computes the kurtosis (Fisher) of a list.
+
+  Kurtosis is the fourth central moment divided by the square of the variance.
+
+  ## Examples
+
+    iex> Statistics.Descriptive.kurtosis([1,2,3,2,1]) 
+    -1.1530612244897964
+    
+  """
+  def kurtosis(list) do
+    m2 = moment(list, 2)
+    m4 = moment(list, 4)
+    p = m4 / :math.pow(m2, 2.0) # pearson 
+    p - 3                       # fisher
   end
 
 end
