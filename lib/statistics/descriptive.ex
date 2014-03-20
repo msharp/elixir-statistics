@@ -237,4 +237,29 @@ defmodule Statistics.Descriptive do
     sqrt(variance(list))
   end
 
+  @doc  """
+  Calculates the nth moment about the mean for a sample.
+
+  Generally used to calculate coefficients of skewness and  kurtosis.
+  Returns the n-th central moment as a float
+  The denominator for the moment calculation is the number of
+  observations, no degrees of freedom correction is done.
+
+  ## Examples
+
+      iex> Statistics.Descriptive.moment([1,2,3,4,5,6,7,8,9,8,7,6,5,4,3],3) 
+      -1.3440000000000025
+
+  """
+  def moment(list, moment \\ 1) do
+    if moment == 1 do 
+      # By definition the first moment about the mean is 0.
+      0.0
+    else
+      mn = mean(list)
+      s = Enum.map(list, fn(x) -> :math.pow((x - mn), moment) end)
+      mean(s)
+    end
+  end
+
 end
