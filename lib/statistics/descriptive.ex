@@ -77,8 +77,8 @@ defmodule Statistics.Descriptive do
   
   ## Examples
 
-    iex> Statistics.Descriptive.mode([1,2,3,2,4,5,2,6,7,2,8,9]) 
-    2
+      iex> Statistics.Descriptive.mode([1,2,3,2,4,5,2,6,7,2,8,9]) 
+      2
 
   """
   def mode(list) do
@@ -271,8 +271,8 @@ defmodule Statistics.Descriptive do
 
   ## Examples 
 
-    iex> Statistics.Descriptive.skew([1,2,3,2,1])  
-    0.3436215967445454
+      iex> Statistics.Descriptive.skew([1,2,3,2,1])  
+      0.3436215967445454
 
   """
   def skew(list) do
@@ -288,8 +288,8 @@ defmodule Statistics.Descriptive do
 
   ## Examples
 
-    iex> Statistics.Descriptive.kurtosis([1,2,3,2,1]) 
-    -1.1530612244897964
+      iex> Statistics.Descriptive.kurtosis([1,2,3,2,1]) 
+      -1.1530612244897964
     
   """
   def kurtosis(list) do
