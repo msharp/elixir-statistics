@@ -68,6 +68,10 @@ defmodule DescriptiveTest do
     assert Statistics.Descriptive.harmonic_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) == 4.5204836768674568
   end
 
+  test "calculate geometric mean" do
+    assert Statistics.Descriptive.geometric_mean([1,2,3,4,5,6]) == 2.9937951655239088
+  end
+
   # moment/skew/kurtosis numbers match python/scipy
 
   test "calculate moment about the mean" do

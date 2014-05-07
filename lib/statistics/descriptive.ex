@@ -278,6 +278,22 @@ defmodule Statistics.Descriptive do
     Enum.count(list) / Enum.sum(r)
   end
 
+  @doc """
+  Calculate the geometric mean of a list
+
+  Geometric mean is the nth root of the product of n values
+
+  ## Examples
+
+      iex> Statistics.Descriptive.geometric_mean([1,2,3]) 
+      1.8171205928321397
+
+  """
+  def geometric_mean(list) do
+    p = List.foldl(list, 1, fn(x, acc) -> acc * x end)
+    :math.pow(p, (1/Enum.count(list)))
+  end
+
   @doc  """
   Calculates the nth moment about the mean for a sample.
 
