@@ -261,6 +261,23 @@ defmodule Statistics.Descriptive do
     mean(list)
   end
 
+  @doc """
+  Calculates the harmonic mean from a list
+
+  Harmonic mean is the number of values divided by 
+  the sum of the reciprocal of all the values.
+
+  ## Examples
+  
+      iex> Statistics.Descriptive.harmonic_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) 
+      4.5204836768674568
+
+  """
+  def harmonic_mean(list) do
+    r = Enum.map(list, fn(x) -> 1/x end)
+    Enum.count(list) / Enum.sum(r)
+  end
+
   @doc  """
   Calculates the nth moment about the mean for a sample.
 

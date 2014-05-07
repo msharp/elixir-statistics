@@ -64,6 +64,10 @@ defmodule DescriptiveTest do
     assert Statistics.Descriptive.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15],:iqr) == 7.3
   end
 
+  test "calculate harmonic mean" do
+    assert Statistics.Descriptive.harmonic_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) == 4.5204836768674568
+  end
+
   # moment/skew/kurtosis numbers match python/scipy
 
   test "calculate moment about the mean" do
