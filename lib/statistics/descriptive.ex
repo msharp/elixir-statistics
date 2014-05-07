@@ -237,6 +237,30 @@ defmodule Statistics.Descriptive do
     sqrt(variance(list))
   end
 
+  @doc """
+  Calculate the trimmed mean of a list. 
+  Can specify cutoff values as a tuple, 
+  or simply choose the IQR min/max as the cutoffs
+
+  ## Examples
+  
+    iex> Statistics.Descriptive.trimmed_mean([1,2,3],{1,3})
+    2
+
+  """
+  def trimmed_mean(list, {low,high}) do
+    tl = Enum.reject(list, fn(x) -> x < low or x > high end)
+    mean(tl)
+  end
+  def trimmed_mean(list, range) when range == :iqr do
+    q1 = quartile(list,:first)
+    q3 = quartile(list,:third)
+    trimmed_mean(list,{q1,q3})
+  end
+  def trimmed_mean(list) do
+    mean(list)
+  end
+
   @doc  """
   Calculates the nth moment about the mean for a sample.
 

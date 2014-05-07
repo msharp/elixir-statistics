@@ -58,6 +58,12 @@ defmodule DescriptiveTest do
     assert Statistics.Descriptive.stdev([4,3,3,4,5,6,7,6,5]) == 1.314684396244359
   end
 
+  test "calculate trimmed mean" do 
+    assert Statistics.Descriptive.trimmed_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) == 8.0 # not trimmed
+    assert Statistics.Descriptive.trimmed_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], {4,9}) == 6.5
+    assert Statistics.Descriptive.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15],:iqr) == 7.3
+  end
+
   # moment/skew/kurtosis numbers match python/scipy
 
   test "calculate moment about the mean" do
