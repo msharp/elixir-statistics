@@ -4,7 +4,9 @@ defmodule Statistics.Mixfile do
   def project do
     [ app: :statistics,
       version: File.read!("VERSION") |> String.strip,
-      elixir: "~> 0.13.1",
+      elixir: "~> 0.13.2",
+      description: description,
+      package: package,
       deps: deps ]
   end
 
@@ -13,9 +15,23 @@ defmodule Statistics.Mixfile do
     [mod: { Statistics, [] }]
   end
 
-  # Returns the list of dependencies in the format:
-  # { :foobar, "~> 0.1", git: "https://github.com/elixir-lang/foobar.git" }
   defp deps do
-     [ { :ex_doc, github: "elixir-lang/ex_doc" } ]
+     [ { :ex_doc, github: "elixir-lang/ex_doc", only: :dev} ]
   end
+
+  defp description do
+    """
+    A set of statistics functions
+    """
+  end
+
+  defp package do
+    [
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      contributors: ["Max Sharples"],
+      licenses: ["Apache 2.0"],
+      links: %{"GitHub" => "https://github.com/msharp/elixir-statistics"}
+    ]
+  end
+
 end
