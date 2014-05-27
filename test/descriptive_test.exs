@@ -37,6 +37,14 @@ defmodule DescriptiveTest do
     assert Statistics.Descriptive.quartile([1,2,3,4,5,6,7,8,9],:third) == 7
   end
 
+  test "get nth percentile score" do
+    a = [1,2,3,4,5,6,7,8,9]
+    assert Statistics.Descriptive.percentile(a,0) == 1
+    assert Statistics.Descriptive.percentile(a,20) == 2.8
+    assert Statistics.Descriptive.percentile(a,80) == 8.2
+    assert Statistics.Descriptive.percentile(a,100) == 9
+  end
+
   test "get range" do
     assert Statistics.Descriptive.range([1,2,3,4,5,6,7,8,9]) == 8
   end

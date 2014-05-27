@@ -141,6 +141,16 @@ defmodule Statistics.Descriptive do
 
   @doc """
   Get the quartile cutoff value from a list
+
+  responds to only first and third quartile.
+
+  ## Examples
+
+      iex>  Statistics.Descriptive.quartile([1,2,3,4,5,6,7,8,9],:first) 
+      3
+      iex>  Statistics.Descriptive.quartile([1,2,3,4,5,6,7,8,9],:third)
+      7
+
   """
   def quartile(list,quartile) when quartile == :first do
     {l,_} = split_list(list)
@@ -149,6 +159,31 @@ defmodule Statistics.Descriptive do
   def quartile(list,quartile) when quartile == :third do
     {_,l} = split_list(list)
     median(l)
+  end
+
+  @doc """
+  Get the nth percentile cutoff from a list
+
+  ## Examples
+  
+      iex> Statistics.Descriptive.percentile([1,2,3,4,5,6,7,8,9],80)
+      8.2
+
+  """
+  def percentile(list,n) when is_number(n) do
+    case n do
+      0 ->
+        Enum.min(list)
+      100 ->
+        Enum.max(list)
+      _ ->
+        l = Enum.sort(list)
+        rank = n/100.0 * Enum.count(list)
+        floor_rank = Float.floor(rank)
+        {:ok,lower} = Enum.fetch(l,floor_rank)
+        {:ok,upper} = Enum.fetch(l,floor_rank+1)
+        lower + (upper - lower) * (rank - floor_rank)
+    end
   end
 
   @doc """
