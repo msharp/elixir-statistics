@@ -178,11 +178,11 @@ defmodule Statistics.Descriptive do
         Enum.max(list)
       _ ->
         l = Enum.sort(list)
-        rank = n/100.0 * Enum.count(list)
-        floor_rank = Float.floor(rank)
-        {:ok,lower} = Enum.fetch(l,floor_rank)
-        {:ok,upper} = Enum.fetch(l,floor_rank+1)
-        lower + (upper - lower) * (rank - floor_rank)
+        rank = n/100.0 * (Enum.count(list)-1)
+        f_rank = Float.floor(rank)
+        {:ok,lower} = Enum.fetch(l,f_rank)
+        {:ok,upper} = Enum.fetch(l,f_rank+1)
+        lower + (upper - lower) * (rank - f_rank)
     end
   end
 
