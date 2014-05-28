@@ -1,5 +1,6 @@
 defmodule DescriptiveTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+  doctest Statistics.Descriptive 
 
   test "sum a list" do
     assert Statistics.Descriptive.sum([1,2,3,4,5,6,7,8,9]) == 45

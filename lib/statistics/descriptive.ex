@@ -30,7 +30,7 @@ defmodule Statistics.Descriptive do
   ## Examples
     
       iex> Statistics.Descriptive.mean([1,2,3])
-      2
+      2.0
 
   """
   def mean(list) do
@@ -167,7 +167,9 @@ defmodule Statistics.Descriptive do
   ## Examples
   
       iex> Statistics.Descriptive.percentile([1,2,3,4,5,6,7,8,9],80)
-      8.2
+      7.4
+      iex> Statistics.Descriptive.percentile([1,2,3,4,5,6,7,8,9],100)
+      9
 
   """
   def percentile(list,n) when is_number(n) do
@@ -280,7 +282,7 @@ defmodule Statistics.Descriptive do
   ## Examples
   
     iex> Statistics.Descriptive.trimmed_mean([1,2,3],{1,3})
-    2
+    2.0
 
   """
   def trimmed_mean(list, {low,high}) do
