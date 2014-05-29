@@ -54,11 +54,6 @@ defmodule DescriptiveTest do
     assert Statistics.Descriptive.iqr([1,2,3,4,5,6,7,8,9]) == 4
   end
 
-
-  test "calculate square root" do
-    assert Statistics.Descriptive.sqrt(64) == 8
-  end
-
   test "calculate variance" do
     assert Statistics.Descriptive.variance([4,3,3,4,5,6,7,6,5]) == 1.7283950617283952
   end

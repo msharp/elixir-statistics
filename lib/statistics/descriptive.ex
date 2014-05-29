@@ -14,14 +14,10 @@ defmodule Statistics.Descriptive do
   @doc """
   Sum the contents of a list
 
-  ## Examples
-
-      iex> Statistics.Descriptive.sum([1,2,3])
-      6
-
+  Calls Enum.sum/1
   """
   def sum(list) do
-    List.foldl(list, 0, fn (x, acc) -> x + acc end)
+    Enum.sum(list)
   end
 
   @doc """
@@ -34,7 +30,7 @@ defmodule Statistics.Descriptive do
 
   """
   def mean(list) do
-    sum(list) / Enum.count(list)
+    Enum.sum(list) / Enum.count(list)
   end
 
   @doc """
@@ -49,27 +45,16 @@ defmodule Statistics.Descriptive do
 
   """
   def median(list) do
-    sorted = :lists.sort(list)
+    sorted = Enum.sort(list)
     middle = (Enum.count(list) - 1) / 2
-    median(sorted, middle, 0, [])
-  end
-  # for when we haven't reached the mid-point(s)
-  defp median([_|t], middle, pos, acc) when pos < :erlang.trunc(middle) do
-    pos = pos + 1
-    median(t, middle, pos, acc)
-  end
-  # for the case when there is a definite middle point
-  defp median([h|_], middle, pos, _) when pos == middle do
-    h
-  end
-  # we've passed the midpoint for a two-item median
-  defp median([h|_], middle, pos, acc) when pos > middle do
-    mean([h|acc])
-  end
-  # we've reached the first of the two middle values
-  defp median([h|t], middle, pos, _) when pos == :erlang.trunc(middle) do
-    pos = pos + 1
-    median(t, middle, pos, [h])
+    f_middle = Float.floor(middle)
+    {:ok, m1} = Enum.fetch(sorted, f_middle)
+    if middle > f_middle do
+      {:ok, m2} = Enum.fetch(sorted, f_middle+1)
+      mean([m1,m2])
+    else
+      m1
+    end
   end
 
   @doc """
@@ -115,28 +100,19 @@ defmodule Statistics.Descriptive do
   @doc """
   Get the minimum value from a list
 
-  ## Examples
-      
-      iex> Statistics.Descriptive.min([3,4,2,1,2,3,5,2])
-      1
-
+  Call to Enum.min/1
   """
   def min(list) do
-    hd(Enum.sort(list))
+    Enum.min(list)
   end
 
   @doc """
   Get the maximum value from a list
 
-  ## Examples
-      
-      iex> Statistics.Descriptive.max([3,4,2,1,2,3,5,2])
-      5
-
+  Call to Enum.max/1
   """
   def max(list) do
-    l = Enum.sort(list)
-    hd(Enum.reverse(l))
+    Enum.max(list)
   end
 
   @doc """
@@ -233,20 +209,6 @@ defmodule Statistics.Descriptive do
   end
 
   @doc """
-  Get square root from Erlang
-
-  ## Examples
-
-      iex> Statistics.Descriptive.sqrt(64)
-      8.0
-
-  """
-  def sqrt(num) do
-    :math.sqrt(num)
-  end
-
-
-  @doc """
   Calculate variance from a list of numbers
 
   ## Examples
@@ -328,7 +290,7 @@ defmodule Statistics.Descriptive do
   """
   def geometric_mean(list) do
     p = List.foldl(list, 1, fn(x, acc) -> acc * x end)
-    :math.pow(p, (1/Enum.count(list)))
+    pow(p, (1/Enum.count(list)))
   end
 
   @doc  """
@@ -351,7 +313,7 @@ defmodule Statistics.Descriptive do
       0.0
     else
       mn = mean(list)
-      s = Enum.map(list, fn(x) -> :math.pow((x - mn), moment) end)
+      s = Enum.map(list, fn(x) -> pow((x - mn), moment) end)
       mean(s)
     end
   end
@@ -372,7 +334,7 @@ defmodule Statistics.Descriptive do
   def skew(list) do
     m2 = moment(list, 2)
     m3 = moment(list, 3)
-    m3 / :math.pow(m2, 1.5)
+    m3 / pow(m2, 1.5)
   end
 
   @doc """
@@ -389,8 +351,22 @@ defmodule Statistics.Descriptive do
   def kurtosis(list) do
     m2 = moment(list, 2)
     m4 = moment(list, 4)
-    p = m4 / :math.pow(m2, 2.0) # pearson 
+    p = m4 / pow(m2, 2.0) # pearson 
     p - 3                       # fisher
   end
+
+  # some math helpers
+  
+  # Get square root from Erlang
+  defp sqrt(num) do
+    :math.sqrt(num)
+  end
+
+  # Get power from Erlang 
+  # (waiting for the ** operator)
+  defp pow(num,pow) do
+    :math.pow(num,pow)
+  end
+
 
 end
