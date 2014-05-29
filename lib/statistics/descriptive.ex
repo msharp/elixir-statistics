@@ -179,42 +179,14 @@ defmodule Statistics.Descriptive do
   end
 
   @doc """
-  Split a list into two equal lists.
-  Needed for getting the quartiles.
-  """
-  def split_list(list) do
-    lst = Enum.sort(list)
-    split_list(lst,[],[])
-  end
-  defp split_list([],lower,upper) do
-    {lower,upper}
-  end
-  defp split_list([h|t],[],[]) do
-    lower = [h]
-    split_list(t,lower,[])
-  end
-  defp split_list([h|t],lower,upper) do
-    cond do
-      Enum.count(lower) < Enum.count(t) ->
-        lower = [h|lower]
-      Enum.count(lower) == Enum.count(t) ->
-        lower = [h|lower]
-        upper = [h]
-      upper == [] ->
-        upper = [h]
-      true ->
-        upper = [h|upper]
-    end
-    split_list(t,lower,upper)
-  end
-
-  @doc """
   Calculate variance from a list of numbers
 
   ## Examples
 
       iex> Statistics.Descriptive.variance([1,2,3,4])
       1.25
+      iex> Statistics.Descriptive.variance([55,56,60,65,54,51,39])
+      56.48979591836735
 
   """
   def variance(list) do
@@ -233,7 +205,7 @@ defmodule Statistics.Descriptive do
 
   """
   def stdev(list) do
-    sqrt(variance(list))
+    variance(list) |> sqrt
   end
 
   @doc """
@@ -248,8 +220,8 @@ defmodule Statistics.Descriptive do
 
   """
   def trimmed_mean(list, {low,high}) do
-    tl = Enum.reject(list, fn(x) -> x < low or x > high end)
-    mean(tl)
+    Enum.reject(list, fn(x) -> x < low or x > high end)
+    |> mean
   end
   def trimmed_mean(list, range) when range == :iqr do
     q1 = quartile(list,:first)
@@ -289,8 +261,8 @@ defmodule Statistics.Descriptive do
 
   """
   def geometric_mean(list) do
-    p = List.foldl(list, 1, fn(x, acc) -> acc * x end)
-    pow(p, (1/Enum.count(list)))
+    List.foldl(list, 1, fn(x, acc) -> acc * x end)
+    |> pow((1/Enum.count(list)))
   end
 
   @doc  """
@@ -313,8 +285,8 @@ defmodule Statistics.Descriptive do
       0.0
     else
       mn = mean(list)
-      s = Enum.map(list, fn(x) -> pow((x - mn), moment) end)
-      mean(s)
+      Enum.map(list, fn(x) -> pow((x - mn), moment) end)
+      |> mean
     end
   end
 
@@ -352,11 +324,39 @@ defmodule Statistics.Descriptive do
     m2 = moment(list, 2)
     m4 = moment(list, 4)
     p = m4 / pow(m2, 2.0) # pearson 
-    p - 3                       # fisher
+    p - 3                 # fisher
   end
 
-  # some math helpers
+  ## helpers and other flotsam
   
+  # Split a list into two equal lists.
+  # Needed for getting the quartiles.
+  defp split_list(list) do
+    lst = Enum.sort(list)
+    split_list(lst,[],[])
+  end
+  defp split_list([],lower,upper) do
+    {lower,upper}
+  end
+  defp split_list([h|t],[],[]) do
+    lower = [h]
+    split_list(t,lower,[])
+  end
+  defp split_list([h|t],lower,upper) do
+    cond do
+      Enum.count(lower) < Enum.count(t) ->
+        lower = [h|lower]
+      Enum.count(lower) == Enum.count(t) ->
+        lower = [h|lower]
+        upper = [h]
+      upper == [] ->
+        upper = [h]
+      true ->
+        upper = [h|upper]
+    end
+    split_list(t,lower,upper)
+  end
+
   # Get square root from Erlang
   defp sqrt(num) do
     :math.sqrt(num)
@@ -367,6 +367,5 @@ defmodule Statistics.Descriptive do
   defp pow(num,pow) do
     :math.pow(num,pow)
   end
-
 
 end
