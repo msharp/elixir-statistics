@@ -1,6 +1,9 @@
 defmodule Statistics.Descriptive do
   use Application
 
+  import Statistics.MathHelpers
+  alias Statistics.MathHelpers, as: Math
+
   # See http://elixir-lang.org/docs/stable/Application.Behaviour.html
   # for more information on OTP Applications
   def start(_type, _args) do
@@ -204,7 +207,7 @@ defmodule Statistics.Descriptive do
 
   """
   def stdev(list) do
-    variance(list) |> sqrt
+    variance(list) |> Math.sqrt
   end
 
   @doc """
@@ -263,7 +266,7 @@ defmodule Statistics.Descriptive do
   """
   def geometric_mean(list) do
     List.foldl(list, 1, fn(x, acc) -> acc * x end)
-    |> pow((1/Enum.count(list)))
+    |> Math.pow((1/Enum.count(list)))
   end
 
   @doc  """
@@ -286,7 +289,7 @@ defmodule Statistics.Descriptive do
       0.0
     else
       mn = mean(list)
-      Enum.map(list, fn(x) -> pow((x - mn), moment) end)
+      Enum.map(list, fn(x) -> Math.pow((x - mn), moment) end)
       |> mean
     end
   end
@@ -307,7 +310,7 @@ defmodule Statistics.Descriptive do
   def skew(list) do
     m2 = moment(list, 2)
     m3 = moment(list, 3)
-    m3 / pow(m2, 1.5)
+    m3 / Math.pow(m2, 1.5)
   end
 
   @doc """
@@ -324,7 +327,7 @@ defmodule Statistics.Descriptive do
   def kurtosis(list) do
     m2 = moment(list, 2)
     m4 = moment(list, 4)
-    p = m4 / pow(m2, 2.0) # pearson 
+    p = m4 / Math.pow(m2, 2.0) # pearson 
     p - 3                 # fisher
   end
 
@@ -373,20 +376,6 @@ defmodule Statistics.Descriptive do
         upper = [h|upper]
     end
     split_list(t,lower,upper)
-  end
-
-
-  # FIXME - these helpers were moved to the MathHelpers module
-
-  # Get square root from Erlang
-  defp sqrt(num) do
-    :math.sqrt(num)
-  end
-
-  # Get power from Erlang 
-  # (waiting for the ** operator)
-  defp pow(num,pow) do
-    :math.pow(num,pow)
   end
 
 end
