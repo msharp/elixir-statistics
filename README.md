@@ -1,4 +1,6 @@
 #  Statistics
+ 
+[![Build Status](https://travis-ci.org/msharp/elixir-statistics.svg?branch=master)](https://travis-ci.org/msharp/elixir-statistics)
 
 Statistics functions for [Elixir](https://github.com/elixir-lang/elixir).
 
