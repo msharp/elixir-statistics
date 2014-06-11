@@ -4,7 +4,7 @@ defmodule Statistics.Mixfile do
   def project do
     [ app: :statistics,
       version: File.read!("VERSION") |> String.strip,
-      elixir: "~> 0.13.3",
+      elixir: "~> 0.13.3  or ~> 0.14.0-dev",
       description: description,
       package: package,
       deps: deps ]
