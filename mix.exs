@@ -4,7 +4,7 @@ defmodule Statistics.Mixfile do
   def project do
     [ app: :statistics,
       version: File.read!("VERSION") |> String.strip,
-      elixir: "~> 0.13.3",
+      elixir: "~> 0.14.2",
       description: description,
       package: package,
       deps: deps ]
@@ -16,7 +16,7 @@ defmodule Statistics.Mixfile do
   end
 
   defp deps do
-     [ { :ex_doc, github: "elixir-lang/ex_doc", only: :dev} ]
+     [ { :ex_doc, github: "elixir-lang/ex_doc"} ]
   end
 
   defp description do
