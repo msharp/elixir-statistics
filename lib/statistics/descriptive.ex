@@ -47,7 +47,7 @@ defmodule Statistics.Descriptive do
   def median(list) do
     sorted = Enum.sort(list)
     middle = (Enum.count(list) - 1) / 2
-    f_middle = Float.floor(middle)
+    f_middle = Kernel.trunc(Float.floor(middle))
     {:ok, m1} = Enum.fetch(sorted, f_middle)
     if middle > f_middle do
       {:ok, m2} = Enum.fetch(sorted, f_middle+1)
@@ -157,7 +157,7 @@ defmodule Statistics.Descriptive do
       _ ->
         l = Enum.sort(list)
         rank = n/100.0 * (Enum.count(list)-1)
-        f_rank = Float.floor(rank)
+        f_rank = Kernel.trunc(Float.floor(rank))
         {:ok,lower} = Enum.fetch(l,f_rank)
         {:ok,upper} = Enum.fetch(l,f_rank+1)
         lower + (upper - lower) * (rank - f_rank)
