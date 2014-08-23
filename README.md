@@ -10,7 +10,7 @@ Add Statistics as a dependency in your `mix.exs` file.
 
 ```elixir
 def deps do
-[ { :statistics, github: "msharp/elixir-statistics" } ]
+[ { :statistics, "~> 0.1.6" } ]
 end
 ```
   
