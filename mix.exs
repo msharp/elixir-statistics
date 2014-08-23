@@ -16,7 +16,7 @@ defmodule Statistics.Mixfile do
   end
 
   defp deps do
-     [ { :ex_doc, github: "elixir-lang/ex_doc"} ]
+     [ { :ex_doc, github: "elixir-lang/ex_doc", only: :dev } ]
   end
 
   defp description do
