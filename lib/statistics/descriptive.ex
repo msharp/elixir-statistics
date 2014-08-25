@@ -217,13 +217,15 @@ defmodule Statistics.Descriptive do
   
     iex> Statistics.Descriptive.trimmed_mean([1,2,3],{1,3})
     2.0
+    iex> Statistics.Descriptive.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15], :iqr)
+    7.3
 
   """
   def trimmed_mean(list, {low,high}) do
     Enum.reject(list, fn(x) -> x < low or x > high end)
     |> mean
   end
-  def trimmed_mean(list, range) when range == :iqr do
+  def trimmed_mean(list, :iqr) do
     q1 = quartile(list,:first)
     q3 = quartile(list,:third)
     trimmed_mean(list,{q1,q3})
