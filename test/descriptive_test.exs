@@ -92,5 +92,15 @@ defmodule DescriptiveTest do
   test "calculate kurtosis (fisher)" do
     assert Statistics.Descriptive.kurtosis([1,2,3,2,1]) == -1.1530612244897964
   end
+  
+  test "calculate standard score for items in a list" do
+    #expected = [-0.74278135, -1.57841037, -0.74278135,
+    #            0.09284767, 0.92847669, 1.76410571,
+    #          0.92847669, 0.09284767, -0.74278135]
+    expected =  [-0.7427813527082074, -1.5784103745049407, -0.7427813527082074,
+                  0.09284766908852597, 0.9284766908852594, 1.7641057126819928,
+                  0.9284766908852594, 0.09284766908852597, -0.7427813527082074]
+    assert Statistics.Descriptive.zscore([3,2,3,4,5,6,5,4,3]) == expected
+  end
 
 end

@@ -329,6 +329,23 @@ defmodule Statistics.Descriptive do
     p - 3                 # fisher
   end
 
+  @doc """
+  Calculate a standard `z` score for each item in a list
+
+  ## Examples
+
+      iex> Statistics.Descriptive.zscore([3,2,3,4,5,6,5,4,3])
+      [-0.7427813527082074, -1.5784103745049407, -0.7427813527082074,
+      0.09284766908852597, 0.9284766908852594, 1.7641057126819928,
+      0.9284766908852594, 0.09284766908852597, -0.7427813527082074]
+
+  """
+  def zscore(list) do
+    mean = mean(list)
+    stdev = stdev(list)
+    for n <- list, do: (n-mean)/stdev
+  end
+
   ## helpers and other flotsam
   
   # Split a list into two equal lists.
@@ -358,6 +375,9 @@ defmodule Statistics.Descriptive do
     end
     split_list(t,lower,upper)
   end
+
+
+  # FIXME - these helpers were moved to the MathHelpers module
 
   # Get square root from Erlang
   defp sqrt(num) do
