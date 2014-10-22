@@ -72,10 +72,7 @@ defmodule Statistics.Distributions.Normal do
     p  =  0.3275911
         
     # Save the sign of x
-    sign = 1
-    if x < 0 do
-      sign = -1
-    end
+    sign = if x < 0, do: -1, else: 1
     x = abs(x)
     
     # Formula 7.1.26 given in Abramowitz and Stegun.
