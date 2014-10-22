@@ -1,7 +1,6 @@
 defmodule Statistics.Distributions.Normal do
   #use Application.Behaviour
 
-  import Statistics.MathHelpers
   alias Statistics.MathHelpers, as: Math
 
   @doc """
