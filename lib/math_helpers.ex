@@ -83,4 +83,15 @@ defmodule Statistics.MathHelpers do
     :math.log(i)
   end
 
+  @doc """
+  Exponent function
+
+  Raise *e* to given power
+
+  """
+  def exp(x) do
+    pow(@e, x)
+  end
+
+
 end
