@@ -44,7 +44,11 @@ defmodule Statistics.Distributions.Normal do
                  
   """
   def cdf(x) do
-    0.5 * (1.0 + erf(x / Math.sqrt(2)))
+    cdf(x, 0, 1)
+  end
+
+  def cdf(x, mu, sigma) do
+    0.5 * (1.0 + erf((x - mu) / (sigma * Math.sqrt(2))))
   end
 
   def rnd do 

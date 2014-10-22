@@ -12,8 +12,10 @@ defmodule NormalDistributionTest do
   end
 
   test "return a cdf " do
-    assert Statistics.Distributions.Normal.cdf(2) == 0.9772499371127437
-    assert Statistics.Distributions.Normal.cdf(0) == 0.5000000005
+    assert Norm.cdf(2) == 0.9772499371127437
+    assert Norm.cdf(0) == 0.5000000005
+    assert Norm.cdf(2.8, 2, 2.5) == 0.6255157658802836
+    assert Norm.cdf(2, 2, 2.5) == 0.5000000005
   end
 
   test "return a normally-distributed random number" do
