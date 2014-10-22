@@ -17,7 +17,7 @@ defmodule Statistics.Mixfile do
 
   defp deps do
     [
-      { :ex_doc, "~> 0.6.0" },
+      {:ex_doc, "~> 0.6.0"},
       {:earmark, ">= 0.0.0"}
     ]
   end
