@@ -1,6 +1,7 @@
 #  Statistics
  
 [![Build Status](https://travis-ci.org/msharp/elixir-statistics.svg?branch=master)](https://travis-ci.org/msharp/elixir-statistics)
+[![hex.pm version](https://img.shields.io/hexpm/v/statistics.svg?style=flat)](https://hex.pm/packages/statistics)
 
 Statistics functions for [Elixir](https://github.com/elixir-lang/elixir).
 
