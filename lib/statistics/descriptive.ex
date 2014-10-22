@@ -8,7 +8,7 @@ defmodule Statistics.Descriptive do
   end
 
   @moduledoc """
-  Provides some helpful mathematical/statistics functions
+  Provides basic statistics functions
   """
   
   @doc """
@@ -58,7 +58,7 @@ defmodule Statistics.Descriptive do
   end
 
   @doc """
-  Get the mode
+  Get the most frequently occuring value
   
   ## Examples
 
@@ -67,34 +67,33 @@ defmodule Statistics.Descriptive do
 
   """
   def mode(list) do
-    mode(list,{0,0})
+    mode(list, {0, 0})
   end
-  defp mode([],champ) do
-    {val,_} = champ
+  defp mode([], champ) do
+    {val, _} = champ
     val
   end
-  defp mode([h|t],champ) do
-    {count,list} = mode_count_and_remove(h,t)
-    {_,champ_count} = champ
-    {_,new_count} = count
+  defp mode([h|t], champ) do
+    {count, list} = mode_count_and_remove(h, t)
+    {_, champ_count} = champ
+    {_, new_count} = count
     if new_count > champ_count do
       champ = count
     end
-    mode(list,champ)
+    mode(list, champ)
   end
-  defp mode_count_and_remove(val,list) do
-    {count,new_list} = mode_count_and_remove(val,1,list,[])
-    {{val,count},new_list}
+  defp mode_count_and_remove(val, list) do
+    {count, new_list} = mode_count_and_remove(val, 1, list, [])
+    {{val,count}, new_list}
+  end
+  defp mode_count_and_remove(h, count, [h|t], new_list) do
+    mode_count_and_remove(h, count+1, t, new_list)
   end
   defp mode_count_and_remove(val, count, [h|t], new_list) do
-    if val == h do
-      mode_count_and_remove(val,count+1,t,new_list)
-    else
-      mode_count_and_remove(val,count,t,[h|new_list])
-    end
+    mode_count_and_remove(val, count, t, [h|new_list])
   end
   defp mode_count_and_remove(_, count, [], new_list) do
-    {count,new_list}
+    {count, new_list}
   end
 
   @doc """
