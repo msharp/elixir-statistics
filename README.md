@@ -12,7 +12,7 @@ Add Statistics as a dependency in your `mix.exs` file to install from [hex.pm](h
 ```elixir
 def deps do
   [ 
-    { :statistics, "~> 0.1.6"} 
+    { :statistics, "~> 0.2.0"} 
   ]
 end
 ```
@@ -22,21 +22,25 @@ After you are done, run `mix deps.get` in your shell to fetch and compile Statis
 To try it out, start an interactive Elixir shell with `iex -S mix`.
 
 ```iex
-iex> alias Statistics, as: S
+iex> alias Statistics, as: Stats
 nil
-iex> S.Descriptive.median([1,2,3])
+iex> Stats.median([1,2,3])
 2
-iex> S.Descriptive.variance([1,2,3,4])
+iex> Stats.variance([1,2,3,4])
 1.25
 ```
 
 ## Roadmap
 
-This library is currently only descriptive statistics. But I'm planning to add common statistical tests and distributions.
+This library is evolving to include more than just simple descriptive statistics. 
+
+I plan to add most common statistical tests and distributions.
 
 ## Contributing
 
-Happy to accept pull requests. Please create a topic branch with tests.
+I'd love to accept pull requests. 
+
+If you want to contribute, please create a topic branch with tests.
 
 ## License
 
