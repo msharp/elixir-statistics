@@ -93,5 +93,11 @@ defmodule Statistics.MathHelpers do
     pow(@e, x)
   end
 
+  @doc """
+  Get a random number from erlang
+  """
+  def rand() do
+    :random.uniform()
+  end
 
 end
