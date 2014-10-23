@@ -88,7 +88,6 @@ defmodule Statistics.Distributions.Normal do
 
   Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
 
-
   ## Examples
 
       iex> Statistics.Distributions.Normal.rand()
@@ -104,13 +103,18 @@ defmodule Statistics.Distributions.Normal do
   end
 
   def rand(mu, sigma) do 
-    rmu = 0.5
-    rsigma = 0.1
-    x = :random.uniform()
-    y = :random.uniform()
-    if pdf(x, rmu, rsigma) > y do
-      z = (rmu - x) / rsigma # get z-score
-      mu + (z * sigma) # adjust for distribution size
+    # this is slow - needs to generate many random numbers before 
+    # one is found which can appear in the distribution.
+    # (probability of 50 ocurring in a Normal(0,1) distribution is
+    # too small to calculate with the precision available to us)
+    # random number between -50,+50 
+    x = Math.rand() * 100 - 50
+    {rmu, rsigma} = {0, 1}
+    if pdf(x, rmu, rsigma) > Math.rand() do
+      # get z-score
+      z = (rmu - x) / rsigma 
+      # adjust for distribution size
+      mu + (z * sigma) 
     else
       rand(mu, sigma) # keep trying
     end
