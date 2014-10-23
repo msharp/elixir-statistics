@@ -25,7 +25,9 @@ defmodule NormalDistributionTest do
   test "get the percentile point value" do
     assert Norm.ppf(0.975) == 1.9603949169253396
     assert Norm.ppf(0.025) == -1.96039491692534
-    assert Norm.ppf(0.75) ==  0.6741891400433162
+    assert Norm.ppf(0.75) == 0.6741891400433162
+    assert Norm.ppf(0.25, 7, 2.1) == 5.583571524588228
+    assert Norm.ppf(0.95, 37.66, 1.31) == 39.814758251306422
   end
 
 end
