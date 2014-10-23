@@ -61,14 +61,20 @@ defmodule Statistics.Distributions.Normal do
 
       iex> Statistics.Distributions.Normal.ppf(0.025) 
       -1.96039491692534
+      iex> Statistics.Distributions.Normal.ppf(0.25, 7, 2.1)
+      5.584202805909036
 
   """
   def ppf(x) do
+    ppf(x, 0, 1)
+  end
+  def ppf(x, mu, sigma) do
     if x < 0.5 do 
-      -inv_erf(Math.sqrt(-2.0*Math.ln(x)))
+      p = -inv_erf(Math.sqrt(-2.0*Math.ln(x)))
     else
-      inv_erf(Math.sqrt(-2.0*Math.ln(1-x)))
+      p = inv_erf(Math.sqrt(-2.0*Math.ln(1-x)))
     end
+    mu + (p * sigma)
   end
 
   @doc """
