@@ -1,6 +1,6 @@
 defmodule NormalDistributionTest do
   use ExUnit.Case, async: true
-  doctest Statistics.Distributions.Normal
+  doctest Statistics.Distributions.Normal, except: [rand: 0, rand: 3]
 
   alias Statistics.Distributions.Normal, as: Norm
 
@@ -19,7 +19,7 @@ defmodule NormalDistributionTest do
   end
 
   test "return a normally-distributed random number" do
-    assert Norm.rnd == 0.0
+    assert is_float Norm.rand() 
   end
 
 end

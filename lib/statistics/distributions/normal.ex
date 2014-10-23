@@ -50,8 +50,40 @@ defmodule Statistics.Distributions.Normal do
     0.5 * (1.0 + erf((x - mu) / (sigma * Math.sqrt(2))))
   end
 
-  def rnd do 
-    0.0
+  @doc """
+  Draw a random number from a normal distribution
+
+  `rnd/0` will return a random number from a normal distribution
+  with a mean of 0 and a standard deviation of 1
+
+  `rnd/3` allows you to provide the mean and standard deviation
+  parameters of the distribution from which the random number is drawn
+
+  Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
+
+  ## Examples
+
+      iex> Statistics.Distributions.Normal.rand()
+      1.5990817245679434
+      iex> Statistics.Distributions.Normal.rand(22, 2.3)
+      23.900248900049736
+
+  """
+  def rand do 
+    rand(0, 1)
+  end
+
+  def rand(mu, sigma) do 
+    rmu = 0.5
+    rsigma = 0.1
+    x = :random.uniform()
+    y = :random.uniform()
+    if pdf(x, rmu, rsigma) > y do
+      z = (rmu - x) / rsigma # get z-score
+      mu + (z * sigma) # adjust for distribution size
+    else
+      rand(mu, sigma) # keep trying
+    end
   end
 
   # the error function
@@ -83,7 +115,6 @@ defmodule Statistics.Distributions.Normal do
     y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t * Math.pow(Math.e, (-x*x))
     
     sign * y
-
   end
 
 end
