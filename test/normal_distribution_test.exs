@@ -22,4 +22,10 @@ defmodule NormalDistributionTest do
     assert is_float Norm.rand() 
   end
 
+  test "get the percentile point value" do
+    assert Norm.ppf(0.975) == 1.9603949169253396
+    assert Norm.ppf(0.025) == -1.96039491692534
+    assert Norm.ppf(0.75) ==  0.6741891400433162
+  end
+
 end
