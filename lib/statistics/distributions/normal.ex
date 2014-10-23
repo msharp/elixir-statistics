@@ -50,6 +50,27 @@ defmodule Statistics.Distributions.Normal do
     0.5 * (1.0 + erf((x - mu) / (sigma * Math.sqrt(2))))
   end
 
+  
+  @doc """
+  The percentile-point function
+
+  Get the maximum point which lies below the given probability.
+  This is the inverse of the cdf
+
+  ## Examples
+
+      iex> Statistics.Distributions.Normal.ppf(0.025) 
+      -1.96039491692534
+
+  """
+  def ppf(x) do
+    if x < 0.5 do 
+      -inv_erf(Math.sqrt(-2.0*Math.ln(x)))
+    else
+      inv_erf(Math.sqrt(-2.0*Math.ln(1-x)))
+    end
+  end
+
   @doc """
   Draw a random number from a normal distribution
 
@@ -61,6 +82,7 @@ defmodule Statistics.Distributions.Normal do
 
   Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
 
+
   ## Examples
 
       iex> Statistics.Distributions.Normal.rand()
@@ -69,6 +91,8 @@ defmodule Statistics.Distributions.Normal do
       23.900248900049736
 
   """
+  # Note: an alternate method exists and may be better
+  # Inverse transform sampling - https://en.wikipedia.org/wiki/Inverse_transform_sampling
   def rand do 
     rand(0, 1)
   end
@@ -99,11 +123,7 @@ defmodule Statistics.Distributions.Normal do
   """
   defp erf(x) do
     # constants
-    a1 =  0.254829592
-    a2 = -0.284496736
-    a3 =  1.421413741
-    a4 = -1.453152027
-    a5 =  1.061405429
+    {a1, a2, a3, a4, a5} = {0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429}
     p  =  0.3275911
         
     # Save the sign of x
@@ -116,5 +136,14 @@ defmodule Statistics.Distributions.Normal do
     
     sign * y
   end
+
+  # the inverse error function
+  def inv_erf(x) do
+    # constants
+    {c0, c1, c2} = {2.515517, 0.802853, 0.010328}
+    {d0, d1, d2} = {1.432788, 0.189269, 0.001308}
+    # formula
+    x - ((c2*x + c1)*x + c0) / (((d2*x + d1)*x + d0)*x + 1.0)
+  end 
 
 end
