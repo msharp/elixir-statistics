@@ -3,6 +3,15 @@ defmodule NormalDistributionTest do
   doctest Statistics.Distributions.Normal, except: [rand: 0, rand: 3]
 
   alias Statistics.Distributions.Normal, as: Norm
+  alias Statistics.MathHelpers, as: Math
+
+  """
+  to get mitigate the vagaries of floating-point math 
+  and rounding errors, test equivalence to 4 decimal places
+  """
+  def assert_p(left, right, precision \\ 4) do
+      assert Math.round(left, precision) == Math.round(right, precision) 
+  end
 
   test "output of the pdf function" do
     assert Norm.pdf(0) == 0.3989422804014327
@@ -13,13 +22,16 @@ defmodule NormalDistributionTest do
 
   test "return a cdf " do
     assert Norm.cdf(2) == 0.9772499371127437
-    assert Norm.cdf(0) == 0.5000000005
+    assert_p Norm.cdf(0), 0.5
     assert Norm.cdf(2.8, 2, 2.5) == 0.6255157658802836
-    assert Norm.cdf(2, 2, 2.5) == 0.5000000005
+    assert_p Norm.cdf(2, 2, 2.5), 0.5
   end
 
   test "return a normally-distributed random number" do
     assert is_float Norm.rand() 
+    rands = for i <- 0..10000, do: Norm.rand(5, 1.5)
+    assert_p Statistics.Descriptive.mean(rands), 5, 1
+    assert_p Statistics.Descriptive.stdev(rands), 1.5, 1
   end
 
   test "get the percentile point value" do

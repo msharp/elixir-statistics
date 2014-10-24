@@ -93,5 +93,24 @@ defmodule Statistics.MathHelpers do
     pow(@e, x)
   end
 
+  @doc """
+  Get a random number from erlang
+  """
+  def rand() do
+    :random.uniform()
+  end
+
+  @doc """
+  Round a decimal to a specific precision
+
+  ## Examples 
+
+      iex> Statistics.MathHelpers.round(0.123456, 4)
+      0.1235
+  """
+  def round(x, precision) do
+    p = pow(10, precision)
+    :erlang.round(x * p) / p
+  end
 
 end

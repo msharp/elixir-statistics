@@ -88,7 +88,6 @@ defmodule Statistics.Distributions.Normal do
 
   Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
 
-
   ## Examples
 
       iex> Statistics.Distributions.Normal.rand()
@@ -97,20 +96,24 @@ defmodule Statistics.Distributions.Normal do
       23.900248900049736
 
   """
-  # Note: an alternate method exists and may be better
-  # Inverse transform sampling - https://en.wikipedia.org/wiki/Inverse_transform_sampling
   def rand do 
     rand(0, 1)
   end
 
   def rand(mu, sigma) do 
-    rmu = 0.5
-    rsigma = 0.1
-    x = :random.uniform()
-    y = :random.uniform()
-    if pdf(x, rmu, rsigma) > y do
-      z = (rmu - x) / rsigma # get z-score
-      mu + (z * sigma) # adjust for distribution size
+    # Note: an alternate method exists and may be better
+    # Inverse transform sampling - https://en.wikipedia.org/wiki/Inverse_transform_sampling
+    # ----
+    # Generate a random number between -10,+10 
+    # (probability of 10 ocurring in a Normal(0,1) distribution is
+    # too small to calculate with the precision available to us)
+    x = Math.rand() * 20 - 10
+    {rmu, rsigma} = {0, 1}
+    if pdf(x, rmu, rsigma) > Math.rand() do
+      # get z-score
+      z = (rmu - x) / rsigma 
+      # transpose to specified distribution
+      mu + (z * sigma) 
     else
       rand(mu, sigma) # keep trying
     end
@@ -118,14 +121,12 @@ defmodule Statistics.Distributions.Normal do
 
   # the error function
   """ 
-  from: http://malishoaib.wordpress.com/2014/04/02/python-code-and-normal-distribution-writing-cdf-from-scratch/
-  John D. Cook's implementation.http://www.johndcook.com
-    >> Formula 7.1.26 given in Abramowitz and Stegun.
-    >> Formula appears as 1 – (a1t1 + a2t2 + a3t3 + a4t4 + a5t5)exp(-x2)
-    >> A little wisdom in Horner's Method of coding polynomials:
-      1) We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
-      2) But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
-      3) The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
+  Formula 7.1.26 given in Abramowitz and Stegun.
+  Formula appears as 1 – (a1t1 + a2t2 + a3t3 + a4t4 + a5t5)exp(-x2)
+  A little wisdom in Horner's Method of coding polynomials:
+    1) We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
+    2) But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
+    3) The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
   """
   defp erf(x) do
     # constants

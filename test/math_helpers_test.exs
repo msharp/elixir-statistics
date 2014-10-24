@@ -32,4 +32,11 @@ defmodule MathHelpersTest do
     assert Math.exp(2) == 7.3890560989306495
   end
 
+  test "round a decimal" do
+    assert Math.round(99.999999, 3) == 100
+    assert Math.round(0.123456, 4) == 0.1235
+    assert Math.round(0.123436, 4) == 0.1234
+    assert Math.round(1.123456, 0) == 1
+  end
+
 end
