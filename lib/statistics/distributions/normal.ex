@@ -96,14 +96,15 @@ defmodule Statistics.Distributions.Normal do
       23.900248900049736
 
   """
-  # Note: an alternate method exists and may be better
-  # Inverse transform sampling - https://en.wikipedia.org/wiki/Inverse_transform_sampling
   def rand do 
     rand(0, 1)
   end
 
   def rand(mu, sigma) do 
-    # random number between -10,+10 
+    # Note: an alternate method exists and may be better
+    # Inverse transform sampling - https://en.wikipedia.org/wiki/Inverse_transform_sampling
+    # ----
+    # Generate a random number between -10,+10 
     # (probability of 10 ocurring in a Normal(0,1) distribution is
     # too small to calculate with the precision available to us)
     x = Math.rand() * 20 - 10
@@ -111,7 +112,7 @@ defmodule Statistics.Distributions.Normal do
     if pdf(x, rmu, rsigma) > Math.rand() do
       # get z-score
       z = (rmu - x) / rsigma 
-      # adjust for distribution size
+      # transpose to specified distribution
       mu + (z * sigma) 
     else
       rand(mu, sigma) # keep trying
