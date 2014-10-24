@@ -30,6 +30,12 @@ iex> Stats.variance([1,2,3,4])
 1.25
 ```
 
+## Documentation
+
+Elixir has great documentation tools using `ex_doc`. 
+
+The docs are hosted on [hexdocs.pm/statistics](http://hexdocs.pm/statistics/). 
+
 ## Roadmap
 
 This library is evolving to include more than just simple descriptive statistics. 
