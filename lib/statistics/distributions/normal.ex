@@ -103,12 +103,10 @@ defmodule Statistics.Distributions.Normal do
   end
 
   def rand(mu, sigma) do 
-    # this is slow - needs to generate many random numbers before 
-    # one is found which can appear in the distribution.
-    # (probability of 50 ocurring in a Normal(0,1) distribution is
+    # random number between -10,+10 
+    # (probability of 10 ocurring in a Normal(0,1) distribution is
     # too small to calculate with the precision available to us)
-    # random number between -50,+50 
-    x = Math.rand() * 100 - 50
+    x = Math.rand() * 20 - 10
     {rmu, rsigma} = {0, 1}
     if pdf(x, rmu, rsigma) > Math.rand() do
       # get z-score
@@ -122,14 +120,12 @@ defmodule Statistics.Distributions.Normal do
 
   # the error function
   """ 
-  from: http://malishoaib.wordpress.com/2014/04/02/python-code-and-normal-distribution-writing-cdf-from-scratch/
-  John D. Cook's implementation.http://www.johndcook.com
-    >> Formula 7.1.26 given in Abramowitz and Stegun.
-    >> Formula appears as 1 – (a1t1 + a2t2 + a3t3 + a4t4 + a5t5)exp(-x2)
-    >> A little wisdom in Horner's Method of coding polynomials:
-      1) We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
-      2) But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
-      3) The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
+  Formula 7.1.26 given in Abramowitz and Stegun.
+  Formula appears as 1 – (a1t1 + a2t2 + a3t3 + a4t4 + a5t5)exp(-x2)
+  A little wisdom in Horner's Method of coding polynomials:
+    1) We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
+    2) But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
+    3) The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
   """
   defp erf(x) do
     # constants
