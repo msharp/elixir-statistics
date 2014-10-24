@@ -30,8 +30,8 @@ defmodule NormalDistributionTest do
   test "return a normally-distributed random number" do
     assert is_float Norm.rand() 
     rands = for i <- 0..10000, do: Norm.rand(5, 1.5)
-    assert_p Statistics.Descriptive.mean(rands), 5, 1
-    assert_p Statistics.Descriptive.stdev(rands), 1.5, 1
+    assert_p Statistics.mean(rands), 5, 1
+    assert_p Statistics.stdev(rands), 1.5, 1
   end
 
   test "get the percentile point value" do

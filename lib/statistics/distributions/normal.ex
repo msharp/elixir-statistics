@@ -1,5 +1,8 @@
 defmodule Statistics.Distributions.Normal do
-  #use Application.Behaviour
+
+  @moduledoc """
+  The normal, or gaussian, distribution
+  """
 
   alias Statistics.MathHelpers, as: Math
 
