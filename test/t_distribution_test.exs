@@ -3,12 +3,12 @@ defmodule TDistributionTest do
   doctest Statistics.Distributions.T, except: [rand: 0, rand: 3]
 
   alias Statistics.Distributions.T, as: T
-  alias Statistics.MathHelpers, as: Math
+  #alias Statistics.MathHelpers, as: Math
 
 
   test "output of the pdf function" do
     assert T.pdf(0, 3) == 0.36755259694786135
-    #assert T.pdf(2.1, 77) == 0.045311235599925608
+    assert T.pdf(0.1, 7) == 0.3827987876130386
   end
 
   test "return a cdf " do
@@ -16,7 +16,9 @@ defmodule TDistributionTest do
   end
 
   test "return a random number from the distribution" do
-    assert is_float T.rand() 
+    assert is_float T.rand(2) 
+    # rands = for _ <- 0..10000, do: T.rand(3)
+    # assert T.rand(77) == 0.5
   end
 
   test "get the percentile point value" do

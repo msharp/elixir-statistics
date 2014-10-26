@@ -28,10 +28,15 @@ defmodule Statistics.Distributions.T do
   end
 
   @doc """
-  generate a random number from the distribution
+  Draw a random number from a t distribution with specified degrees of freedom
   """
-  def rand() do
-    0.0
+  def rand(df) do
+    x = Math.rand() * 20 - 10
+    if pdf(x, df) > Math.rand() do
+      x
+    else
+      rand(df) # keep trying
+    end
   end
 
 
@@ -50,13 +55,9 @@ defmodule Statistics.Distributions.T do
         0.00000000000000122678, -0.00000000000000011813, 0.00000000000000000119,
         0.00000000000000000141, -0.00000000000000000023] # , 0.00000000000000000002]
 
-    y  = x - 1.0
     sm = 0.00000000000000000002
-    g = gamma_map(y, Enum.reverse(a), sm)
-
-    1.0 / g
+    1.0 / gamma_map(x-1.0, Enum.reverse(a), sm)
   end
-
   defp gamma_map(y, [], acc) do
     acc
   end
