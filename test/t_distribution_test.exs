@@ -7,7 +7,8 @@ defmodule TDistributionTest do
 
 
   test "output of the pdf function" do
-    assert T.pdf(0) == 0.0
+    assert T.pdf(0, 3) == 0.36755259694786135
+    #assert T.pdf(2.1, 77) == 0.045311235599925608
   end
 
   test "return a cdf " do
