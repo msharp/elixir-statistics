@@ -32,10 +32,26 @@ defmodule Statistics.MathHelpers do
       8.0
       iex> Statistics.MathHelpers.pow(9,9)
       387420489.0
+      iex> Statistics.MathHelpers.pow(2,0)
+      1
+      iex> Statistics.MathHelpers.pow(-2, 1.5)
+      -2.8284271247461903
+      iex> Statistics.MathHelpers.pow(0, 5)
+      0
 
   """
-  def pow(num,pow) do
-    :math.pow(num,pow)
+  def pow(_, pow) when pow == 0.0 do
+    1
+  end
+  def pow(num, _) when num == 0.0 do
+    0 # not always true, raising 0 to a negative number is NaN
+  end
+  # erlang doesn't like raising negative numbers to non-integer powers
+  def pow(num, pow) when num < 0 and is_float(pow) do
+   :math.pow(-num, pow) * -1
+  end
+  def pow(num, pow) do
+    :math.pow(num, pow)
   end
 
   @doc """
@@ -107,10 +123,101 @@ defmodule Statistics.MathHelpers do
 
       iex> Statistics.MathHelpers.round(0.123456, 4)
       0.1235
+
   """
   def round(x, precision) do
     p = pow(10, precision)
     :erlang.round(x * p) / p
   end
+
+  @doc """
+  Get the absolute value of a number
+
+  ## Examples 
+
+      iex> Statistics.MathHelpers.abs(-4)
+      4
+
+  """
+  def abs(x) when x < 0 do
+    x * -1
+  end
+  def abs(x) do
+    x
+  end
+
+  @doc """
+  Get the base integer from a float
+
+  ## Examples
+
+      iex> Statistics.MathHelpers.to_int(66.6666)
+      66
+
+  """
+  def to_int(f) do
+    s = Float.to_string Float.floor(f), [decimals: 0, compact: true]
+    {i, rem} = Integer.parse(s)
+    i
+  end
+
+  ################################
+  
+  @doc """
+  The Gamma function
+
+  This implementation uses the [Lanczos approximation](http://en.wikipedia.org/wiki/Lanczos_approximation)
+
+  ## Examples
+   
+      iex> Statistics.MathHelpers.gamma(0.5)
+      1.7724538509055163
+
+  """
+  def gamma(x) do
+    gamma_lanczos(x)
+    #gamma_taylor(x)
+  end
+
+  defp gamma_lanczos(x) do
+    # coefficients used by the GNU Scientific Library
+    g = 7
+    p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+         771.32342877765313, -176.61502916214059, 12.507343278686905,
+         -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7]
+    # recursive formula
+    if x < 0.5 do
+      pi / (:math.sin(pi*x) * gamma_lanczos(1-x))
+    else
+      z = x - 1
+      xs = for i <- 1..8, do: Enum.at(p, i)/(z+i)
+      x = Enum.at(p, 0) + Enum.sum(xs)
+      t = z + g + 0.5
+      sqrt(2*pi) * pow(t, (z+0.5)) * exp(-1*t) * x
+    end
+  end
+
+  @doc """
+  The Beta function
+
+  ## Examples 
+
+      iex> Statistics.MathHelpers.beta(2, 0.5)
+      1.3333333333333328
+
+  """
+  def beta(x, y) do
+    # from https://en.wikipedia.org/wiki/Beta_function#Properties
+    gamma(x) * gamma(y) / gamma(x + y)
+  end
+
+  # ############################
+  # incomplete Gamma function
+  # 
+  # try: https://mail.python.org/pipermail/python-list/2001-April/092498.html
+  #
+  # ###########################
+
+
 
 end

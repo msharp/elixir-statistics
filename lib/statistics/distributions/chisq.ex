@@ -18,7 +18,7 @@ defmodule Statistics.Distributions.Chisq do
 
   """
   def pdf(x, df) do
-    1 / (Math.pow(2, df/2) * gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
+    1 / (Math.pow(2, df/2) * Math.gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
   end
   def pdf(x) do
     pdf(x, 1)
@@ -36,9 +36,10 @@ defmodule Statistics.Distributions.Chisq do
 
   """
   def cdf(x, df) do
-    g = gamma(df/2) 
-    b = lgamma(df/2, x/2)
-    b / g  
+    #g = Math.gamma(df/2) 
+    #b = Math.gamma_inc_q(df/2, x/2)
+    #b / g  
+    0.0
   end
 
   @doc """
@@ -68,51 +69,9 @@ defmodule Statistics.Distributions.Chisq do
     end
   end
 
-  def lgamma(s, x) do
-    (s-1)*beta(s-1,x)-Math.pow(s, x-1)*Math.exp(-1*x)
-  end
-
-  @doc """
-  The Gamma function
-
-  Two implementations available here:
-
-      - Using Taylor series coefficients 
-      - using the [Lanczos approximation](http://en.wikipedia.org/wiki/Lanczos_approximation)
-  
-  """
-  def gamma(x) do
-    gamma_lanczos(x)
-    #gamma_taylor(x)
-  end
-
-  defp gamma_lanczos(x) do
-    # coefficients used by the GNU Scientific Library
-    g = 7
-    p = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
-         771.32342877765313, -176.61502916214059, 12.507343278686905,
-         -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7]
-    # recursive formula
-    if x < 0.5 do
-      Math.pi / (:math.sin(Math.pi*x) * gamma_lanczos(1-x))
-    else
-      z = x - 1
-      xs = for i <- 1..8, do: Enum.at(p, i)/(z+i)
-      x = Enum.at(p, 0) + Enum.sum(xs)
-      t = z + g + 0.5
-      Math.sqrt(2*Math.pi) * Math.pow(t, (z+0.5)) * Math.exp(-1*t) * x
-    end
-  end
-
-  @doc """
-  The Beta function
-  """
-  def beta(x, y) do
-    # from https://en.wikipedia.org/wiki/Beta_function#Properties
-    gamma(x) * gamma(y) / gamma(x + y)
-  end
+  ######################################################
+  ######################################################
+  ######################################################
 
 end
-
-
 

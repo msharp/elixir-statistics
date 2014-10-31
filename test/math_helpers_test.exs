@@ -12,6 +12,7 @@ defmodule MathHelpersTest do
   test "raise to a power" do
     assert Math.pow(3, 2) == 9
     assert Math.pow(2, -1) == 0.5
+    assert Math.pow(-0.5, -0.5) == -1.4142135623730951
     assert Math.pow(99, 3) == 970299
   end
 
@@ -37,6 +38,27 @@ defmodule MathHelpersTest do
     assert Math.round(0.123456, 4) == 0.1235
     assert Math.round(0.123436, 4) == 0.1234
     assert Math.round(1.123456, 0) == 1
+  end
+
+  test "get absolute value" do
+    assert Math.abs(-2) == 2
+    assert Math.abs(2.2) == 2.2
+  end
+
+  test "turn a float into an integer" do
+    assert Math.to_int(2.2) == 2
+    assert Math.to_int(599.9) == 599
+  end
+
+  test "gamma function" do
+    assert Math.gamma(22) == 5.109094217170959e19
+    assert Math.gamma(0.02) == 49.442210163195654
+  end
+
+  test "beta function" do
+    assert Math.beta(1, 2) == 0.5
+    assert Math.beta(2, 2) == 0.1666666666666665
+    assert Math.beta(0.05, 1) == 19.999999999999996
   end
 
 end

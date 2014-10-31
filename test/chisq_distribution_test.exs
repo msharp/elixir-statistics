@@ -3,7 +3,6 @@ defmodule ChisqDistributionTest do
   doctest Statistics.Distributions.Chisq, except: [rand: 1]
 
   alias Statistics.Distributions.Chisq, as: Chisq
-  #alias Statistics.MathHelpers, as: Math
 
 
   test "output of the pdf function" do
@@ -12,7 +11,9 @@ defmodule ChisqDistributionTest do
   end
 
   test "return a cdf " do
-    # assert Chisq.cdf(2, 1) == 0.63212055882855778
+    #assert Chisq.cdf(2, 2) == 0.63212055882855778
+    #assert Chisq.cdf(16.8, 23) == 0.18105083862291921
+    assert Chisq.cdf(1, 1) == 0.0
   end
 
   test "return a random number from the distribution" do
@@ -25,10 +26,6 @@ defmodule ChisqDistributionTest do
     assert Chisq.ppf(0.0) == 0.0
   end
 
-  test "beta function" do
-    assert Chisq.beta(1, 2) == 0.5
-    assert Chisq.beta(2, 2) == 0.1666666666666665
-    assert Chisq.beta(0.05, 1) == 19.999999999999996
-  end
-
 end
+
+
