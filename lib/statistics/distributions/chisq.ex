@@ -42,9 +42,23 @@ defmodule Statistics.Distributions.Chisq do
   @doc """
   The percentile-point function
   """
-  def ppf(x) do
-    0.0
+  def ppf(x, df) do
+    # trial-and-error
+    ppf_tande(x, df, 0)
   end
+  defp ppf_tande(x, df, g) do
+    guess = g + 1 # start
+    if Math.to_int(x) == Math.to_int(cdf(guess, df)) do 
+      guess
+    else
+      ppf_tande(x, df, guess)
+    end
+  end
+  # get the DF and required ppf point
+  # start with a guess (df)
+  # if it's not the ppf we want ->
+    #  move closer by
+    
 
   @doc """
   Draw a random number from a t distribution with specified degrees of freedom
