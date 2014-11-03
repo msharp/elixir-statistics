@@ -55,6 +55,15 @@ defmodule MathHelpersTest do
     assert Math.gamma(0.02) == 49.442210163195654
   end
 
+  test "incomplete gamma function" do
+    assert Math.gammainc(2,2) == 0.5939941502901618
+    assert Math.gammainc(1,2) == 0.8646647167633872
+    assert Math.gammainc(1,1) == 0.63212055882855778
+    # not a complete solution ... some cases that do not work
+    #assert Math.gammainc(4,1) == 0.018988156876153808
+    #assert Math.gammainc(0.1,1) == 0.97587265627367215
+  end
+
   test "beta function" do
     assert Math.beta(1, 2) == 0.5
     assert Math.beta(2, 2) == 0.1666666666666665

@@ -29,17 +29,14 @@ defmodule Statistics.Distributions.Chisq do
 
   ## Examples
 
-  #iex> Statistics.Distributions.Chisq(2, 2)
-  #    0.63212055882855778
-
-  http://rosettacode.org/wiki/Verify_distribution_uniformity/Chi-squared_test
+      iex> Statistics.Distributions.Chisq.cdf(2, 2)
+      0.6321205588285574
 
   """
   def cdf(x, df) do
-    #g = Math.gamma(df/2) 
-    #b = Math.gamma_inc_q(df/2, x/2)
-    #b / g  
-    0.0
+    g = Math.gamma(df/2.0) 
+    b = Math.gammainc(df/2.0, x/2.0)
+    b / g  
   end
 
   @doc """

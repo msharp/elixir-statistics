@@ -211,12 +211,37 @@ defmodule Statistics.MathHelpers do
     gamma(x) * gamma(y) / gamma(x + y)
   end
 
+  @doc """ 
+  Incomplete Gamma function
+    
+  ## Examples 
+
+      iex> Statistics.MathHelpers.gammainc(1,1)
+      0.63212055882855778
+
+  """
   # ############################
-  # incomplete Gamma function
+  # this simple approach adapted from 
+  # http://www.dreamincode.net/forums/topic/12775-statistical-functions/
   # 
-  # try: https://mail.python.org/pipermail/python-list/2001-April/092498.html
+  # for alternate implementation strategies to try
   #
+  #   : https://mail.python.org/pipermail/python-list/2001-April/092498.html
+  #   : http://www.dreamincode.net/forums/topic/12775-statistical-functions/
+  #   : http://www.crbond.com/math.htm
+  #  
   # ###########################
+  def gammainc(a, x) do
+    pow(x, a) * exp(-x) * gammainc_sum(a, x, 1/a, 0, 1)
+  end
+  defp gammainc_sum(_, _, t, s, _) when t == 0.0 do
+    s
+  end
+  defp gammainc_sum(a, x, t, s, n) do
+    s = s + t
+    t = t * (x / (a + n))
+    gammainc_sum(a, x, t, s, n+1)
+  end
 
 
 

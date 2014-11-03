@@ -11,9 +11,10 @@ defmodule ChisqDistributionTest do
   end
 
   test "return a cdf " do
-    #assert Chisq.cdf(2, 2) == 0.63212055882855778
-    #assert Chisq.cdf(16.8, 23) == 0.18105083862291921
-    assert Chisq.cdf(1, 1) == 0.0
+    assert Chisq.cdf(1, 1) == 0.6826894921370859
+    assert Chisq.cdf(2, 2) == 0.6321205588285574
+    assert Chisq.cdf(16.8, 23) == 0.18105083862291935
+    assert Chisq.cdf(89.999, 77) == 0.8524000316322363
   end
 
   test "return a random number from the distribution" do
