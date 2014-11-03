@@ -41,23 +41,33 @@ defmodule Statistics.Distributions.Chisq do
 
   @doc """
   The percentile-point function
+
+  ## Examples 
+
+      iex> Statistics.Distributions.Chisq.ppf(0.95, 1)
+      3.841458820694101
+
   """
   def ppf(x, df) do
-    # trial-and-error
-    ppf_tande(x, df, 0)
+    ppf_tande(x, df) 
   end
-  defp ppf_tande(x, df, g) do
-    guess = g + 1 # start
-    if Math.to_int(x) == Math.to_int(cdf(guess, df)) do 
-      guess
+  # trial-and-error method which refines guesses
+  # to arbitrary number of decimal places 
+  defp ppf_tande(x, df, precision \\ 14) do
+    ppf_tande(x, df, 0, precision+2, 0) 
+  end
+  defp ppf_tande(_, _, g, precision, precision) do
+    g
+  end
+  defp ppf_tande(x, df, g, precision, p) do
+    increment = 100 / Math.pow(10, p)
+    guess = g + increment
+    if x < cdf(guess, df) do
+      ppf_tande(x, df, g, precision, p+1)
     else
-      ppf_tande(x, df, guess)
+      ppf_tande(x, df, guess, precision, p)
     end
   end
-  # get the DF and required ppf point
-  # start with a guess (df)
-  # if it's not the ppf we want ->
-    #  move closer by
     
 
   @doc """
@@ -79,10 +89,6 @@ defmodule Statistics.Distributions.Chisq do
       rand(df) # keep trying
     end
   end
-
-  ######################################################
-  ######################################################
-  ######################################################
 
 end
 

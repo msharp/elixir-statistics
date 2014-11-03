@@ -157,7 +157,7 @@ defmodule Statistics.MathHelpers do
   """
   def to_int(f) do
     s = Float.to_string Float.floor(f), [decimals: 0, compact: true]
-    {i, rem} = Integer.parse(s)
+    {i, _} = Integer.parse(s)
     i
   end
 
@@ -224,7 +224,7 @@ defmodule Statistics.MathHelpers do
   # this simple approach adapted from 
   # http://www.dreamincode.net/forums/topic/12775-statistical-functions/
   # 
-  # for alternate implementation strategies to try
+  # there are alternate implementation strategies to try
   #
   #   : https://mail.python.org/pipermail/python-list/2001-April/092498.html
   #   : http://www.dreamincode.net/forums/topic/12775-statistical-functions/
@@ -242,7 +242,6 @@ defmodule Statistics.MathHelpers do
     t = t * (x / (a + n))
     gammainc_sum(a, x, t, s, n+1)
   end
-
 
 
 end

@@ -24,9 +24,8 @@ defmodule ChisqDistributionTest do
   end
 
   test "get the percentile point value" do
-    assert Chisq.ppf(0.95, 77) == 98.484383459340307
+    assert Chisq.ppf(0.95, 77) == 98.48438345933901
+    assert Chisq.ppf(0.05, 7) == 2.167349909298
   end
 
 end
-
-
