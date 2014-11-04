@@ -147,6 +147,20 @@ defmodule Statistics.MathHelpers do
   end
 
   @doc """
+  Factorial!
+  """
+  def factorial(0) do
+    1
+  end
+  def factorial(1) do
+    1
+  end
+  def factorial(n) do
+    l = for i <- n-1..1, do: i
+    List.foldl(l, n, fn(x, acc) -> x*acc end)
+  end
+
+  @doc """
   Get the base integer from a float
 
   ## Examples
@@ -243,5 +257,25 @@ defmodule Statistics.MathHelpers do
     gammainc_sum(a, x, t, s, n+1)
   end
 
+  @doc """
+  Hypergeometrc 2F1 function
+  """
+  # from http://mhtlab.uwaterloo.ca/courses/me755/web_chap7.pdf
+  def hyp2f1(a, b, c, x) do
+    pb = gamma(c)/gamma(a)*gamma(b)
+    pa = hyp2f1_cont(a, b, c, x)
+    pb * pa
+  end
+  defp hyp2f1_cont(a, b, c, x) do
+    hyp2f1_cont(a, b, c, x, 0, 0)
+  end
+  defp hyp2f1_cont(_, _, _, _, n, acc) when n > 50 do
+    acc
+  end
+  defp hyp2f1_cont(a, b, c, x, n, acc) do
+    s = gamma(a+n) * gamma(b+n) / gamma(c+n)
+    p = pow(x, n) / factorial(n)
+    hyp2f1_cont(a, b, c, x, n+1, acc+(s*p))
+  end
 
 end

@@ -45,6 +45,11 @@ defmodule MathHelpersTest do
     assert Math.abs(2.2) == 2.2
   end
 
+  test "calculate factorial" do
+    assert Math.factorial(5) == 120
+    assert Math.factorial(11) == 39916800
+  end
+
   test "turn a float into an integer" do
     assert Math.to_int(2.2) == 2
     assert Math.to_int(599.9) == 599
@@ -68,6 +73,12 @@ defmodule MathHelpersTest do
     assert Math.beta(1, 2) == 0.5
     assert Math.beta(2, 2) == 0.1666666666666665
     assert Math.beta(0.05, 1) == 19.999999999999996
+  end
+
+  test "hypergeometric 2F1 function" do
+    #assert Math.hyp2f1(0.2, 3, 0.2, 0.2) == 1.9531249999999998
+    assert Math.hyp2f1(1, 2, 1, 0.5) == 3.999999999999959
+    assert Math.hyp2f1(1, 1, 1, 0.5) == 2.000000000000001
   end
 
 end
