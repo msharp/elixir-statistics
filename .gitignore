@@ -2,3 +2,8 @@
 /deps
 erl_crash.dump
 *.ez
+/_build
+/docs
+mix.lock
+TODO
+*.txt
