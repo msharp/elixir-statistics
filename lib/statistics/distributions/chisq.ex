@@ -1,6 +1,7 @@
 defmodule Statistics.Distributions.Chisq do
 
   alias Statistics.Math
+  alias Statistics.Math.Functions
 
   @moduledoc """
   Chi square distribution.
@@ -18,7 +19,7 @@ defmodule Statistics.Distributions.Chisq do
 
   """
   def pdf(x, df) do
-    1 / (Math.pow(2, df/2) * Math.gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
+    1 / (Math.pow(2, df/2) * Functions.gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
   end
   def pdf(x) do
     pdf(x, 1)
@@ -34,8 +35,8 @@ defmodule Statistics.Distributions.Chisq do
 
   """
   def cdf(x, df) do
-    g = Math.gamma(df/2.0) 
-    b = Math.gammainc(df/2.0, x/2.0)
+    g = Functions.gamma(df/2.0) 
+    b = Functions.gammainc(df/2.0, x/2.0)
     b / g  
   end
 
