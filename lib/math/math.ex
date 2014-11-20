@@ -1,4 +1,4 @@
-defmodule Statistics.MathHelpers do
+defmodule Statistics.Math do
 
   @e 2.718281828459045
   @pi :math.pi
@@ -10,9 +10,9 @@ defmodule Statistics.MathHelpers do
   
   ## Examples
 
-      iex> Statistics.MathHelpers.sqrt(9)
+      iex> Statistics.Math.sqrt(9)
       3.0
-      iex> Statistics.MathHelpers.sqrt(99)
+      iex> Statistics.Math.sqrt(99)
       9.9498743710662
 
   """
@@ -28,15 +28,15 @@ defmodule Statistics.MathHelpers do
 
   ## Examples
 
-      iex> Statistics.MathHelpers.pow(2,3)
+      iex> Statistics.Math.pow(2,3)
       8.0
-      iex> Statistics.MathHelpers.pow(9,9)
+      iex> Statistics.Math.pow(9,9)
       387420489.0
-      iex> Statistics.MathHelpers.pow(2,0)
+      iex> Statistics.Math.pow(2,0)
       1
-      iex> Statistics.MathHelpers.pow(-2, 1.5)
+      iex> Statistics.Math.pow(-2, 1.5)
       -2.8284271247461903
-      iex> Statistics.MathHelpers.pow(0, 5)
+      iex> Statistics.Math.pow(0, 5)
       0
 
   """
@@ -59,7 +59,7 @@ defmodule Statistics.MathHelpers do
 
   ## Examples
 
-      iex> Statistics.MathHelpers.e
+      iex> Statistics.Math.e
       2.718281828459045
 
   """
@@ -74,7 +74,7 @@ defmodule Statistics.MathHelpers do
 
   ## Examples
 
-      iex> Statistics.MathHelpers.pi
+      iex> Statistics.Math.pi
       3.141592653589793
 
   """
@@ -89,9 +89,9 @@ defmodule Statistics.MathHelpers do
 
   ## Examples
   
-      iex> Statistics.MathHelpers.ln(20)
+      iex> Statistics.Math.ln(20)
       2.995732273553991
-      iex> Statistics.MathHelpers.ln(200)
+      iex> Statistics.Math.ln(200)
       5.298317366548036
 
   """
@@ -121,7 +121,7 @@ defmodule Statistics.MathHelpers do
 
   ## Examples 
 
-      iex> Statistics.MathHelpers.round(0.123456, 4)
+      iex> Statistics.Math.round(0.123456, 4)
       0.1235
 
   """
@@ -135,7 +135,7 @@ defmodule Statistics.MathHelpers do
 
   ## Examples 
 
-      iex> Statistics.MathHelpers.abs(-4)
+      iex> Statistics.Math.abs(-4)
       4
 
   """
@@ -165,7 +165,7 @@ defmodule Statistics.MathHelpers do
 
   ## Examples
 
-      iex> Statistics.MathHelpers.to_int(66.6666)
+      iex> Statistics.Math.to_int(66.6666)
       66
 
   """
@@ -184,7 +184,7 @@ defmodule Statistics.MathHelpers do
 
   ## Examples
    
-      iex> Statistics.MathHelpers.gamma(0.5)
+      iex> Statistics.Math.gamma(0.5)
       1.7724538509055163
 
   """
@@ -216,7 +216,7 @@ defmodule Statistics.MathHelpers do
 
   ## Examples 
 
-      iex> Statistics.MathHelpers.beta(2, 0.5)
+      iex> Statistics.Math.beta(2, 0.5)
       1.3333333333333328
 
   """
@@ -230,7 +230,7 @@ defmodule Statistics.MathHelpers do
     
   ## Examples 
 
-      iex> Statistics.MathHelpers.gammainc(1,1)
+      i2ex> Statistics.Math.gammainc(1,1)
       0.63212055882855778
 
   """

@@ -1,8 +1,8 @@
-defmodule MathHelpersTest do
+defmodule MathTest do
   use ExUnit.Case, async: true
-  doctest Statistics.MathHelpers
+  doctest Statistics.Math
 
-  alias Statistics.MathHelpers, as: Math
+  alias Statistics.Math
 
   test "square root" do
     assert Math.sqrt(9) == 3

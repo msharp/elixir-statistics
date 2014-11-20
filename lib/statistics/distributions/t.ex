@@ -1,6 +1,6 @@
 defmodule Statistics.Distributions.T do
 
-  alias Statistics.MathHelpers, as: Math
+  alias Statistics.Math
 
   @moduledoc """
   Student's t distribution.

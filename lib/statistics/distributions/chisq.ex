@@ -1,6 +1,6 @@
 defmodule Statistics.Distributions.Chisq do
 
-  alias Statistics.MathHelpers, as: Math
+  alias Statistics.Math
 
   @moduledoc """
   Chi square distribution.

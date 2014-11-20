@@ -3,7 +3,7 @@ defmodule NormalDistributionTest do
   doctest Statistics.Distributions.Normal, except: [rand: 0, rand: 3]
 
   alias Statistics.Distributions.Normal, as: Norm
-  alias Statistics.MathHelpers, as: Math
+  alias Statistics.Math
 
   """
   to get mitigate the vagaries of floating-point math 
