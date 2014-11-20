@@ -29,8 +29,11 @@ defmodule Statistics.Distributions.T do
   @doc """
   The cumulative density function
   """
-  def cdf(x) do
-    0.0
+  def cdf(x, df) do
+    p1 = 0.5 + x * Math.gamma((df+1)/2)  
+    p2n = Math.hyp2f1(0.5, ((df+1)/2), 1.5, -1*Math.pow(x,2)/df) 
+    p2d = Math.sqrt(Math.pi*df) * Math.gamma(df/2)
+    p1 * (p2n / p2d)
   end
 
   @doc """
