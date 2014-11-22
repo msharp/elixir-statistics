@@ -5,6 +5,8 @@ defmodule MathFunctionsTest do
   alias Statistics.Math.Functions
   alias Statistics.Math
 
+  alias Statistics.Distributions.T
+
   test "gamma function" do
     assert Functions.gamma(22) == 5.109094217170959e19
     assert Functions.gamma(0.02) == 49.442210163195654
@@ -26,6 +28,7 @@ defmodule MathFunctionsTest do
   end
 
   test "hypergeometric 2F1 function" do
+    # This is not a correct implementation, fails in many cases.
     #assert Functions.hyp2f1(0.2, 3, 0.2, 0.2) == 1.9531249999999998
     assert Functions.hyp2f1(1, 2, 1, 0.5) == 3.999999999999959
     assert Functions.hyp2f1(1, 1, 1, 0.5) == 2.000000000000001
@@ -35,6 +38,13 @@ defmodule MathFunctionsTest do
     f = fn x -> Math.pow(x,9) end
     sr = Functions.simpson(f, 0, 10, 100000)
     assert Math.round(sr, 1) == 1000000000.0
+    
+    # integral of t.pdf(x, 1) at 2 and -2
+    f = fn x -> T.pdf(x, 1) end
+    sr = Functions.simpson(f, -10000, 2, 100000)
+    assert sr == 0.8523845106569063
+    sr = Functions.simpson(f, -10000, -2, 100000)
+    assert sr == 0.14755182730100083
   end
 
 end

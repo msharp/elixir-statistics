@@ -107,7 +107,13 @@ defmodule Statistics.Math.Functions do
   @doc """
   Simpsons rule for numerical intergation of a function
 
-  from: http://en.wikipedia.org/wiki/Simpson's_rule
+  see: http://en.wikipedia.org/wiki/Simpson's_rule
+
+  ## Examples
+
+    iex> Statistics.Math.Functions.simpson(fn x -> x*x*x end, 0, 20, 100000)
+    40000.00000000011
+
   """
   def simpson(f, a, b, n) do
     h = (b - a) / n
