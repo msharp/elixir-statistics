@@ -16,15 +16,12 @@ defmodule Statistics.Distributions.T do
 
       iex> Statistics.Distributions.T.pdf(0, 3)
       0.36755259694786124
-      iex> Statistics.Distributions.T.pdf(3.2)
+      iex> Statistics.Distributions.T.pdf(3.2, 1)
       0.02831938489179633
 
   """
   def pdf(x, df) do
     Functions.gamma((df+1)/2) / (Math.sqrt(df*Math.pi) * Functions.gamma(df/2) ) * Math.pow((1 + (x*x/df)), ((df+1)/2)*-1)
-  end
-  def pdf(x) do
-    pdf(x, 1)
   end
 
   @doc """
@@ -58,7 +55,7 @@ defmodule Statistics.Distributions.T do
   @doc """
   The percentile-point function
 
-  NOTE: this is slow due to the current implementation of the CDF
+  NOTE: this is very slow due to the current implementation of the CDF
 
   """
   def ppf(x, df) do  
