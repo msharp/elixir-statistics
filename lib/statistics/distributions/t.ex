@@ -57,11 +57,31 @@ defmodule Statistics.Distributions.T do
 
   @doc """
   The percentile-point function
-  """
-  def ppf(x) do
-    0.0
-  end
 
+  NOTE: this is slow due to the current implementation of the CDF
+
+  """
+  def ppf(x, df) do  
+    ppf_tande(x, df) 
+  end
+  # trial-and-error method which refines guesses
+  # to arbitrary number of decimal places 
+  defp ppf_tande(x, df, precision \\ 4) do
+    ppf_tande(x, df, -10, precision+2, 0) 
+  end
+  defp ppf_tande(_, _, g, precision, precision) do
+    g
+  end
+  defp ppf_tande(x, df, g, precision, p) do
+    increment = 100 / Math.pow(10, p)
+    guess = g + increment
+    if x < cdf(guess, df) do
+      ppf_tande(x, df, g, precision, p+1)
+    else
+      ppf_tande(x, df, guess, precision, p)
+    end
+  end
+   
   @doc """
   Draw a random number from a t distribution with specified degrees of freedom
   """
