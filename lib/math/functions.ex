@@ -103,4 +103,24 @@ defmodule Statistics.Math.Functions do
     hyp2f1_cont(a, b, c, x, n+1, acc+(s*p))
   end
 
+
+  @doc """
+  Simpsons rule for numerical intergation of a function
+
+  from: http://en.wikipedia.org/wiki/Simpson's_rule
+  """
+  def simpson(f, a, b, n) do
+    h = (b - a) / n
+    s = f.(a) + f.(b) + 
+      ( Stream.take_every(1..n-1, 2) 
+        |> Enum.map(fn i -> 4 * f.(a + i * h) end)
+        |> Enum.sum ) + 
+      ( Stream.take_every(2..n-2, 2) 
+        |> Enum.map(fn i -> 2 * f.(a + i * h) end)
+        |> Enum.sum
+    )
+
+    s * h / 3
+  end
+
 end

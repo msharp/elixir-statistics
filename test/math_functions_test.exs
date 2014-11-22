@@ -3,6 +3,7 @@ defmodule MathFunctionsTest do
   doctest Statistics.Math.Functions
 
   alias Statistics.Math.Functions
+  alias Statistics.Math
 
   test "gamma function" do
     assert Functions.gamma(22) == 5.109094217170959e19
@@ -28,6 +29,12 @@ defmodule MathFunctionsTest do
     #assert Functions.hyp2f1(0.2, 3, 0.2, 0.2) == 1.9531249999999998
     assert Functions.hyp2f1(1, 2, 1, 0.5) == 3.999999999999959
     assert Functions.hyp2f1(1, 1, 1, 0.5) == 2.000000000000001
+  end
+
+  test "simpsons numeric integration rule" do
+    f = fn x -> Math.pow(x,9) end
+    sr = Functions.simpson(f, 0, 10, 100000)
+    assert Math.round(sr, 1) == 1000000000.0
   end
 
 end
