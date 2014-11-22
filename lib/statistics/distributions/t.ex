@@ -29,8 +29,26 @@ defmodule Statistics.Distributions.T do
 
   @doc """
   The cumulative density function
+
+  NOTE: this currently uses the very slow Simpson's Rule to execute
+  a numerical integration of the `pdf` function to approximate
+  the CDF.
+  A robust implementation of the 2F1 hypergeometric function is 
+  required to properly calculate the CDF of the t distribution. 
+
+  ## Examples
+
+      iex> Statistics.Distributions.T.cdf(0, 3)
+      0.4999999999991643
+      
   """
   def cdf(x, df) do
+    f = fn y -> pdf(y, df) end
+    Functions.simpson(f, -10000, x, 100000)
+  end
+
+  # when a robust hyp2F1 materialises, use this implementation
+  defp cdf_hyp2f1(x, df) do
     p1 = 0.5 + x * Functions.gamma((df+1)/2)  
     p2n = Math.hyp2f1(0.5, ((df+1)/2), 1.5, -1*Math.pow(x,2)/df) 
     p2d = Math.sqrt(Math.pi*df) * Functions.gamma(df/2)

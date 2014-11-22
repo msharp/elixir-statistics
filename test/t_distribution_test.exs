@@ -2,9 +2,7 @@ defmodule TDistributionTest do
   use ExUnit.Case, async: true
   doctest Statistics.Distributions.T, except: [rand: 0, rand: 3]
 
-  alias Statistics.Distributions.T, as: T
-  #alias Statistics.MathHelpers, as: Math
-
+  alias Statistics.Distributions.T
 
   test "output of the pdf function" do
     assert T.pdf(0, 3) == 0.36755259694786124
@@ -13,8 +11,8 @@ defmodule TDistributionTest do
   end
 
   test "return a cdf " do
-    #assert T.cdf(2, 1) == 0.85241638234956674
-    #assert T.cdf(0, 1) == 0.5
+    assert T.cdf(2, 3) == 0.9303369577936188
+    assert T.cdf(0, 1) == 0.4999681690117117 # ~ 0.5
   end
 
   test "return a random number from the distribution" do
