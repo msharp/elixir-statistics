@@ -29,19 +29,20 @@ defmodule Statistics.Distributions.T do
 
   NOTE: this currently uses the very slow Simpson's Rule to execute
   a numerical integration of the `pdf` function to approximate
-  the CDF.
+  the CDF. This leads to a trade-off between precision and speed.
+
   A robust implementation of the 2F1 hypergeometric function is 
   required to properly calculate the CDF of the t distribution. 
 
   ## Examples
 
       iex> Statistics.Distributions.T.cdf(0, 3)
-      0.4999999999991643
+      0.49091825070702755
       
   """
   def cdf(x, df) do
     f = fn y -> pdf(y, df) end
-    Functions.simpson(f, -10000, x, 100000)
+    Functions.simpson(f, -10000, x, 10000)
   end
 
   # when a robust hyp2F1 materialises, use this implementation
