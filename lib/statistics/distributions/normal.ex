@@ -5,6 +5,7 @@ defmodule Statistics.Distributions.Normal do
   """
 
   alias Statistics.Math
+  alias Statistics.Math.Functions
 
   @doc """
   Probability density function
@@ -50,7 +51,7 @@ defmodule Statistics.Distributions.Normal do
   end
 
   def cdf(x, mu, sigma) do
-    0.5 * (1.0 + erf((x - mu) / (sigma * Math.sqrt(2))))
+    0.5 * (1.0 + Functions.erf((x - mu) / (sigma * Math.sqrt(2))))
   end
 
   
@@ -73,9 +74,9 @@ defmodule Statistics.Distributions.Normal do
   end
   def ppf(x, mu, sigma) do
     if x < 0.5 do 
-      p = -inv_erf(Math.sqrt(-2.0*Math.ln(x)))
+      p = -Functions.inv_erf(Math.sqrt(-2.0*Math.ln(x)))
     else
-      p = inv_erf(Math.sqrt(-2.0*Math.ln(1-x)))
+      p = Functions.inv_erf(Math.sqrt(-2.0*Math.ln(1-x)))
     end
     mu + (p * sigma)
   end
@@ -121,39 +122,5 @@ defmodule Statistics.Distributions.Normal do
       rand(mu, sigma) # keep trying
     end
   end
-
-  # the error function
-  """ 
-  Formula 7.1.26 given in Abramowitz and Stegun.
-  Formula appears as 1 – (a1t1 + a2t2 + a3t3 + a4t4 + a5t5)exp(-x2)
-  A little wisdom in Horner's Method of coding polynomials:
-    1) We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
-    2) But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
-    3) The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
-  """
-  defp erf(x) do
-    # constants
-    {a1, a2, a3, a4, a5} = {0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429}
-    p  =  0.3275911
-        
-    # Save the sign of x
-    sign = if x < 0, do: -1, else: 1
-    x = abs(x)
-    
-    # Formula 7.1.26 given in Abramowitz and Stegun.
-    t = 1.0/(1.0 + p*x)
-    y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t * Math.pow(Math.e, (-x*x))
-    
-    sign * y
-  end
-
-  # the inverse error function
-  def inv_erf(x) do
-    # constants
-    {c0, c1, c2} = {2.515517, 0.802853, 0.010328}
-    {d0, d1, d2} = {1.432788, 0.189269, 0.001308}
-    # formula
-    x - ((c2*x + c1)*x + c0) / (((d2*x + d1)*x + d0)*x + 1.0)
-  end 
 
 end
