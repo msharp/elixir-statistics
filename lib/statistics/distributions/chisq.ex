@@ -21,9 +21,6 @@ defmodule Statistics.Distributions.Chisq do
   def pdf(x, df) do
     1 / (Math.pow(2, df/2) * Functions.gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
   end
-  def pdf(x) do
-    pdf(x, 1)
-  end
 
   @doc """
   The cumulative density function
