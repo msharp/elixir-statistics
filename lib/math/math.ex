@@ -104,6 +104,11 @@ defmodule Statistics.Math do
 
   Raise *e* to given power
 
+  ## Examples
+
+      iex> Statistics.Math.exp(5.6)
+      270.4264074261525
+
   """
   def exp(x) do
     pow(@e, x)

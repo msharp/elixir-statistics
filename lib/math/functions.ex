@@ -56,11 +56,12 @@ defmodule Statistics.Math.Functions do
 
   Formula 7.1.26 given in Abramowitz and Stegun.
   Formula appears as 1 – (a1t1 + a2t2 + a3t3 + a4t4 + a5t5)exp(-x2)
-  A little wisdom in Horner's Method of coding polynomials:
-    1) We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
-    2) But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
-    3) The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
+
   """
+  #Some wisdom in Horner's Method of coding polynomials:
+  #  - We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
+  #  - But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
+  #  - The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
   def erf(x) do
     # constants
     {a1, a2, a3, a4, a5} = {0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429}
@@ -89,11 +90,11 @@ defmodule Statistics.Math.Functions do
   end 
 
   @doc """ 
-  Incomplete Gamma function
+  Lower incomplete Gamma function
     
   ## Examples 
 
-      i2ex> Statistics.Math.Functions.gammainc(1,1)
+      iex> Statistics.Math.Functions.gammainc(1,1)
       0.63212055882855778
 
   """
@@ -101,7 +102,8 @@ defmodule Statistics.Math.Functions do
   # this simple approach adapted from 
   # http://www.dreamincode.net/forums/topic/12775-statistical-functions/
   # 
-  # there are alternate implementation strategies to try
+  # there are alternate implementation strategies to try, 
+  # for examples, see:
   #
   #   : https://mail.python.org/pipermail/python-list/2001-April/092498.html
   #   : http://www.dreamincode.net/forums/topic/12775-statistical-functions/
@@ -121,7 +123,10 @@ defmodule Statistics.Math.Functions do
   end
 
   @doc """
-  Hypergeometrc 2F1 function
+  Hypergeometrc 2F1 functiono
+
+  WARNING: the implementation is incomplete, and should not be used
+
   """
   # from http://mhtlab.uwaterloo.ca/courses/me755/web_chap7.pdf
   def hyp2f1(a, b, c, x) do
@@ -149,21 +154,21 @@ defmodule Statistics.Math.Functions do
 
   ## Examples
 
-    iex> Statistics.Math.Functions.simpson(fn x -> x*x*x end, 0, 20, 100000)
-    40000.00000000011
+      iex> Statistics.Math.Functions.simpson(fn x -> x*x*x end, 0, 20, 100000)
+      40000.00000000011
 
   """
   def simpson(f, a, b, n) do
     h = (b - a) / n
-    s = f.(a) + f.(b) + 
-      ( Stream.take_every(1..n-1, 2) 
+    s = f.(a) + f.(b) + ( 
+      Stream.take_every(1..n-1, 2) 
         |> Enum.map(fn i -> 4 * f.(a + i * h) end)
-        |> Enum.sum ) + 
-      ( Stream.take_every(2..n-2, 2) 
+        |> Enum.sum 
+      ) + (
+      Stream.take_every(2..n-2, 2) 
         |> Enum.map(fn i -> 2 * f.(a + i * h) end)
-        |> Enum.sum
-    )
-
+        |> Enum.sum 
+      )
     s * h / 3
   end
 
