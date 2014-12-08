@@ -1,23 +1,23 @@
 #  Statistics
- 
+
 [![Build Status](https://travis-ci.org/msharp/elixir-statistics.svg?branch=master)](https://travis-ci.org/msharp/elixir-statistics)
 [![hex.pm version](https://img.shields.io/hexpm/v/statistics.svg?style=flat)](https://hex.pm/packages/statistics)
 
 Statistics functions for [Elixir](https://github.com/elixir-lang/elixir).
 
-## Usage 
+## Usage
 
 Add Statistics as a dependency in your `mix.exs` file to install from [hex.pm](https://hex.pm).
 
 ```elixir
 def deps do
-  [ 
-    { :statistics, "~> 0.2.0"} 
+  [
+    { :statistics, "~> 0.2.0"}
   ]
 end
 ```
-  
-After you are done, run `mix deps.get` in your shell to fetch and compile Statistics. 
+
+After you are done, run `mix deps.get` in your shell to fetch and compile Statistics.
 
 To try it out, start an interactive Elixir shell with `iex -S mix`.
 
@@ -32,23 +32,22 @@ iex> Stats.variance([1,2,3,4])
 
 ## Documentation
 
-Elixir has great documentation tools using `ex_doc`. 
+Elixir has great documentation tools using `ex_doc`.
 
-The docs are hosted on [hexdocs.pm/statistics](http://hexdocs.pm/statistics/). 
+The docs are hosted on [hexdocs.pm/statistics](http://hexdocs.pm/statistics/).
 
 ## Roadmap
 
-This library is evolving to include more than just simple descriptive statistics. 
+This library is evolving to include more than just simple descriptive statistics.
 
 I plan to add most common statistical tests and distributions.
 
 ## Contributing
 
-I'd love to accept pull requests. 
+I'd love to accept pull requests.
 
 If you want to contribute, please create a topic branch with tests.
 
 ## License
 
 Apache 2
-

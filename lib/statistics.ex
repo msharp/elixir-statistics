@@ -12,7 +12,7 @@ defmodule Statistics do
   @moduledoc """
   Provides basic statistics functions
   """
-  
+
   @doc """
   Sum the contents of a list
 
@@ -26,7 +26,7 @@ defmodule Statistics do
   Calculate the mean from a list of numbers
 
   ## Examples
-    
+
       iex> Statistics.mean([1,2,3])
       2.0
 
@@ -39,7 +39,7 @@ defmodule Statistics do
   Get the median value from a list
 
   ## Examples
-  
+
       iex> Statistics.median([1,2,3])
       2
       iex> Statistics.median([1,2,3,4])
@@ -61,10 +61,10 @@ defmodule Statistics do
 
   @doc """
   Get the most frequently occuring value
-  
+
   ## Examples
 
-      iex> Statistics.mode([1,2,3,2,4,5,2,6,7,2,8,9]) 
+      iex> Statistics.mode([1,2,3,2,4,5,2,6,7,2,8,9])
       2
 
   """
@@ -123,7 +123,7 @@ defmodule Statistics do
 
   ## Examples
 
-      iex>  Statistics.quartile([1,2,3,4,5,6,7,8,9],:first) 
+      iex>  Statistics.quartile([1,2,3,4,5,6,7,8,9],:first)
       3
       iex>  Statistics.quartile([1,2,3,4,5,6,7,8,9],:third)
       7
@@ -142,7 +142,7 @@ defmodule Statistics do
   Get the nth percentile cutoff from a list
 
   ## Examples
-  
+
       iex> Statistics.percentile([1,2,3,4,5,6,7,8,9],80)
       7.4
       iex> Statistics.percentile([1,2,3,4,5,6,7,8,9],100)
@@ -210,12 +210,12 @@ defmodule Statistics do
   end
 
   @doc """
-  Calculate the trimmed mean of a list. 
-  Can specify cutoff values as a tuple, 
+  Calculate the trimmed mean of a list.
+  Can specify cutoff values as a tuple,
   or simply choose the IQR min/max as the cutoffs
 
   ## Examples
-  
+
     iex> Statistics.trimmed_mean([1,2,3],{1,3})
     2.0
     iex> Statistics.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15], :iqr)
@@ -238,12 +238,12 @@ defmodule Statistics do
   @doc """
   Calculates the harmonic mean from a list
 
-  Harmonic mean is the number of values divided by 
+  Harmonic mean is the number of values divided by
   the sum of the reciprocal of all the values.
 
   ## Examples
-  
-      iex> Statistics.harmonic_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) 
+
+      iex> Statistics.harmonic_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
       4.5204836768674568
 
   """
@@ -259,7 +259,7 @@ defmodule Statistics do
 
   ## Examples
 
-      iex> Statistics.geometric_mean([1,2,3]) 
+      iex> Statistics.geometric_mean([1,2,3])
       1.8171205928321397
 
   """
@@ -278,12 +278,12 @@ defmodule Statistics do
 
   ## Examples
 
-      iex> Statistics.moment([1,2,3,4,5,6,7,8,9,8,7,6,5,4,3],3) 
+      iex> Statistics.moment([1,2,3,4,5,6,7,8,9,8,7,6,5,4,3],3)
       -1.3440000000000025
 
   """
   def moment(list, moment \\ 1) do
-    if moment == 1 do 
+    if moment == 1 do
       # By definition the first moment about the mean is 0.
       0.0
     else
@@ -300,9 +300,9 @@ defmodule Statistics do
   value > 0 means that there is more weight in the left tail of the
   distribution.
 
-  ## Examples 
+  ## Examples
 
-      iex> Statistics.skew([1,2,3,2,1])  
+      iex> Statistics.skew([1,2,3,2,1])
       0.3436215967445454
 
   """
@@ -319,14 +319,14 @@ defmodule Statistics do
 
   ## Examples
 
-      iex> Statistics.kurtosis([1,2,3,2,1]) 
+      iex> Statistics.kurtosis([1,2,3,2,1])
       -1.1530612244897964
-    
+
   """
   def kurtosis(list) do
     m2 = moment(list, 2)
     m4 = moment(list, 4)
-    p = m4 / Math.pow(m2, 2.0) # pearson 
+    p = m4 / Math.pow(m2, 2.0) # pearson
     p - 3                 # fisher
   end
 
@@ -348,7 +348,7 @@ defmodule Statistics do
   end
 
   ## helpers and other flotsam
-  
+
   # Split a list into two equal lists.
   # Needed for getting the quartiles.
   defp split_list(list) do

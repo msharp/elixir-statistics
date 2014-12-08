@@ -6,11 +6,11 @@ defmodule NormalDistributionTest do
   alias Statistics.Math
 
   """
-  to get mitigate the vagaries of floating-point math 
+  to get mitigate the vagaries of floating-point math
   and rounding errors, test equivalence to 4 decimal places
   """
   def assert_p(left, right, precision \\ 4) do
-      assert Math.round(left, precision) == Math.round(right, precision) 
+      assert Math.round(left, precision) == Math.round(right, precision)
   end
 
   test "output of the pdf function" do
@@ -28,7 +28,7 @@ defmodule NormalDistributionTest do
   end
 
   test "return a normally-distributed random number" do
-    assert is_float Norm.rand() 
+    assert is_float Norm.rand()
     rands = for _ <- 0..10000, do: Norm.rand(5, 1.5)
     assert_p Statistics.mean(rands), 5, 1
     assert_p Statistics.stdev(rands), 1.5, 1

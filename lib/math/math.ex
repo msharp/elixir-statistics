@@ -2,12 +2,12 @@ defmodule Statistics.Math do
 
   @e 2.718281828459045
   @pi :math.pi
-  
+
   @doc """
-  Get square root 
-  
+  Get square root
+
   return sqrt from Erlang
-  
+
   ## Examples
 
       iex> Statistics.Math.sqrt(9)
@@ -20,10 +20,10 @@ defmodule Statistics.Math do
     :math.sqrt(num)
   end
 
-  @doc """ 
+  @doc """
   Get power from Erlang
 
-  This is needed because Elixir doesn't 
+  This is needed because Elixir doesn't
   currently have the `**` operator
 
   ## Examples
@@ -88,7 +88,7 @@ defmodule Statistics.Math do
   ( from Erlang Math module)
 
   ## Examples
-  
+
       iex> Statistics.Math.ln(20)
       2.995732273553991
       iex> Statistics.Math.ln(200)
@@ -124,7 +124,7 @@ defmodule Statistics.Math do
   @doc """
   Round a decimal to a specific precision
 
-  ## Examples 
+  ## Examples
 
       iex> Statistics.Math.round(0.123456, 4)
       0.1235
@@ -138,7 +138,7 @@ defmodule Statistics.Math do
   @doc """
   Get the absolute value of a number
 
-  ## Examples 
+  ## Examples
 
       iex> Statistics.Math.abs(-4)
       4

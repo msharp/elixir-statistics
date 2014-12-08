@@ -38,7 +38,7 @@ defmodule MathFunctionsTest do
     f = fn x -> Math.pow(x,9) end
     sr = Functions.simpson(f, 0, 10, 100000)
     assert Math.round(sr, 1) == 1000000000.0
-    
+
     # integral of t.pdf(x, 1) at 2 and -2
     f = fn x -> T.pdf(x, 1) end
     sr = Functions.simpson(f, -10000, 2, 100000)
