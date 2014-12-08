@@ -10,7 +10,7 @@ defmodule Statistics.Math.Functions do
   ## Examples
    
       iex> Statistics.Math.Functions.gamma(0.5)
-      1.7724538509055163
+      1.7724538509055159
 
   """
   def gamma(x) do
@@ -42,7 +42,7 @@ defmodule Statistics.Math.Functions do
   ## Examples 
 
       iex> Statistics.Math.Functions.beta(2, 0.5)
-      1.3333333333333328
+      1.3333333333333324
 
   """
   def beta(x, y) do

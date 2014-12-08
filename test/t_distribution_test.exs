@@ -5,7 +5,7 @@ defmodule TDistributionTest do
   alias Statistics.Distributions.T
 
   test "output of the pdf function" do
-    assert T.pdf(0, 3) == 0.36755259694786124
+    assert T.pdf(0, 3) == 0.3675525969478612
     assert T.pdf(0.1, 7) ==  0.38279933426055135
     assert T.pdf(0.1, 77) == 0.39564030492250557
   end

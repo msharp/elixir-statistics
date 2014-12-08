@@ -30,7 +30,7 @@ defmodule MathTest do
   end
 
   test "exponent function" do
-    assert Math.exp(2) == 7.3890560989306495
+    assert Math.exp(2) == 7.38905609893065
   end
 
   test "round a decimal" do

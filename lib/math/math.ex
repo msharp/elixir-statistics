@@ -16,9 +16,7 @@ defmodule Statistics.Math do
       9.9498743710662
 
   """
-  def sqrt(num) do
-    :math.sqrt(num)
-  end
+  defdelegate sqrt(num), to: :math
 
   @doc """ 
   Get power from Erlang
@@ -50,9 +48,8 @@ defmodule Statistics.Math do
   def pow(num, pow) when num < 0 and is_float(pow) do
    :math.pow(-num, pow) * -1
   end
-  def pow(num, pow) do
-    :math.pow(num, pow)
-  end
+
+  defdelegate pow(num, pow), to: :math
 
   @doc """
   The constant *e*
@@ -95,9 +92,7 @@ defmodule Statistics.Math do
       5.298317366548036
 
   """
-  def ln(i) do
-    :math.log(i)
-  end
+  defdelegate ln(i), to: :math, as: :log
 
   @doc """
   Exponent function
@@ -107,19 +102,15 @@ defmodule Statistics.Math do
   ## Examples
 
       iex> Statistics.Math.exp(5.6)
-      270.4264074261525
+      270.42640742615254
 
   """
-  def exp(x) do
-    pow(@e, x)
-  end
+  defdelegate exp(x), to: :math
 
   @doc """
   Get a random number from erlang
   """
-  def rand() do
-    :random.uniform()
-  end
+  defdelegate rand(), to: :random, as: :uniform
 
   @doc """
   Round a decimal to a specific precision
@@ -144,12 +135,7 @@ defmodule Statistics.Math do
       4
 
   """
-  def abs(x) when x < 0 do
-    x * -1
-  end
-  def abs(x) do
-    x
-  end
+  defdelegate abs(x), to: :erlang
 
   @doc """
   Factorial!

@@ -15,7 +15,7 @@ defmodule Statistics.Distributions.Chisq do
   ## Examples
 
       iex> Statistics.Distributions.Chisq.pdf(2, 1)
-      0.10377687435514865
+      0.10377687435514868
 
   """
   def pdf(x, df) do
@@ -28,7 +28,7 @@ defmodule Statistics.Distributions.Chisq do
   ## Examples
 
       iex> Statistics.Distributions.Chisq.cdf(2, 2)
-      0.6321205588285574
+      0.6321205588285578
 
   """
   def cdf(x, df) do

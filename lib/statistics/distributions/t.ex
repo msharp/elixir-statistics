@@ -15,9 +15,9 @@ defmodule Statistics.Distributions.T do
   ## Examples
 
       iex> Statistics.Distributions.T.pdf(0, 3)
-      0.36755259694786124
+      0.3675525969478612
       iex> Statistics.Distributions.T.pdf(3.2, 1)
-      0.02831938489179633
+      0.028319384891796327
 
   """
   def pdf(x, df) do
@@ -37,7 +37,7 @@ defmodule Statistics.Distributions.T do
   ## Examples
 
       iex> Statistics.Distributions.T.cdf(0, 3)
-      0.49091825070702755
+      0.4909182507070275
       
   """
   def cdf(x, df) do
