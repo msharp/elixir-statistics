@@ -38,13 +38,11 @@ defmodule Statistics.Math do
       0
 
   """
-  def pow(_, pow) when pow == 0.0 do
-    1
-  end
-  def pow(num, _) when num == 0.0 do
-    0 # not always true, raising 0 to a negative number is NaN
-  end
-  # erlang doesn't like raising negative numbers to non-integer powers
+  def pow(_, 0), do: 1
+
+  def pow(0, pow) when pow >= 0, do: 0
+
+  # Erlang doesn't like raising negative numbers to non-integer powers
   def pow(num, pow) when num < 0 and is_float(pow) do
    :math.pow(-num, pow) * -1
   end
