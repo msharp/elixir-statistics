@@ -141,7 +141,7 @@ defmodule Statistics.Math.Functions do
       # Otherwise, there is a pole and we take the
       # sign to be that when approaching from below
       # XXX: this evaluation is not necessarily correct in all cases
-      hyp2f1(a,b,c,1-eps*2) # * ctx.inf
+      hyp2f1(a,b,c,1-eps*2) * inf
     end
   end
   
@@ -156,6 +156,9 @@ defmodule Statistics.Math.Functions do
     end
   end
 
+  defp inf do
+    999.999e999999
+  end
   defp isint(i) do
     Math.round(i,0) == i
   end
