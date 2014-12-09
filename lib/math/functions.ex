@@ -125,25 +125,63 @@ defmodule Statistics.Math.Functions do
   @doc """
   Hypergeometrc 2F1 functiono
 
-  WARNING: the implementation is incomplete, and should not be used
+  
 
   """
+  def hyp2f1(a, b, c, z) when z == 1 do 
+    # TODO: the following logic can be simplified
+    convergent = (c-a-b) > 0
+    finite = (isint(a) and a <= 0) or (isint(b) and b <= 0)
+    zerodiv = isint(c) and c <= 0 and not ((isint(a) and c <= a <= 0) or (isint(b) and c <= b <= 0))
+    #print "bz", a, b, c, z, convergent, finite, zerodiv
+    # Gauss's theorem gives the value if convergent
+    if (convergent or finite) and not zerodiv do
+      gammainc(c, c-a)
+    else
+      # Otherwise, there is a pole and we take the
+      # sign to be that when approaching from below
+      # XXX: this evaluation is not necessarily correct in all cases
+      hyp2f1(a,b,c,1-eps*2) # * ctx.inf
+    end
+  end
+  
+  def hyp2f1(a, b, c, z) when z == 0 do 
+    # Division by zero but power of z is higher than
+    # first order so cancels
+    if c > 0 or c < 0 or a == 0 or b == 0 do
+      1+z
+    else
+      # Indeterminate
+      :inf
+    end
+  end
+
+  defp isint(i) do
+    Math.round(i,0) == i
+  end
+  defp eps do
+    2.2204460492503131e-16
+  end
+
+  #####################
+  #
+  # WARNING: the implementation is incomplete, and should not be used
   # from http://mhtlab.uwaterloo.ca/courses/me755/web_chap7.pdf
-  def hyp2f1(a, b, c, x) do
+  def old_hyp2f1(a, b, c, x) do
     pb = gamma(c)/gamma(a)*gamma(b)
-    pa = hyp2f1_cont(a, b, c, x)
+    pa = old_hyp2f1_cont(a, b, c, x)
     pb * pa
   end
-  defp hyp2f1_cont(a, b, c, x) do
-    hyp2f1_cont(a, b, c, x, 0, 0)
+  defp old_hyp2f1_cont(a, b, c, x) do
+    old_hyp2f1_cont(a, b, c, x, 0, 0)
   end
-  defp hyp2f1_cont(_, _, _, _, n, acc) when n > 50 do
+  defp old_hyp2f1_cont(_, _, _, _, n, acc) when n > 50 do
     acc
   end
-  defp hyp2f1_cont(a, b, c, x, n, acc) do
+  defp old_hyp2f1_cont(a, b, c, x, n, acc) do
     s = gamma(a+n) * gamma(b+n) / gamma(c+n)
     p = Math.pow(x, n) / Math.factorial(n)
-    hyp2f1_cont(a, b, c, x, n+1, acc+(s*p))
+    old_hyp2f1_cont(a, b, c, x, n+1, acc+(s*p))
   end
 
 

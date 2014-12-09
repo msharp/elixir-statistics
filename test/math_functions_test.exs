@@ -34,10 +34,12 @@ defmodule MathFunctionsTest do
     #assert Functions.hyp2f1(0.2, 3, 0.2, 0.2) == 1.9531249999999998
     #assert Functions.hyp2f1(1, 2, 1, 0.5) == 3.999999999999959
     #assert Functions.hyp2f1(1, 1, 1, 0.5) == 2.000000000000001
-  
+
     assert Functions.hyp2f1(1,2,3,0) == 1.0
-    #assert Functions.hyp2f1(0,1,0,0) == 1.0
-    #assert Functions.hyp2f1(0,0,0,0) == 1.0
+    assert Functions.hyp2f1(0,1,0,0) == 1.0
+    assert Functions.hyp2f1(0,0,0,0) == 1.0
+  
+    #assert Functions.hyp2f1(0, -6, -4, 1) == 1
   end
 
   test "simpsons numeric integration rule" do
