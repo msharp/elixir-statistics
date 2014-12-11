@@ -51,6 +51,7 @@ defmodule MathTest do
   end
 
   test "turn a float into an integer" do
+    assert Math.to_int(2) == 2
     assert Math.to_int(2.2) == 2
     assert Math.to_int(599.9) == 599
   end

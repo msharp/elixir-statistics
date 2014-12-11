@@ -158,7 +158,10 @@ defmodule Statistics.Math do
       66
 
   """
-  def to_int(f) do
+  def to_int(f) when is_integer(f) do
+    f
+  end
+  def to_int(f) when is_float(f) do
     s = Float.to_string Float.floor(f), [decimals: 0, compact: true]
     {i, _} = Integer.parse(s)
     i
