@@ -141,7 +141,8 @@ defmodule Statistics.Math.Functions do
       # Otherwise, there is a pole and we take the
       # sign to be that when approaching from below
       # XXX: this evaluation is not necessarily correct in all cases
-      hyp2f1(a,b,c,1-eps*2) * inf
+      z = 1 - eps*2
+      hyp2f1(a, b, c, z) * inf
     end
   end
   
@@ -149,15 +150,101 @@ defmodule Statistics.Math.Functions do
     # Division by zero but power of z is higher than
     # first order so cancels
     if c > 0 or c < 0 or a == 0 or b == 0 do
-      1+z
+      1
     else
-      # Indeterminate
-      :inf
+      :inf      # infinite/indeterminate
     end
   end
 
+  def hyp2f1(a, b, c, z)  do 
+    v = false
+    
+    if hyp2f1_is_pole(a, b, c) do
+      v = :inf
+    end
+
+    absz = Math.abs(z)
+ 
+    # Fast case: standard series converges rapidly,
+    # possibly in finitely many terms
+    if hyp2f1_converges(a, b, absz) and ret_not_set(v) do
+      v = hypsum(2, 1, [a, b, c], z)
+    end
+
+    # Use 1/z transformation
+    if absz >= 1.3 and ret_not_set(v) do
+      h = fn a, b -> 
+        t = mpq_1-c
+        ab = a-b
+        rz = 1/z
+        t1 = {[-z],[-a], [c,-ab],[b,c-a], [a,t+a],[mpq_1+ab],  rz}
+        t2 = {[-z],[-b], [c,ab],[a,c-b], [b,t+b],[mpq_1-ab],  rz}
+        {t1, t2}
+      end
+      v = hypercomb(h, [a,b])
+    end
+
+    # Use 1-z transformation
+    if abs(1-z) <= 0.75 and ret_not_set(v) do
+      h = fn a,b ->
+        t = c-a-b
+        ca = c-a 
+        cb = c-b
+        rz = 1-z
+        t1 = {[], [], [c,t], [ca,cb], [a,b], [1-t], rz}
+        t2 = {[rz], [t], [c,a+b-c], [a,b], [ca,cb], [1+t], rz}
+        {t1, t2}
+      end
+      v = hypercomb(h, [a,b])
+    end
+
+    # Use z/(z-1) transformation
+    if abs(z/(z-1)) <= 0.75 and ret_not_set(v) do
+      v = hyp2f1(a, c-b, c, z/(z-1)) / Math.pow((1-z), a)
+    end
+
+    # Remaining part of unit circle
+    if ret_not_set(v) do
+      v = hyp2f1_gosper(a, b, c, z)
+    end
+
+    v
+  end
+
+  def hyp2f1_gosper(a, b, c, z) do
+    :inf
+  end
+
+  defp hypercomb(function, params \\ []) do
+    :inf
+  end
+  defp hypsum(p, q, coeffs, z) do
+    :inf
+  end
+
+
+  defp hyp2f1_converges(a, b, absz) do
+    absz <= 0.8 or (isint(a) and a <= 0 and a >= -1000) or (isint(b) and b <= 0 and b >= -1000)
+  end
+
+  defp hyp2f1_is_pole(a, b, c) do
+    # Hit zero denominator unless numerator goes to 0 first
+    if isint(c) and c <= 0 do
+      if (isint(a) and c <= a <= 0)  or isint(b) and c <= b <= 0 do
+        false
+      else
+        true
+      end
+    else
+      false
+    end
+  end
+
+  defp mpq_1 do
+    1
+  end
   defp inf do
-    999.999e999999
+    :math.pow(2,1023)
   end
   defp isint(i) do
     Math.round(i,0) == i
@@ -165,6 +252,13 @@ defmodule Statistics.Math.Functions do
   defp eps do
     2.2204460492503131e-16
   end
+  defp ret_not_set(var) when var == false do
+    true
+  end
+  defp ret_not_set(var) do
+    false
+  end
+
 
   #####################
   #

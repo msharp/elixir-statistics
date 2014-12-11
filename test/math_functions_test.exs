@@ -39,7 +39,7 @@ defmodule MathFunctionsTest do
     assert Functions.hyp2f1(0,1,0,0) == 1.0
     assert Functions.hyp2f1(0,0,0,0) == 1.0
   
-    #assert Functions.hyp2f1(0, -6, -4, 1) == 1
+    assert Functions.hyp2f1(0, -6, -4, 1) == 1
   end
 
   test "simpsons numeric integration rule" do
