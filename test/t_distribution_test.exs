@@ -16,7 +16,7 @@ defmodule TDistributionTest do
   end
 
   test "return a random number from the distribution" do
-    assert is_float T.rand(2) 
+    assert is_float T.rand(2)
     # rands = for _ <- 0..10000, do: T.rand(3)
     #assert T.rand(77) == 0.5
   end

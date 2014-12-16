@@ -11,7 +11,7 @@ defmodule DescriptiveTest do
     assert Statistics.mean([1,2,3,4,5,6,7,8,9]) == 5
   end
 
-  test "get mode" do 
+  test "get mode" do
     assert Statistics.mode([1,2,3,2,4,5,2,6,7,2,8,9]) == 2
   end
 
@@ -62,7 +62,7 @@ defmodule DescriptiveTest do
     assert Statistics.stdev([4,3,3,4,5,6,7,6,5]) == 1.314684396244359
   end
 
-  test "calculate trimmed mean" do 
+  test "calculate trimmed mean" do
     assert Statistics.trimmed_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) == 8.0 # not trimmed
     assert Statistics.trimmed_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], {4,9}) == 6.5
     assert Statistics.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15],:iqr) == 7.3
@@ -81,7 +81,7 @@ defmodule DescriptiveTest do
   test "calculate moment about the mean" do
     a = [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3]
     assert Statistics.moment(a,1) == 0.0
-    assert Statistics.moment(a,2) == 5.2266666666666675 
+    assert Statistics.moment(a,2) == 5.2266666666666675
     assert Statistics.moment(a,3) == -1.3440000000000025
   end
 
@@ -92,7 +92,7 @@ defmodule DescriptiveTest do
   test "calculate kurtosis (fisher)" do
     assert Statistics.kurtosis([1,2,3,2,1]) == -1.1530612244897964
   end
-  
+
   test "calculate standard score for items in a list" do
     expected =  [-0.7427813527082074, -1.5784103745049407, -0.7427813527082074,
                   0.09284766908852597, 0.9284766908852594, 1.7641057126819928,
