@@ -21,7 +21,7 @@ defmodule Statistics.Distributions.Poisson do
 
   """
   def pmf(k, lambda) do
-    Math.pow(lambda, k) * Math.exp(-k) / Math.factorial(k)
+    Math.pow(lambda, k) / Math.factorial(k) * Math.exp(-lambda)
   end
 
 
@@ -54,12 +54,12 @@ defmodule Statistics.Distributions.Poisson do
 
   """
   def ppf(x, lambda) do
-    ppf_tande(x, lambda, 0.0, 0.0)
+    ppf_tande(x, lambda, 0.0)
   end
-  # trial-and-error method 
-  defp ppf_tande(x, lambda, guess, prev_guess) do
+  # the trusty trial-and-error method 
+  defp ppf_tande(x, lambda, guess) do
     if x > cdf(guess, lambda) do
-      ppf_tande(x, lambda, guess+1, guess)
+      ppf_tande(x, lambda, guess+1)
     else
       guess
     end
@@ -71,8 +71,6 @@ defmodule Statistics.Distributions.Poisson do
 
   This is a discrete distribution and the values it can take are positive integers.
 
-  Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
-
   ## Examples
 
       iex> Statistics.Distributions.Poisson.rand(1)
@@ -80,7 +78,12 @@ defmodule Statistics.Distributions.Poisson do
 
   """
   def rand(lambda) do 
-    1.0
+    x = Math.rand() * 100 + lambda |> Math.floor
+    if pmf(x, lambda) > Math.rand() do 
+      x
+    else
+      rand(lambda) # keep trying
+    end
   end
 
 end

@@ -8,6 +8,7 @@ defmodule PoissonDistributionTest do
   test "output of the pmf function" do
     assert Poisson.pmf(1, 1) == 0.36787944117144233
     assert Poisson.pmf(10, 10) == 0.12511003572113336
+    assert Poisson.pmf(4, 10) == 0.018916637401035365
   end
 
   test "return a cdf " do
@@ -22,4 +23,8 @@ defmodule PoissonDistributionTest do
     assert Poisson.ppf(0.05, 62) == 49.0
   end
 
+  test "random number generation" do
+    r = Poisson.rand(10)
+    assert Math.floor(r) == r
+  end
 end

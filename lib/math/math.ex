@@ -125,6 +125,44 @@ defmodule Statistics.Math do
   end
 
   @doc """
+  Floor function
+
+  ## Examples
+
+      iex> Statistics.Math.floor(3.999)
+      3.0
+
+  """
+  def floor(x) do
+    f = :erlang.trunc(x) * 1.0
+    cond do
+      x - f >= 0 ->
+        f
+      x - f < 0 ->
+        f - 1
+    end
+  end  
+
+  @doc """
+  Ceiling function
+
+  ## Examples
+
+      iex> Statistics.Math.ceil(3.999)
+      4.0
+
+  """
+  def ceil(x) do
+    f = :erlang.trunc(x) * 1.0
+    cond do
+      x - f > 0 ->
+        f + 1
+      x - f <= 0 ->
+        f
+    end
+  end
+
+  @doc """
   Get the absolute value of a number
 
   ## Examples
@@ -138,14 +176,11 @@ defmodule Statistics.Math do
   @doc """
   Factorial!
   """
-  def factorial(0) do
-    1
-  end
-  def factorial(1) do
+  def factorial(n) when n == 0 or n == 1 do
     1
   end
   def factorial(n) do
-    l = for i <- n-1..1, do: i
+    l = for i <- to_int(n)-1..1, do: i
     List.foldl(l, n, fn(x, acc) -> x*acc end)
   end
 
@@ -158,13 +193,6 @@ defmodule Statistics.Math do
       66
 
   """
-  def to_int(f) when is_integer(f) do
-    f
-  end
-  def to_int(f) when is_float(f) do
-    s = Float.to_string Float.floor(f), [decimals: 0, compact: true]
-    {i, _} = Integer.parse(s)
-    i
-  end
+  defdelegate to_int(f), to: :erlang, as: :trunc
 
 end
