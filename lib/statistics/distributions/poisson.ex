@@ -1,7 +1,11 @@
 defmodule Statistics.Distributions.Poisson do
 
   @moduledoc """
-  The Poisson distribution is a discrete probablility distribution
+  The Poisson distribution is a discrete probablility distribution.
+  
+  It models the probability of a given number of events occurring 
+  in a fixed interval if the events occur with a known average rate 
+  and are independent of the previous event.
 
   """
 
@@ -22,7 +26,7 @@ defmodule Statistics.Distributions.Poisson do
 
 
   @doc """
-  Get the probability that a value lies below `x`
+  Get the probability that a value lies below `k`
   
   ## Examples
 
@@ -40,7 +44,8 @@ defmodule Statistics.Distributions.Poisson do
   The percentile-point function
 
   Get the maximum point which lies below the given probability.
-  This is the inverse of the cdf
+  This is the inverse of the cdf and will take only positive integer values 
+  (but returns a float)
 
   ## Examples
 
@@ -49,12 +54,22 @@ defmodule Statistics.Distributions.Poisson do
 
   """
   def ppf(x, lambda) do
-    3.0
+    ppf_tande(x, lambda, 0.0, 0.0)
   end
-   
+  # trial-and-error method 
+  defp ppf_tande(x, lambda, guess, prev_guess) do
+    if x > cdf(guess, lambda) do
+      ppf_tande(x, lambda, guess+1, guess)
+    else
+      guess
+    end
+  end
+  
   
   @doc """
   Draw a random number from this distribution
+
+  This is a discrete distribution and the values it can take are positive integers.
 
   Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
 
