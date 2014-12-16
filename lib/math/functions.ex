@@ -8,7 +8,7 @@ defmodule Statistics.Math.Functions do
   This implementation uses the [Lanczos approximation](http://en.wikipedia.org/wiki/Lanczos_approximation)
 
   ## Examples
-   
+
       iex> Statistics.Math.Functions.gamma(0.5)
       1.7724538509055159
 
@@ -39,7 +39,7 @@ defmodule Statistics.Math.Functions do
   @doc """
   The Beta function
 
-  ## Examples 
+  ## Examples
 
       iex> Statistics.Math.Functions.beta(2, 0.5)
       1.3333333333333324
@@ -51,7 +51,7 @@ defmodule Statistics.Math.Functions do
   end
 
 
-  @doc """ 
+  @doc """
   The 'error' function
 
   Formula 7.1.26 given in Abramowitz and Stegun.
@@ -66,19 +66,19 @@ defmodule Statistics.Math.Functions do
     # constants
     {a1, a2, a3, a4, a5} = {0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429}
     p  =  0.3275911
-        
+
     # Save the sign of x
     sign = if x < 0, do: -1, else: 1
     x = abs(x)
-    
+
     # Formula 7.1.26 given in Abramowitz and Stegun.
     t = 1.0/(1.0 + p*x)
     y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1) * t * Math.pow(Math.e, (-x*x))
-    
+
     sign * y
   end
 
-  @doc """ 
+  @doc """
   The  inverse 'error' function
   """
   def inv_erf(x) do
@@ -87,28 +87,28 @@ defmodule Statistics.Math.Functions do
     {d0, d1, d2} = {1.432788, 0.189269, 0.001308}
     # formula
     x - ((c2*x + c1)*x + c0) / (((d2*x + d1)*x + d0)*x + 1.0)
-  end 
+  end
 
-  @doc """ 
+  @doc """
   Lower incomplete Gamma function
-    
-  ## Examples 
+
+  ## Examples
 
       iex> Statistics.Math.Functions.gammainc(1,1)
       0.63212055882855778
 
   """
   # ############################
-  # this simple approach adapted from 
+  # this simple approach adapted from
   # http://www.dreamincode.net/forums/topic/12775-statistical-functions/
-  # 
-  # there are alternate implementation strategies to try, 
+  #
+  # there are alternate implementation strategies to try,
   # for examples, see:
   #
   #   : https://mail.python.org/pipermail/python-list/2001-April/092498.html
   #   : http://www.dreamincode.net/forums/topic/12775-statistical-functions/
   #   : http://www.crbond.com/math.htm
-  #  
+  #
   # ###########################
   def gammainc(a, x) do
     Math.pow(x, a) * Math.exp(-x) * gammainc_sum(a, x, 1/a, 0, 1)
@@ -160,14 +160,14 @@ defmodule Statistics.Math.Functions do
   """
   def simpson(f, a, b, n) do
     h = (b - a) / n
-    s = f.(a) + f.(b) + ( 
-      Stream.take_every(1..n-1, 2) 
+    s = f.(a) + f.(b) + (
+      Stream.take_every(1..n-1, 2)
         |> Enum.map(fn i -> 4 * f.(a + i * h) end)
-        |> Enum.sum 
+        |> Enum.sum
       ) + (
-      Stream.take_every(2..n-2, 2) 
+      Stream.take_every(2..n-2, 2)
         |> Enum.map(fn i -> 2 * f.(a + i * h) end)
-        |> Enum.sum 
+        |> Enum.sum
       )
     s * h / 3
   end

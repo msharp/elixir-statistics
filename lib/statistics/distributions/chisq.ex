@@ -32,27 +32,27 @@ defmodule Statistics.Distributions.Chisq do
 
   """
   def cdf(x, df) do
-    g = Functions.gamma(df/2.0) 
+    g = Functions.gamma(df/2.0)
     b = Functions.gammainc(df/2.0, x/2.0)
-    b / g  
+    b / g
   end
 
   @doc """
   The percentile-point function
 
-  ## Examples 
+  ## Examples
 
       iex> Statistics.Distributions.Chisq.ppf(0.95, 1)
       3.841458820694101
 
   """
   def ppf(x, df) do
-    ppf_tande(x, df) 
+    ppf_tande(x, df)
   end
   # trial-and-error method which refines guesses
-  # to arbitrary number of decimal places 
+  # to arbitrary number of decimal places
   defp ppf_tande(x, df, precision \\ 14) do
-    ppf_tande(x, df, 0, precision+2, 0) 
+    ppf_tande(x, df, 0, precision+2, 0)
   end
   defp ppf_tande(_, _, g, precision, precision) do
     g
@@ -66,7 +66,7 @@ defmodule Statistics.Distributions.Chisq do
       ppf_tande(x, df, guess, precision, p)
     end
   end
-    
+
 
   @doc """
   Draw a random number from a t distribution with specified degrees of freedom
@@ -89,4 +89,3 @@ defmodule Statistics.Distributions.Chisq do
   end
 
 end
-

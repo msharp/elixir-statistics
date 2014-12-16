@@ -18,7 +18,7 @@ defmodule ChisqDistributionTest do
   end
 
   test "return a random number from the distribution" do
-    assert is_float Chisq.rand(2) 
+    assert is_float Chisq.rand(2)
     #rands = for _ <- 0..10000, do: Chisq.rand(1)
     #assert Statistics.mean(rands) == 1
   end

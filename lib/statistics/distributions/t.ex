@@ -31,8 +31,8 @@ defmodule Statistics.Distributions.T do
   a numerical integration of the `pdf` function to approximate
   the CDF. This leads to a trade-off between precision and speed.
 
-  A robust implementation of the 2F1 hypergeometric function is 
-  required to properly calculate the CDF of the t distribution. 
+  A robust implementation of the 2F1 hypergeometric function is
+  required to properly calculate the CDF of the t distribution.
 
   ## Examples
 
@@ -47,8 +47,8 @@ defmodule Statistics.Distributions.T do
 
   # when a robust hyp2F1 materialises, use this implementation
   defp cdf_hyp2f1(x, df) do
-    p1 = 0.5 + x * Functions.gamma((df+1)/2)  
-    p2n = Math.hyp2f1(0.5, ((df+1)/2), 1.5, -1*Math.pow(x,2)/df) 
+    p1 = 0.5 + x * Functions.gamma((df+1)/2)
+    p2n = Math.hyp2f1(0.5, ((df+1)/2), 1.5, -1*Math.pow(x,2)/df)
     p2d = Math.sqrt(Math.pi*df) * Functions.gamma(df/2)
     p1 * (p2n / p2d)
   end
@@ -59,13 +59,13 @@ defmodule Statistics.Distributions.T do
   NOTE: this is very slow due to the current implementation of the CDF
 
   """
-  def ppf(x, df) do  
-    ppf_tande(x, df) 
+  def ppf(x, df) do
+    ppf_tande(x, df)
   end
   # trial-and-error method which refines guesses
-  # to arbitrary number of decimal places 
+  # to arbitrary number of decimal places
   defp ppf_tande(x, df, precision \\ 4) do
-    ppf_tande(x, df, -10, precision+2, 0) 
+    ppf_tande(x, df, -10, precision+2, 0)
   end
   defp ppf_tande(_, _, g, precision, precision) do
     g
@@ -79,7 +79,7 @@ defmodule Statistics.Distributions.T do
       ppf_tande(x, df, guess, precision, p)
     end
   end
-   
+
   @doc """
   Draw a random number from a t distribution with specified degrees of freedom
   """
@@ -93,6 +93,3 @@ defmodule Statistics.Distributions.T do
   end
 
 end
-
-
-
