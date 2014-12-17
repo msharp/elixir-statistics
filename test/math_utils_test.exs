@@ -46,11 +46,26 @@ defmodule MathTest do
   end
 
   test "calculate factorial" do
+    assert Math.factorial(0) == 1
+    assert Math.factorial(1.0) == 1
     assert Math.factorial(5) == 120
     assert Math.factorial(11) == 39916800
   end
 
+  test "get the floor as a float" do
+    assert Math.floor(2) == 2.0
+    assert Math.floor(2.9999) == 2
+    assert Math.floor(-2.2) == -3.0
+  end
+
+  test "get the ceiling as a float" do
+    assert Math.ceil(2) == 2.0
+    assert Math.ceil(2.9999) == 3.0
+    assert Math.ceil(-2.2) == -2.0
+  end
+
   test "turn a float into an integer" do
+    assert Math.to_int(2) == 2
     assert Math.to_int(2.2) == 2
     assert Math.to_int(599.9) == 599
   end
