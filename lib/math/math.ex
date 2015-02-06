@@ -1,6 +1,6 @@
 defmodule Statistics.Math do
 
-  @e 2.718281828459045
+  @e :math.exp(1)
   @pi :math.pi
 
   @doc """
