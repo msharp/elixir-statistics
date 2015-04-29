@@ -107,5 +107,10 @@ defmodule DescriptiveTest do
     assert_raise ArgumentError, fn() -> Statistics.correlation(x, []) end;
   end
 
+  test "calculate the covariance of 2 lists" do
+    x = [1,2,3,2,1]
+    y = [1,4,5.2,7,99]
+    assert Statistics.covariance(x, y) == -17.89
+  end
 
 end
