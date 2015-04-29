@@ -10,7 +10,7 @@ defmodule Statistics do
   end
 
   @moduledoc """
-  Provides basic statistics functions
+  Descriptive statistics functions
   """
 
   @doc """
@@ -347,6 +347,39 @@ defmodule Statistics do
     for n <- list, do: (n-mean)/stdev
   end
 
+  @doc """
+  Calculate the correlation between two lists.
+
+  The two lists are rpesumed to represent matched pairs of observations, the `x` and `y` of a simple regression.
+
+  ## Examples
+
+      iex> assert Statistics.correlation([1,2,3,4], [1,3,5,6]) 
+      0.9897782665572894
+
+  """
+  def correlation(x, y) do
+    if Enum.count(x) != Enum.count(y) do 
+      raise ArgumentError, "Lists must be equal length"
+    end
+    # TODO fail when not lists of equal length
+    mu_x = mean(x) 
+    mu_y = mean(y)
+    numer = meld_lists(x, y) 
+            |> Enum.map(fn({xi, yi}) -> (xi - mu_x) * (yi - mu_y) end)
+            |> Enum.sum
+    denom_x = x 
+              |> Enum.map(fn(xi) -> Math.pow((xi - mu_x), 2) end)
+              |> Enum.sum
+    denom_y = y
+              |> Enum.map(fn(yi) -> Math.pow((yi - mu_y), 2) end)
+              |> Enum.sum
+
+    numer / Math.sqrt(denom_x * denom_y)
+  end
+
+
+
   ## helpers and other flotsam
 
   # Split a list into two equal lists.
@@ -376,5 +409,18 @@ defmodule Statistics do
     end
     split_list(t,lower,upper)
   end
+
+  # meld two lists into list of tuples
+  defp meld_lists([hx|tx], [hy|ty]) do
+    meld_lists(tx, ty, [{hx, hy}])
+  end
+  defp meld_lists([], [], tuple_list) do
+    Enum.reverse(tuple_list)
+  end
+  defp meld_lists([hx|tx], [hy|ty], tuple_list) do
+    tuple_list = [{hx, hy}|tuple_list]
+    meld_lists(tx, ty, tuple_list)
+  end
+
 
 end

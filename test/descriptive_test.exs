@@ -100,4 +100,12 @@ defmodule DescriptiveTest do
     assert Statistics.zscore([3,2,3,4,5,6,5,4,3]) == expected
   end
 
+  test "calculate the correlation of 2 lists" do
+    x = [1,2,3,4,12,4,2,4,6,3,5,6,7,4,7,8,2,5]
+    y = [1,3,5,6,5,2,7,4,6,8,2,3,9,5,2,8,9,4]
+    assert Statistics.correlation(x, y) ==  0.09315273948675289
+    assert_raise ArgumentError, fn() -> Statistics.correlation(x, []) end;
+  end
+
+
 end
