@@ -348,9 +348,9 @@ defmodule Statistics do
   end
 
   @doc """
-  Calculate the correlation between two lists.
+  Calculate the the Pearson product-moment correlation coefficient of two lists.
 
-  The two lists are rpesumed to represent matched pairs of observations, the `x` and `y` of a simple regression.
+  The two lists are presumed to represent matched pairs of observations, the `x` and `y` of a simple regression.
 
   ## Examples
 
@@ -362,7 +362,6 @@ defmodule Statistics do
     if Enum.count(x) != Enum.count(y) do 
       raise ArgumentError, "Lists must be equal length"
     end
-    # TODO fail when not lists of equal length
     mu_x = mean(x) 
     mu_y = mean(y)
     numer = meld_lists(x, y) 
@@ -378,6 +377,29 @@ defmodule Statistics do
     numer / Math.sqrt(denom_x * denom_y)
   end
 
+  @doc """
+  Calculate the covariance of two lists. 
+
+  Covariance is a measure of how much two random variables change together. 
+  The two lists are presumed to represent matched pairs of observations, such as the `x` and `y` of a simple regression.
+
+  ## Examples
+
+      iex> assert Statistics.covariance([1,2,3,2,1], [1,4,5.2,7,99]) 
+      -17.89
+
+  """
+  def covariance(x, y) do
+    if Enum.count(x) != Enum.count(y) do 
+      raise ArgumentError, "Lists must be equal length"
+    end
+    mu_x = mean(x) 
+    mu_y = mean(y)
+    meld_lists(x, y) 
+    |> Enum.map(fn({xi, yi}) -> (xi - mu_x) * (yi - mu_y) end)
+    |> Enum.map(fn(i) -> i / (Enum.count(x) - 1) end)
+    |> Enum.sum 
+  end
 
 
   ## helpers and other flotsam
