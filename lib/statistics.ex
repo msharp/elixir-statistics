@@ -180,9 +180,15 @@ defmodule Statistics do
 
   @doc """
   Calculate the inter-quartile range
+
+  ## Examples
+   
+      iex> Statistics.iqr([1,2,3,4,5,6,7,8,9])
+      4
+
   """
   def iqr(list) do
-    quartile(list,:third) - quartile(list,:first)
+    quartile(list, :third) - quartile(list, :first)
   end
 
   @doc """
@@ -228,14 +234,16 @@ defmodule Statistics do
       7.3
 
   """
-  def trimmed_mean(list, {low,high}) do
-    Enum.reject(list, fn(x) -> x < low or x > high end)
-    |> mean
+  def trimmed_mean(list, cutoff) when cutoff == :iqr do
+    q1 = quartile(list, :first)
+    q3 = quartile(list, :third)
+    trimmed_mean(list, {q1, q3})
   end
-  def trimmed_mean(list, :iqr) do
-    q1 = quartile(list,:first)
-    q3 = quartile(list,:third)
-    trimmed_mean(list,{q1,q3})
+  def trimmed_mean(list, cutoff) when is_tuple(cutoff) do
+    {low, high} = cutoff
+    list
+    |> Enum.reject(fn(x) -> x < low or x > high end)
+    |> mean
   end
 
   @doc """
