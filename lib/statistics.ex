@@ -354,7 +354,7 @@ defmodule Statistics do
 
   ## Examples
 
-      iex> assert Statistics.correlation([1,2,3,4], [1,3,5,6]) 
+      iex> Statistics.correlation([1,2,3,4], [1,3,5,6]) 
       0.9897782665572894
 
   """
@@ -385,7 +385,7 @@ defmodule Statistics do
 
   ## Examples
 
-      iex> assert Statistics.covariance([1,2,3,2,1], [1,4,5.2,7,99]) 
+      iex> Statistics.covariance([1,2,3,2,1], [1,4,5.2,7,99]) 
       -17.89
 
   """
