@@ -211,12 +211,12 @@ defmodule Statistics do
 
   @doc """
   Calculate the trimmed mean of a list.
-  Can specify cutoff values as a tuple,
-  or simply choose the IQR min/max as the cutoffs
+
+  Can specify cutoff values as a tuple, or simply choose the IQR min/max as the cutoffs
 
   ## Examples
 
-    iex> Statistics.trimmed_mean([1,2,3],{1,3})
+    iex> Statistics.trimmed_mean([1,2,3], {1,3})
     2.0
     iex> Statistics.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15], :iqr)
     7.3
@@ -230,9 +230,6 @@ defmodule Statistics do
     q1 = quartile(list,:first)
     q3 = quartile(list,:third)
     trimmed_mean(list,{q1,q3})
-  end
-  def trimmed_mean(list) do
-    mean(list)
   end
 
   @doc """
