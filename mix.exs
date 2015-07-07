@@ -1,3 +1,13 @@
+
+defmodule Mix.Tasks.Compile.Cephes do
+  @shortdoc "Compiles Cephes"
+  def run(_) do
+    {result, _error_code} = System.cmd("make", ["priv/cmath.so"], stderr_to_stdout: true)
+    Mix.shell.info result
+    :ok
+  end
+end
+
 defmodule Statistics.Mixfile do
   use Mix.Project
 
@@ -7,7 +17,9 @@ defmodule Statistics.Mixfile do
       elixir: "~> 1.0.0",
       description: description,
       package: package,
-      deps: deps ]
+      deps: deps,
+      compilers: [:cephes, :elixir, :app]
+      ]
   end
 
   # Configuration for the OTP application
@@ -18,7 +30,8 @@ defmodule Statistics.Mixfile do
   defp deps do
     [
       { :ex_doc, "~> 0.6.0", only: :dev },
-      { :earmark, ">= 0.0.0", only: :dev }
+      { :earmark, ">= 0.0.0", only: :dev },
+      { :cephes, github: "strahlex/cephes-math", app: false}
     ]
   end
 
@@ -30,7 +43,15 @@ defmodule Statistics.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*", "LICENSE*", "VERSION"],
+      files: [
+          "lib", 
+          "mix.exs", 
+          "README*", 
+          "LICENSE*", 
+          "VERSION",
+          "src",
+          "priv"
+          ],
       contributors: ["Max Sharples"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/msharp/elixir-statistics"}

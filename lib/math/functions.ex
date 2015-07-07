@@ -1,5 +1,16 @@
 defmodule Statistics.Math.Functions do
 
+
+  @on_load { :init, 0 }
+
+  app = Mix.Project.config[:app]
+
+  def init do
+    path = :filename.join(:code.priv_dir(unquote(app)), 'cmath')
+    :ok = :erlang.load_nif(path, 0)
+  end
+
+
   alias Statistics.Math
 
   @doc """
@@ -129,6 +140,10 @@ defmodule Statistics.Math.Functions do
 
   """
   # from http://mhtlab.uwaterloo.ca/courses/me755/web_chap7.pdf
+  def hyp2f1(_, _, _, _) do
+    "NIF not loaded"
+  end
+  """
   def hyp2f1(a, b, c, x) do
     pb = gamma(c)/gamma(a)*gamma(b)
     pa = hyp2f1_cont(a, b, c, x)
@@ -145,6 +160,7 @@ defmodule Statistics.Math.Functions do
     p = Math.pow(x, n) / Math.factorial(n)
     hyp2f1_cont(a, b, c, x, n+1, acc+(s*p))
   end
+  """
 
 
   @doc """
