@@ -31,7 +31,7 @@ defmodule Statistics.Mixfile do
     [
       { :ex_doc, "~> 0.6.0", only: :dev },
       { :earmark, ">= 0.0.0", only: :dev },
-      { :cephes, github: "strahlex/cephes-math", app: false}
+      { :cephes, github: "msharp/cephes-math", app: false}
     ]
   end
 
