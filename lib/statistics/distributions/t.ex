@@ -27,13 +27,6 @@ defmodule Statistics.Distributions.T do
   @doc """
   The cumulative density function
 
-  NOTE: this currently uses the very slow Simpson's Rule to execute
-  a numerical integration of the `pdf` function to approximate
-  the CDF. This leads to a trade-off between precision and speed.
-
-  A robust implementation of the 2F1 hypergeometric function is
-  required to properly calculate the CDF of the t distribution.
-
   ## Examples
 
       iex> Statistics.Distributions.T.cdf(0, 3)
@@ -41,14 +34,10 @@ defmodule Statistics.Distributions.T do
       
   """
   def cdf(x, df) do
-    f = fn y -> pdf(y, df) end
-    Functions.simpson(f, -10000, x, 10000)
-  end
-
-  # when a robust hyp2F1 materialises, use this implementation
-  defp cdf_hyp2f1(x, df) do
     p1 = 0.5 + x * Functions.gamma((df+1)/2)
-    p2n = Math.hyp2f1(0.5, ((df+1)/2), 1.5, -1*Math.pow(x,2)/df)
+    hyp_b = (df+1)/2 
+    hyp_x = -1 * Math.pow(x, 2)/df
+    p2n = Functions.hyp2f1(0.5, hyp_b, 1.5, hyp_x)
     p2d = Math.sqrt(Math.pi*df) * Functions.gamma(df/2)
     p1 * (p2n / p2d)
   end
@@ -64,7 +53,7 @@ defmodule Statistics.Distributions.T do
   end
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
-  defp ppf_tande(x, df, precision \\ 4) do
+  defp ppf_tande(x, df, precision \\ 12) do
     ppf_tande(x, df, -10, precision+2, 0)
   end
   defp ppf_tande(_, _, g, precision, precision) do

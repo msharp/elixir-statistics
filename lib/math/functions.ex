@@ -134,35 +134,25 @@ defmodule Statistics.Math.Functions do
   end
 
   @doc """
-  Hypergeometrc 2F1 functiono
+  Hypergeometrc 2F1 function
 
   WARNING: the implementation is incomplete, and should not be used
 
   """
   # from http://mhtlab.uwaterloo.ca/courses/me755/web_chap7.pdf
-  def hyp2f1(_, _, _, _) do
+  def hyp2f1(a, b, c, x) do
+    # ensure we pass properly typed 
+    # doubles to the NIF function
+    a_d = a * 1.0
+    b_d = b * 1.0
+    c_d = c * 1.0
+    x_d = x * 1.0
+    cephes_hyp2f1(a_d, b_d, c_d, x_d)
+  end
+  defp cephes_hyp2f1(_, _, _, _) do
     "NIF not loaded"
   end
-  """
-  def hyp2f1(a, b, c, x) do
-    pb = gamma(c)/gamma(a)*gamma(b)
-    pa = hyp2f1_cont(a, b, c, x)
-    pb * pa
-  end
-  defp hyp2f1_cont(a, b, c, x) do
-    hyp2f1_cont(a, b, c, x, 0, 0)
-  end
-  defp hyp2f1_cont(_, _, _, _, n, acc) when n > 50 do
-    acc
-  end
-  defp hyp2f1_cont(a, b, c, x, n, acc) do
-    s = gamma(a+n) * gamma(b+n) / gamma(c+n)
-    p = Math.pow(x, n) / Math.factorial(n)
-    hyp2f1_cont(a, b, c, x, n+1, acc+(s*p))
-  end
-  """
-
-
+  
   @doc """
   Simpsons rule for numerical intergation of a function
 

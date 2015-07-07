@@ -21,7 +21,6 @@ defmodule TDistributionTest do
     #assert T.rand(77) == 0.5
   end
 
-  @tag timeout: 120000
   test "get the percentile point value" do
     assert T.ppf(0.1, 1) == -3.0799999999999996
   end
