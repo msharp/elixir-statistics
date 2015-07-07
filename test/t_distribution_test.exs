@@ -1,5 +1,5 @@
 defmodule TDistributionTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   doctest Statistics.Distributions.T, except: [rand: 0, rand: 3]
 
   alias Statistics.Distributions.T
@@ -11,8 +11,9 @@ defmodule TDistributionTest do
   end
 
   test "return a cdf " do
-    assert T.cdf(2, 3) == 0.9115868129912105
-    #assert T.cdf(0, 1) == 0.48740751602180743 # ~ 0.5
+    assert T.cdf(0, 1) == 0.5
+    assert T.cdf(1, 3) == 0.8044988905221144
+    assert T.cdf(-1, 2) == 0.21132486540518697
   end
 
   test "return a random number from the distribution" do
@@ -22,7 +23,8 @@ defmodule TDistributionTest do
   end
 
   test "get the percentile point value" do
-    assert T.ppf(0.1, 1) == -3.0799999999999996
+    assert T.ppf(0.5, 2) == 0.0
+    assert T.ppf(0.4, 2) == -0.2889999999999985
   end
 
 end

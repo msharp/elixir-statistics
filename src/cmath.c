@@ -4,6 +4,7 @@
 static ERL_NIF_TERM cephes_hyp2f1(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
     /*
+       get the arguments values as doubles
     */
     double a,b,c,x,h;
     enif_get_double(env, argv[0], &a);

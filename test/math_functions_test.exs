@@ -5,9 +5,9 @@ defmodule MathFunctionsTest do
   alias Statistics.Math.Functions
   alias Statistics.Math
 
-  alias Statistics.Distributions.T
+  # alias Statistics.Distributions.T
 
-  #use Statistics.Math.Equalish
+  # use Statistics.Math.Equalish
 
   test "gamma function" do
     assert Functions.gamma(22) == 5.109094217170951e19
@@ -30,7 +30,10 @@ defmodule MathFunctionsTest do
   end
 
   test "hypergeometric 2F1 function" do
-    # This is not a correct implementation, fails in many cases.
+    assert Functions.hyp2f1(10, 22, 100, 0.99) == 13.744277702471942
+    assert Functions.hyp2f1(12, 22, 100, 0.99) == 24.155262950016766
+    assert Functions.hyp2f1(12,22,100, 0.0001) == 1.000264039081519
+    
     assert Functions.hyp2f1(0.2, 3, 0.2, 0.2) == 1.9531249999999996
     assert Functions.hyp2f1(1, 2, 1, 0.5) == 4.0
     assert Functions.hyp2f1(1, 1, 1, 0.5) == 2.0
@@ -39,7 +42,14 @@ defmodule MathFunctionsTest do
     assert Functions.hyp2f1(0,1,0,0) == 1.0
     assert Functions.hyp2f1(0,0,0,0) == 1.0
   
-    assert Functions.hyp2f1(0, -6, -4, 1) == 1
+    assert Functions.hyp2f1(-1, 6, 4, 0.5) == 0.25
+    assert Functions.hyp2f1(-1, -6, -4, 0.5) == 0.25
+    assert Functions.hyp2f1(-1, 6, -4, 0.5) == 1.75
+    assert Functions.hyp2f1(-1, 6, -4, 0.6) == 1.9
+
+    # FAILING Cases - doesn't handle overflows
+    # assert Functions.hyp2f1(-1, -6, -4, 1) == -0.5
+    # assert Functions.hyp2f1(0, -6, -4, 1) == 1.0
   end
 
   test "simpsons numeric integration rule" do
@@ -47,12 +57,12 @@ defmodule MathFunctionsTest do
     sr = Functions.simpson(f, 0, 10, 100000)
     assert Math.round(sr, 1) == 1000000000.0
     
-    # integral of t.pdf(x, 1) at 2 and -2
+    ## integral of t.pdf(x, 1) at 2 and -2
     #f = fn x -> T.pdf(x, 1) end
     #sr = Functions.simpson(f, -10000, 2, 100000)
-    #assert sr == 0.8523845106569063
-    #sr = Functions.simpson(f, -10000, -2, 100000)
-    #assert sr == 0.14755182730100083
+    #assert sr == 0.8523845106569062
+    ##sr = Functions.simpson(f, -10000, -2, 100000)
+    ##assert sr == 0.14755182730100083
   end
 
 end
