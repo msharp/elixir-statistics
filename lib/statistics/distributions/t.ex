@@ -46,6 +46,11 @@ defmodule Statistics.Distributions.T do
   @doc """
   The percentile-point function
 
+  ## Examples
+
+      iex> Statistics.Distributions.T.ppf(0.6, 3)
+      0.27600000000000174
+
   """
   def ppf(x, _) when x == 0.5 do
     0.0

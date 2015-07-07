@@ -1,5 +1,5 @@
 defmodule TDistributionTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   doctest Statistics.Distributions.T, except: [rand: 0, rand: 3]
 
   alias Statistics.Distributions.T
