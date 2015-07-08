@@ -1,5 +1,5 @@
 #include "erl_nif.h"
-#include "protos.h"
+#include "src/protos.h"
 
 static ERL_NIF_TERM cephes_hyp2f1(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
