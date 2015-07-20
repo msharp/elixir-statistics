@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/msharp/elixir-statistics.svg?branch=master)](https://travis-ci.org/msharp/elixir-statistics)
 [![hex.pm version](https://img.shields.io/hexpm/v/statistics.svg?style=flat)](https://hex.pm/packages/statistics)
 
-Statistics functions for [Elixir](https://github.com/elixir-lang/elixir).
+Statistics functions and distributions for [Elixir](https://github.com/elixir-lang/elixir).
 
 ## Usage
 
@@ -21,13 +21,25 @@ After you are done, run `mix deps.get` in your shell to fetch and compile Statis
 
 To try it out, start an interactive Elixir shell with `iex -S mix`.
 
-```iex
-iex> alias Statistics, as: Stats
-nil
-iex> Stats.median([1,2,3])
+Get the median value from a list
+
+```
+iex> Statistics.median([1,2,3])
 2
-iex> Stats.variance([1,2,3,4])
+```
+
+Calculate the variance of a list of values.
+
+```
+iex> Statistics.variance([1,2,3,4])
 1.25
+```
+
+Or draw a random number from a Gaussian distribution
+
+```
+iex> Statistics.Distributions.Normal.rand(1, 2)
+2.5998185179627384
 ```
 
 ## Documentation
@@ -38,9 +50,9 @@ The docs are hosted on [hexdocs.pm/statistics](http://hexdocs.pm/statistics/).
 
 ## Roadmap
 
-This library is evolving to include more than just simple descriptive statistics.
+This library is evolving.
 
-I plan to add most common statistical tests and distributions.
+I plan to add most common statistical tests and a more complete set of distributions.
 
 ## Contributing
 
