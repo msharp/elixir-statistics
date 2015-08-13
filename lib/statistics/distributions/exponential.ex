@@ -2,7 +2,7 @@ defmodule Statistics.Distributions.Exponential do
   @moduledoc """
   Exponential distribution.
 
-  `lambda` is the rate parameter and must be greater than zero. 
+  `lambda` is the rate parameter and must be greater than zero.
   """
 
   alias Statistics.Math
@@ -72,7 +72,7 @@ defmodule Statistics.Distributions.Exponential do
   def ppf(x, lambda) do
     -1 * Math.ln(1-x) / lambda
   end
-  
+
   @doc """
   Draw a random number from the distribution with specified lambda
 
@@ -85,7 +85,7 @@ defmodule Statistics.Distributions.Exponential do
 
   """
   def rand(lambda) do
-    x = Math.rand() * lambda * 100 
+    x = Math.rand() * lambda * 100
     if pdf(x, lambda) > Math.rand() do
       x
     else

@@ -38,7 +38,7 @@ defmodule Statistics.Distributions.T do
 
       iex> Statistics.Distributions.T.cdf(0, 3)
       0.4909182507070275
-      
+
   """
   def cdf(x, df) do
     f = fn y -> pdf(y, df) end
