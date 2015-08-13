@@ -12,7 +12,7 @@ Add Statistics as a dependency in your `mix.exs` file to install from [hex.pm](h
 ```elixir
 def deps do
   [
-    { :statistics, "~> 0.2.0"}
+    { :statistics, "~> 0.3.0"}
   ]
 end
 ```
