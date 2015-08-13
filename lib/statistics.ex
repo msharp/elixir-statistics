@@ -27,10 +27,14 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.mean([])
+      nil
+
       iex> Statistics.mean([1,2,3])
       2.0
 
   """
+  def mean([]), do: nil
   def mean(list) do
     Enum.sum(list) / Enum.count(list)
   end
@@ -46,6 +50,7 @@ defmodule Statistics do
       2.5
 
   """
+  def median([]), do: nil
   def median(list) do
     sorted = Enum.sort(list)
     middle = (Enum.count(list) - 1) / 2
@@ -68,6 +73,7 @@ defmodule Statistics do
       2
 
   """
+  def mode([]), do: nil
   def mode(list) do
     mode(list, {0, 0})
   end
@@ -103,6 +109,7 @@ defmodule Statistics do
 
   Call to Enum.min/1
   """
+  def min([]), do: nil
   def min(list) do
     Enum.min(list)
   end
@@ -112,6 +119,7 @@ defmodule Statistics do
 
   Call to Enum.max/1
   """
+  def max([]), do: nil
   def max(list) do
     Enum.max(list)
   end
@@ -149,6 +157,7 @@ defmodule Statistics do
       9
 
   """
+  def percentile([], _), do: nil
   def percentile(list,n) when is_number(n) do
     case n do
       0 ->
@@ -174,6 +183,7 @@ defmodule Statistics do
       5
 
   """
+  def range([]), do: nil
   def range(list) do
     max(list) - min(list)
   end
@@ -182,11 +192,12 @@ defmodule Statistics do
   Calculate the inter-quartile range
 
   ## Examples
-   
+
       iex> Statistics.iqr([1,2,3,4,5,6,7,8,9])
       4
 
   """
+  def iqr([]), do: nil
   def iqr(list) do
     quartile(list, :third) - quartile(list, :first)
   end
@@ -202,6 +213,7 @@ defmodule Statistics do
       56.48979591836735
 
   """
+  def variance([]), do: nil
   def variance(list) do
     mean = mean(list)
     squared_diffs = Enum.map(list, fn(x) -> (mean - x) * (mean - x) end)
@@ -217,6 +229,7 @@ defmodule Statistics do
       0.5
 
   """
+  def stdev([]), do: nil
   def stdev(list) do
     variance(list) |> Math.sqrt
   end
@@ -258,6 +271,7 @@ defmodule Statistics do
       4.5204836768674568
 
   """
+  def harmonic_mean([]), do: nil
   def harmonic_mean(list) do
     r = Enum.map(list, fn(x) -> 1/x end)
     Enum.count(list) / Enum.sum(r)
@@ -274,12 +288,13 @@ defmodule Statistics do
       1.8171205928321397
 
   """
+  def geometric_mean([]), do: nil
   def geometric_mean(list) do
     List.foldl(list, 1, fn(x, acc) -> acc * x end)
     |> Math.pow((1/Enum.count(list)))
   end
 
-  @doc  """
+  @doc """
   Calculates the nth moment about the mean for a sample.
 
   Generally used to calculate coefficients of skewness and  kurtosis.
@@ -365,20 +380,20 @@ defmodule Statistics do
 
   ## Examples
 
-      iex> Statistics.correlation([1,2,3,4], [1,3,5,6]) 
+      iex> Statistics.correlation([1,2,3,4], [1,3,5,6])
       0.9897782665572894
 
   """
   def correlation(x, y) do
-    if Enum.count(x) != Enum.count(y) do 
+    if Enum.count(x) != Enum.count(y) do
       raise ArgumentError, "Lists must be equal length"
     end
-    mu_x = mean(x) 
+    mu_x = mean(x)
     mu_y = mean(y)
-    numer = meld_lists(x, y) 
+    numer = meld_lists(x, y)
             |> Enum.map(fn({xi, yi}) -> (xi - mu_x) * (yi - mu_y) end)
             |> Enum.sum
-    denom_x = x 
+    denom_x = x
               |> Enum.map(fn(xi) -> Math.pow((xi - mu_x), 2) end)
               |> Enum.sum
     denom_y = y
@@ -389,27 +404,27 @@ defmodule Statistics do
   end
 
   @doc """
-  Calculate the covariance of two lists. 
+  Calculate the covariance of two lists.
 
-  Covariance is a measure of how much two random variables change together. 
+  Covariance is a measure of how much two random variables change together.
   The two lists are presumed to represent matched pairs of observations, such as the `x` and `y` of a simple regression.
 
   ## Examples
 
-      iex> Statistics.covariance([1,2,3,2,1], [1,4,5.2,7,99]) 
+      iex> Statistics.covariance([1,2,3,2,1], [1,4,5.2,7,99])
       -17.89
 
   """
   def covariance(x, y) do
-    if Enum.count(x) != Enum.count(y) do 
+    if Enum.count(x) != Enum.count(y) do
       raise ArgumentError, "Lists must be equal length"
     end
-    mu_x = mean(x) 
+    mu_x = mean(x)
     mu_y = mean(y)
-    meld_lists(x, y) 
+    meld_lists(x, y)
     |> Enum.map(fn({xi, yi}) -> (xi - mu_x) * (yi - mu_y) end)
     |> Enum.map(fn(i) -> i / (Enum.count(x) - 1) end)
-    |> Enum.sum 
+    |> Enum.sum
   end
 
 
@@ -454,6 +469,4 @@ defmodule Statistics do
     tuple_list = [{hx, hy}|tuple_list]
     meld_lists(tx, ty, tuple_list)
   end
-
-
 end
