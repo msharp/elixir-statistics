@@ -12,7 +12,7 @@ defmodule Statistics.Mixfile do
 
   # Configuration for the OTP application
   def application do
-    [mod: { Statistics, [] }]
+    []
   end
 
   defp deps do
