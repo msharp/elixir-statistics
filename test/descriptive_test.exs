@@ -44,6 +44,7 @@ defmodule DescriptiveTest do
   end
 
   test "get nth percentile score" do
+    assert Statistics.percentile([], 12) == nil
     a = [1,2,3,4,5,6,7,8,9]
     assert Statistics.percentile(a,0) == 1
     assert Statistics.percentile(a,20) == 2.6
@@ -52,18 +53,22 @@ defmodule DescriptiveTest do
   end
 
   test "get range" do
+    assert Statistics.range([]) == nil
     assert Statistics.range([1,2,3,4,5,6,7,8,9]) == 8
   end
 
   test "get inter-quartile range" do
+    assert Statistics.iqr([]) == nil
     assert Statistics.iqr([1,2,3,4,5,6,7,8,9]) == 4
   end
 
   test "calculate variance" do
+    assert Statistics.variance([]) == nil
     assert Statistics.variance([4,3,3,4,5,6,7,6,5]) == 1.7283950617283952
   end
 
   test "calculate standard deviation" do
+    assert Statistics.stdev([]) == nil
     assert Statistics.stdev([4,3,3,4,5,6,7,6,5]) == 1.314684396244359
   end
 
@@ -73,10 +78,12 @@ defmodule DescriptiveTest do
   end
 
   test "calculate harmonic mean" do
+    assert Statistics.harmonic_mean([]) == nil
     assert Statistics.harmonic_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) == 4.5204836768674568
   end
 
   test "calculate geometric mean" do
+    assert Statistics.geometric_mean([]) == nil
     assert Statistics.geometric_mean([1,2,3,4,5,6]) == 2.9937951655239088
   end
 
