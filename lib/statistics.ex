@@ -3,12 +3,6 @@ defmodule Statistics do
 
   alias Statistics.Math
 
-  # See http://elixir-lang.org/docs/stable/Application.Behaviour.html
-  # for more information on OTP Applications
-  def start(_type, _args) do
-    Statistics.Supervisor.start_link
-  end
-
   @moduledoc """
   Descriptive statistics functions
   """
