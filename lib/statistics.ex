@@ -1,6 +1,4 @@
 defmodule Statistics do
-  use Application
-
   alias Statistics.Math
 
   @moduledoc """
@@ -152,20 +150,15 @@ defmodule Statistics do
 
   """
   def percentile([], _), do: nil
-  def percentile(list,n) when is_number(n) do
-    case n do
-      0 ->
-        Enum.min(list)
-      100 ->
-        Enum.max(list)
-      _ ->
-        l = Enum.sort(list)
-        rank = n/100.0 * (Enum.count(list)-1)
-        f_rank = Float.floor(rank) |> Kernel.trunc
-        {:ok,lower} = Enum.fetch(l,f_rank)
-        {:ok,upper} = Enum.fetch(l,f_rank+1)
-        lower + (upper - lower) * (rank - f_rank)
-    end
+  def percentile(list, 0), do: Enum.min(list)
+  def percentile(list, 100), do: Enum.max(list)
+  def percentile(list, n) when is_number(n) do
+    l = Enum.sort(list)
+    rank = n/100.0 * (Enum.count(list)-1)
+    f_rank = Float.floor(rank) |> Kernel.trunc
+    {:ok,lower} = Enum.fetch(l,f_rank)
+    {:ok,upper} = Enum.fetch(l,f_rank+1)
+    lower + (upper - lower) * (rank - f_rank)
   end
 
   @doc """
@@ -285,7 +278,7 @@ defmodule Statistics do
   def geometric_mean([]), do: nil
   def geometric_mean(list) do
     List.foldl(list, 1, fn(x, acc) -> acc * x end)
-    |> Math.pow((1/Enum.count(list)))
+    |> Math.pow(1/Enum.count(list))
   end
 
   @doc """
@@ -302,15 +295,14 @@ defmodule Statistics do
       -1.3440000000000025
 
   """
-  def moment(list, moment \\ 1) do
-    if moment == 1 do
-      # By definition the first moment about the mean is 0.
-      0.0
-    else
-      mn = mean(list)
-      Enum.map(list, fn(x) -> Math.pow((x - mn), moment) end)
-      |> mean
-    end
+  def moment(list, n \\ 1)
+  # By definition the first moment about the mean is 0.
+  def moment(list, 1), do: 0.0
+  # Otherwise
+  def moment(list, n) when is_number(n) do
+    mn = mean(list)
+    Enum.map(list, fn(x) -> Math.pow((x - mn), n) end)
+    |> mean
   end
 
   @doc """
