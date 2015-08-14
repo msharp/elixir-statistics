@@ -7,24 +7,29 @@ defmodule DescriptiveTest do
   end
 
   test "calculate mean" do
+    assert Statistics.mean([]) == nil
     assert Statistics.mean([1]) == 1
     assert Statistics.mean([1,2,3,4,5,6,7,8,9]) == 5
   end
 
   test "get mode" do
+    assert Statistics.mode([]) == nil
     assert Statistics.mode([1,2,3,2,4,5,2,6,7,2,8,9]) == 2
   end
 
   test "calculate median" do
+    assert Statistics.median([]) == nil
     assert Statistics.median([1,2,3,4,5,6,7,8,9]) == 5
     assert Statistics.median([1,2,3,4,5,6,7,8]) == 4.5
   end
 
   test "get maximum" do
+    assert Statistics.max([]) == nil
     assert Statistics.max([2,4,3,5,4,6,99,1,7,3,6]) == 99
   end
 
   test "get minimum" do
+    assert Statistics.min([]) == nil
     assert Statistics.min([23,45,34,53,44,65,99,1,74,32,69]) == 1
   end
 

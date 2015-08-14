@@ -131,11 +131,11 @@ defmodule Statistics do
       7
 
   """
-  def quartile(list,quartile) when quartile == :first do
+  def quartile(list, :first) do
     {l,_} = split_list(list)
     median(l)
   end
-  def quartile(list,quartile) when quartile == :third do
+  def quartile(list, :third) do
     {_,l} = split_list(list)
     median(l)
   end
