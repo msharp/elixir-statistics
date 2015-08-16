@@ -10,9 +10,10 @@ defmodule Statistics do
 
   Calls Enum.sum/1
   """
-  def sum(list) do
-    Enum.sum(list)
-  end
+  def sum([]), do: nil
+  def sum(list), do: sum(list, 0)
+  def sum([x|xs], sum), do: sum(xs, sum + x)
+  def sum([], sum), do: sum
 
   @doc """
   Calculate the mean from a list of numbers
@@ -27,8 +28,12 @@ defmodule Statistics do
 
   """
   def mean([]), do: nil
-  def mean(list) do
-    Enum.sum(list) / Enum.count(list)
+  def mean(list), do: mean(list, 0, 0)
+  def mean([x|xs], length, sum) do
+    mean(xs, length + 1, sum + x)
+  end
+  def mean([], length, sum) do
+    sum / length
   end
 
   @doc """
@@ -43,16 +48,14 @@ defmodule Statistics do
 
   """
   def median([]), do: nil
-  def median(list) do
+  def median(list) when is_list(list) do
     sorted = Enum.sort(list)
-    middle = (Enum.count(list) - 1) / 2
-    f_middle = Float.floor(middle) |> Kernel.trunc
-    {:ok, m1} = Enum.fetch(sorted, f_middle)
+    middle = (length(list) - 1) / 2
+    f_middle = middle |> Float.floor |> Kernel.trunc
     if middle > f_middle do
-      {:ok, m2} = Enum.fetch(sorted, f_middle+1)
-      mean([m1,m2])
+      mean Enum.slice(sorted, f_middle, 2)
     else
-      m1
+      Enum.at(sorted, f_middle)
     end
   end
 
@@ -130,12 +133,10 @@ defmodule Statistics do
 
   """
   def quartile(list, :first) do
-    {l,_} = split_list(list)
-    median(l)
+    list |> split_list |> elem(0) |> median
   end
   def quartile(list, :third) do
-    {_,l} = split_list(list)
-    median(l)
+    list |> split_list |> elem(1) |> median
   end
 
   @doc """
@@ -152,9 +153,9 @@ defmodule Statistics do
   def percentile([], _), do: nil
   def percentile(list, 0), do: Enum.min(list)
   def percentile(list, 100), do: Enum.max(list)
-  def percentile(list, n) when is_number(n) do
+  def percentile(list, n) when is_list(list) and is_number(n) do
     l = Enum.sort(list)
-    rank = n/100.0 * (Enum.count(list)-1)
+    rank = n / 100.0 * (length(list)-1)
     f_rank = Float.floor(rank) |> Kernel.trunc
     {:ok,lower} = Enum.fetch(l,f_rank)
     {:ok,upper} = Enum.fetch(l,f_rank+1)
@@ -171,7 +172,7 @@ defmodule Statistics do
 
   """
   def range([]), do: nil
-  def range(list) do
+  def range(list) when is_list(list) do
     max(list) - min(list)
   end
 
@@ -185,8 +186,9 @@ defmodule Statistics do
 
   """
   def iqr([]), do: nil
-  def iqr(list) do
-    quartile(list, :third) - quartile(list, :first)
+  def iqr(list) when is_list(list) do
+    {first_half, second_half} = split_list(list)
+    median(second_half) - median(first_half)
   end
 
   @doc """
@@ -202,9 +204,8 @@ defmodule Statistics do
   """
   def variance([]), do: nil
   def variance(list) do
-    mean = mean(list)
-    squared_diffs = Enum.map(list, fn(x) -> (mean - x) * (mean - x) end)
-    sum(squared_diffs) / Enum.count(list)
+    lmean = mean(list)
+    list |> Enum.map(fn x -> (lmean - x) * (lmean - x) end) |> mean
   end
 
   @doc """
@@ -235,15 +236,12 @@ defmodule Statistics do
 
   """
   def trimmed_mean(list, cutoff) when cutoff == :iqr do
-    q1 = quartile(list, :first)
-    q3 = quartile(list, :third)
-    trimmed_mean(list, {q1, q3})
+    {first_half, second_half} = split_list(list)
+    trimmed_mean(list, {median(first_half), median(second_half)})
   end
   def trimmed_mean(list, cutoff) when is_tuple(cutoff) do
     {low, high} = cutoff
-    list
-    |> Enum.reject(fn(x) -> x < low or x > high end)
-    |> mean
+    list |> Enum.reject(fn x -> x < low or x > high end) |> mean
   end
 
   @doc """
@@ -259,9 +257,11 @@ defmodule Statistics do
 
   """
   def harmonic_mean([]), do: nil
-  def harmonic_mean(list) do
-    r = Enum.map(list, fn(x) -> 1/x end)
-    Enum.count(list) / Enum.sum(r)
+  def harmonic_mean(list) when is_list(list) do
+    {sum, count} = List.foldl list, {0, 0}, fn x, {sum, count} ->
+      {sum + 1 / x, count + 1}
+    end
+    count / sum
   end
 
   @doc """
@@ -277,8 +277,8 @@ defmodule Statistics do
   """
   def geometric_mean([]), do: nil
   def geometric_mean(list) do
-    List.foldl(list, 1, fn(x, acc) -> acc * x end)
-    |> Math.pow(1/Enum.count(list))
+    List.foldl(list, 1, fn x, acc -> acc * x end)
+    |> Math.pow(1 / length(list))
   end
 
   @doc """
@@ -301,8 +301,7 @@ defmodule Statistics do
   # Otherwise
   def moment(list, n) when is_number(n) do
     mn = mean(list)
-    Enum.map(list, fn(x) -> Math.pow((x - mn), n) end)
-    |> mean
+    list |> Enum.map(fn x -> Math.pow((x - mn), n) end) |> mean
   end
 
   @doc """
@@ -356,7 +355,7 @@ defmodule Statistics do
   def zscore(list) do
     mean = mean(list)
     stdev = stdev(list)
-    for n <- list, do: (n-mean)/stdev
+    for n <- list, do: (n - mean)/stdev
   end
 
   @doc """
@@ -370,20 +369,21 @@ defmodule Statistics do
       0.9897782665572894
 
   """
+  def correlation(x, y) when length(x) != length(y) do
+    raise ArgumentError, "Lists must be equal length"
+  end
+
   def correlation(x, y) do
-    if Enum.count(x) != Enum.count(y) do
-      raise ArgumentError, "Lists must be equal length"
-    end
     mu_x = mean(x)
     mu_y = mean(y)
     numer = meld_lists(x, y)
-            |> Enum.map(fn({xi, yi}) -> (xi - mu_x) * (yi - mu_y) end)
+            |> Enum.map(fn {xi, yi} -> (xi - mu_x) * (yi - mu_y) end)
             |> Enum.sum
     denom_x = x
-              |> Enum.map(fn(xi) -> Math.pow((xi - mu_x), 2) end)
+              |> Enum.map(fn xi -> Math.pow((xi - mu_x), 2) end)
               |> Enum.sum
     denom_y = y
-              |> Enum.map(fn(yi) -> Math.pow((yi - mu_y), 2) end)
+              |> Enum.map(fn yi -> Math.pow((yi - mu_y), 2) end)
               |> Enum.sum
 
     numer / Math.sqrt(denom_x * denom_y)
@@ -401,15 +401,16 @@ defmodule Statistics do
       -17.89
 
   """
+  def covariance(x, y) when length(y) != length(x) do
+    raise ArgumentError, "Lists must be equal length"
+  end
+
   def covariance(x, y) do
-    if Enum.count(x) != Enum.count(y) do
-      raise ArgumentError, "Lists must be equal length"
-    end
     mu_x = mean(x)
     mu_y = mean(y)
     meld_lists(x, y)
-    |> Enum.map(fn({xi, yi}) -> (xi - mu_x) * (yi - mu_y) end)
-    |> Enum.map(fn(i) -> i / (Enum.count(x) - 1) end)
+    |> Enum.map(fn {xi, yi} -> (xi - mu_x) * (yi - mu_y) end)
+    |> Enum.map(fn i -> i / (Enum.count(x) - 1) end)
     |> Enum.sum
   end
 
