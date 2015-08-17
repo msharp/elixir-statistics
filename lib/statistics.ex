@@ -376,7 +376,7 @@ defmodule Statistics do
   def correlation(x, y) do
     mu_x = mean(x)
     mu_y = mean(y)
-    numer = meld_lists(x, y)
+    numer = Enum.zip(x, y)
             |> Enum.map(fn {xi, yi} -> (xi - mu_x) * (yi - mu_y) end)
             |> Enum.sum
     denom_x = x
@@ -408,7 +408,7 @@ defmodule Statistics do
   def covariance(x, y) do
     mu_x = mean(x)
     mu_y = mean(y)
-    meld_lists(x, y)
+    Enum.zip(x, y)
     |> Enum.map(fn {xi, yi} -> (xi - mu_x) * (yi - mu_y) end)
     |> Enum.map(fn i -> i / (Enum.count(x) - 1) end)
     |> Enum.sum
@@ -419,41 +419,20 @@ defmodule Statistics do
 
   # Split a list into two equal lists.
   # Needed for getting the quartiles.
-  defp split_list(list) do
-    lst = Enum.sort(list)
-    split_list(lst,[],[])
+  import Integer, only: [is_even: 1, is_odd: 1]
+
+  def split_list(list) when is_list(list), do: split_list(list, length(list))
+  def split_list(list, size) when is_even(size) do
+    middle = trunc(size / 2)
+    do_split_list(list, middle, middle)
   end
-  defp split_list([],lower,upper) do
-    {lower,upper}
-  end
-  defp split_list([h|t],[],[]) do
-    lower = [h]
-    split_list(t,lower,[])
-  end
-  defp split_list([h|t],lower,upper) do
-    cond do
-      Enum.count(lower) < Enum.count(t) ->
-        lower = [h|lower]
-      Enum.count(lower) == Enum.count(t) ->
-        lower = [h|lower]
-        upper = [h]
-      upper == [] ->
-        upper = [h]
-      true ->
-        upper = [h|upper]
-    end
-    split_list(t,lower,upper)
+  def split_list(list, size) when is_odd(size) do
+    middle = trunc((size + 1) / 2)
+    do_split_list(list, middle, middle - 1)
   end
 
-  # meld two lists into list of tuples
-  defp meld_lists([hx|tx], [hy|ty]) do
-    meld_lists(tx, ty, [{hx, hy}])
-  end
-  defp meld_lists([], [], tuple_list) do
-    Enum.reverse(tuple_list)
-  end
-  defp meld_lists([hx|tx], [hy|ty], tuple_list) do
-    tuple_list = [{hx, hy}|tuple_list]
-    meld_lists(tx, ty, tuple_list)
+  defp do_split_list(list, take, drop) when is_integer(take) and is_integer(drop) do
+    list = Enum.sort(list)
+    {Enum.take(list, take), Enum.drop(list, drop)}
   end
 end
