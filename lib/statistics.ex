@@ -326,8 +326,9 @@ defmodule Statistics do
       nil
 
   """
-  def moment([], _), do: nil
   def moment(list, n \\ 1)
+  # empty list has no moment
+  def moment([], _), do: nil
   # By definition the first moment about the mean is 0.
   def moment(list, 1), do: 0.0
   # Otherwise
