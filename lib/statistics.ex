@@ -21,7 +21,6 @@ defmodule Statistics do
 
       iex> Statistics.mean([])
       nil
-
       iex> Statistics.mean([1,2,3])
       2.0
 
@@ -36,6 +35,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.median([])
+      nil
       iex> Statistics.median([1,2,3])
       2
       iex> Statistics.median([1,2,3,4])
@@ -61,6 +62,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.mode([])
+      nil
       iex> Statistics.mode([1,2,3,2,4,5,2,6,7,2,8,9])
       2
 
@@ -99,7 +102,12 @@ defmodule Statistics do
   @doc """
   Get the minimum value from a list
 
-  Call to Enum.min/1
+      iex> Statistics.min([])
+      nil
+      iex> Statistics.min([1,2,3])
+      1
+
+  If a non-empty list is provided, it is a call to Enum.min/1
   """
   def min([]), do: nil
   def min(list) do
@@ -109,7 +117,12 @@ defmodule Statistics do
   @doc """
   Get the maximum value from a list
 
-  Call to Enum.max/1
+      iex> Statistics.max([])
+      nil
+      iex> Statistics.max([1,2,3])
+      3
+
+  If a non-empty list is provided, it is a call to Enum.max/1
   """
   def max([]), do: nil
   def max(list) do
@@ -129,6 +142,7 @@ defmodule Statistics do
       7
 
   """
+  # TODO change these to call `percentile/2`
   def quartile(list, :first) do
     {l,_} = split_list(list)
     median(l)
@@ -143,6 +157,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.percentile([], 50)
+      nil
       iex> Statistics.percentile([1,2,3,4,5,6,7,8,9],80)
       7.4
       iex> Statistics.percentile([1,2,3,4,5,6,7,8,9],100)
@@ -180,6 +196,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.iqr([])
+      nil
       iex> Statistics.iqr([1,2,3,4,5,6,7,8,9])
       4
 
@@ -194,6 +212,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.variance([])
+      nil
       iex> Statistics.variance([1,2,3,4])
       1.25
       iex> Statistics.variance([55,56,60,65,54,51,39])
@@ -212,6 +232,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.stdev([])
+      nil
       iex> Statistics.stdev([1,2])
       0.5
 
@@ -228,12 +250,15 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.trimmed_mean([], :iqr)
+      nil
       iex> Statistics.trimmed_mean([1,2,3], {1,3})
       2.0
       iex> Statistics.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15], :iqr)
       7.3
 
   """
+  def trimmed_mean([], _), do: nil
   def trimmed_mean(list, cutoff) when cutoff == :iqr do
     q1 = quartile(list, :first)
     q3 = quartile(list, :third)
@@ -254,6 +279,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.harmonic_mean([])
+      nil
       iex> Statistics.harmonic_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
       4.5204836768674568
 
@@ -271,6 +298,8 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.geometric_mean([])
+      nil
       iex> Statistics.geometric_mean([1,2,3])
       1.8171205928321397
 
@@ -293,8 +322,11 @@ defmodule Statistics do
 
       iex> Statistics.moment([1,2,3,4,5,6,7,8,9,8,7,6,5,4,3],3)
       -1.3440000000000025
+      iex> Statistics.moment([], 2)
+      nil
 
   """
+  def moment([], _), do: nil
   def moment(list, n \\ 1)
   # By definition the first moment about the mean is 0.
   def moment(list, 1), do: 0.0
@@ -314,10 +346,13 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.skew([])
+      nil
       iex> Statistics.skew([1,2,3,2,1])
       0.3436215967445454
 
   """
+  def skew([]), do: nil
   def skew(list) do
     m2 = moment(list, 2)
     m3 = moment(list, 3)
@@ -331,10 +366,13 @@ defmodule Statistics do
 
   ## Examples
 
+      iex> Statistics.kurtosis([])
+      nil
       iex> Statistics.kurtosis([1,2,3,2,1])
       -1.1530612244897964
 
   """
+  def kurtosis([]), do: nil
   def kurtosis(list) do
     m2 = moment(list, 2)
     m4 = moment(list, 4)

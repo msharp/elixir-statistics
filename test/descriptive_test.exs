@@ -73,6 +73,7 @@ defmodule DescriptiveTest do
   end
 
   test "calculate trimmed mean" do
+    assert Statistics.trimmed_mean([], {1,4}) == nil
     assert Statistics.trimmed_mean([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], {4,9}) == 6.5
     assert Statistics.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15],:iqr) == 7.3
   end
@@ -90,6 +91,7 @@ defmodule DescriptiveTest do
   # moment/skew/kurtosis numbers match python/scipy
 
   test "calculate moment about the mean" do
+    assert Statistics.moment([],3) == nil
     a = [1,2,3,4,5,6,7,8,9,8,7,6,5,4,3]
     assert Statistics.moment(a,1) == 0.0
     assert Statistics.moment(a,2) == 5.2266666666666675
@@ -97,10 +99,12 @@ defmodule DescriptiveTest do
   end
 
   test "calculate skewness" do
+    assert Statistics.skew([]) == nil
     assert Statistics.skew([1,2,3,2,1]) == 0.3436215967445454
   end
 
   test "calculate kurtosis (fisher)" do
+    assert Statistics.kurtosis([]) == nil
     assert Statistics.kurtosis([1,2,3,2,1]) == -1.1530612244897964
   end
 
