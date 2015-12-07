@@ -21,15 +21,24 @@ defmodule Statistics.Distributions.Normal do
 
   """
   def pdf(x) do
-    pdf(x, 0, 1)
+    pdf(0, 1).(x)
   end
 
   def pdf(x, mu, sigma) do
-    numexp = Math.pow((x - mu), 2) / (2 * Math.pow(sigma, 2))
-    denom = sigma * Math.sqrt((2 * Math.pi))
-    numer = Math.pow(Math.e, (numexp * -1))
-    numer / denom
+    pdf(mu, sigma).(x)
   end
+
+  # return functions
+
+  def pdf(mu, sigma) do
+    fn x ->
+      numexp = Math.pow((x - mu), 2) / (2 * Math.pow(sigma, 2))
+      denom = sigma * Math.sqrt((2 * Math.pi))
+      numer = Math.pow(Math.e, (numexp * -1))
+      numer / denom
+    end
+  end
+
 
   @doc """
   Get the probability that a value lies below `x`
