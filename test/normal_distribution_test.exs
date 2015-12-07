@@ -5,10 +5,8 @@ defmodule NormalDistributionTest do
   alias Statistics.Distributions.Normal, as: Norm
   alias Statistics.Math
 
-  """
-  to get mitigate the vagaries of floating-point math
-  and rounding errors, test equivalence to 4 decimal places
-  """
+  # to get mitigate the vagaries of floating-point math
+  # and rounding errors, test equivalence to 4 decimal places
   def assert_p(left, right, precision \\ 4) do
       assert Math.round(left, precision) == Math.round(right, precision)
   end
