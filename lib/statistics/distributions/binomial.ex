@@ -89,6 +89,9 @@ defmodule Statistics.Distributions.Binomial do
 
   ## Examples
 
+      iex> Statistics.Distributions.Binomial.rand(10, 0.5)
+      5.0
+
   """
   @spec rand(non_neg_integer, number) :: non_neg_integer
   def rand(n, p) do

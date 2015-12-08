@@ -3,6 +3,7 @@ defmodule BinomialDistributionTest do
   doctest Statistics.Distributions.Binomial, except: [rand: 0, rand: 3]
 
   alias Statistics.Distributions.Binomial, as: Binom
+  alias Statistics.Math
 
   test "output of the pmf function" do
     assert Binom.pmf(4, 0.5).(4) == 0.0625
@@ -24,6 +25,7 @@ defmodule BinomialDistributionTest do
   test "return a random number from binomial distribution" do
     r = Binom.rand(100, 0.5)
     assert is_float r
+    assert r == Math.to_int r
     assert r <= 100
     assert r >= 0
   end
