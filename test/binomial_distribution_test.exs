@@ -1,6 +1,6 @@
 defmodule BinomialDistributionTest do
   use ExUnit.Case, async: true
-  doctest Statistics.Distributions.Binomial, except: [rand: 0, rand: 3]
+  doctest Statistics.Distributions.Binomial, except: [rand: 2]
 
   alias Statistics.Distributions.Binomial, as: Binom
   alias Statistics.Math
