@@ -176,12 +176,16 @@ defmodule Statistics.Math do
   @doc """
   Factorial!
   """
+  def factorial(n) when n < 0 do
+    raise ArithmeticError, message: "Argument n must be a positive number"
+  end
   def factorial(n) when n == 0 or n == 1 do
     1
   end
   def factorial(n) do
-    l = for i <- to_int(n)-1..1, do: i
-    List.foldl(l, n, fn(x, acc) -> x*acc end)
+    to_int(n)-1..1
+    |> Enum.to_list 
+    |> List.foldl(n, fn(x, acc) -> x*acc end)
   end
 
   @doc """
@@ -194,5 +198,35 @@ defmodule Statistics.Math do
 
   """
   defdelegate to_int(f), to: :erlang, as: :trunc
+
+  @doc """
+  The number of k combinations of n
+
+  Both arguments must be integers
+
+  ## Examples
+  
+      iex> Statistics.Math.combination(10, 3)
+      120
+
+  """
+  @spec combination(non_neg_integer, non_neg_integer) :: non_neg_integer
+  def combination(n, k) do
+    :erlang.div(factorial(n), factorial(k)*factorial(n-k))
+  end
+
+  @doc """
+  The number of k permuations of n
+
+  ## Examples
+  
+      iex> Statistics.Math.permutation(10, 3)
+      720
+
+  """
+  @spec permutation(non_neg_integer, non_neg_integer) :: non_neg_integer
+  def permutation(n, k) do
+    :erlang.div(factorial(n), factorial(n-k))
+  end
 
 end
