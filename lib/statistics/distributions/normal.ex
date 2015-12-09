@@ -2,6 +2,9 @@ defmodule Statistics.Distributions.Normal do
 
   @moduledoc """
   The normal, or gaussian, distribution
+
+  When invoking the distibution functions without parameters, 
+  a distribution with mean of 0 and standard deviation of 1 is assumed.
   """
 
   alias Statistics.Math
@@ -10,26 +13,22 @@ defmodule Statistics.Distributions.Normal do
   @doc """
   Probability density function
 
-  get result of probability density function
+  Roughly the expectation of a given value in the distribution
 
   ## Examples
 
-      iex> Statistics.Distributions.Normal.pdf(0)
+      iex> Statistics.Distributions.Normal.pdf().(0)
       0.3989422804014327
-      iex> Statistics.Distributions.Normal.pdf(1.3, 0.2, 1)
+      iex> Statistics.Distributions.Normal.pdf(0.2, 1).(1.3)
       0.21785217703255055
 
   """
-  def pdf(x) do
-    pdf(0, 1).(x)
+  @spec pdf :: fun
+  def pdf do
+    pdf(0, 1)
   end
 
-  def pdf(x, mu, sigma) do
-    pdf(mu, sigma).(x)
-  end
-
-  # return functions
-
+  @spec pdf(number, number) :: fun
   def pdf(mu, sigma) do
     fn x ->
       numexp = Math.pow((x - mu), 2) / (2 * Math.pow(sigma, 2))
@@ -41,7 +40,9 @@ defmodule Statistics.Distributions.Normal do
 
 
   @doc """
-  Get the probability that a value lies below `x`
+  The cumulative density function
+
+  The probability that a value lies below `x`
 
   Cumulative gives a probability that a statistic
   is less than Z. This equates to the area of the distribution below Z.
@@ -49,18 +50,22 @@ defmodule Statistics.Distributions.Normal do
 
   ## Examples
 
-    iex> Statistics.Distributions.Normal.cdf(2)
+    iex> Statistics.Distributions.Normal.cdf().(2)
     0.9772499371127437
-    iex> Statistics.Distributions.Normal.cdf(0)
+    iex> Statistics.Distributions.Normal.cdf(0,1).(0)
     0.5000000005
 
   """
-  def cdf(x) do
-    cdf(x, 0, 1)
+  @spec cdf :: fun
+  def cdf() do
+    cdf(0, 1)
   end
 
-  def cdf(x, mu, sigma) do
-    0.5 * (1.0 + Functions.erf((x - mu) / (sigma * Math.sqrt(2))))
+  @spec cdf(number, number) :: fun
+  def cdf(mu, sigma) do
+    fn x ->
+      0.5 * (1.0 + Functions.erf((x - mu) / (sigma * Math.sqrt(2))))
+    end
   end
 
 
@@ -72,22 +77,30 @@ defmodule Statistics.Distributions.Normal do
 
   ## Examples
 
-      iex> Statistics.Distributions.Normal.ppf(0.025)
+      iex> Statistics.Distributions.Normal.ppf().(0.025)
       -1.96039491692534
-      iex> Statistics.Distributions.Normal.ppf(0.25, 7, 2.1)
+      iex> Statistics.Distributions.Normal.ppf(7, 2.1).(0.25)
       5.584202805909036
 
   """
-  def ppf(x) do
-    ppf(x, 0, 1)
+  @spec ppf :: fun
+  def ppf() do
+    ppf(0, 1)
   end
-  def ppf(x, mu, sigma) do
-    if x < 0.5 do
-      p = -Functions.inv_erf(Math.sqrt(-2.0*Math.ln(x)))
-    else
-      p = Functions.inv_erf(Math.sqrt(-2.0*Math.ln(1-x)))
+
+  @spec ppf(number, number) :: fun
+  def ppf(mu, sigma) do
+    res = fn p ->
+      mu + (p * sigma)
     end
-    mu + (p * sigma)
+    fn x ->
+      cond do
+        x < 0.5 ->
+          res.(-Functions.inv_erf(Math.sqrt(-2.0*Math.ln(x))))
+        x >= 0.5 ->
+          res.(Functions.inv_erf(Math.sqrt(-2.0*Math.ln(1-x))))
+      end
+    end
   end
 
   @doc """
@@ -96,7 +109,7 @@ defmodule Statistics.Distributions.Normal do
   `rnd/0` will return a random number from a normal distribution
   with a mean of 0 and a standard deviation of 1
 
-  `rnd/3` allows you to provide the mean and standard deviation
+  `rnd/2` allows you to provide the mean and standard deviation
   parameters of the distribution from which the random number is drawn
 
   Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
@@ -109,10 +122,12 @@ defmodule Statistics.Distributions.Normal do
       23.900248900049736
 
   """
+  @spec rand() :: number
   def rand do
     rand(0, 1)
   end
 
+  @spec rand(number, number) :: number
   def rand(mu, sigma) do
     # Note: an alternate method exists and may be better
     # Inverse transform sampling - https://en.wikipedia.org/wiki/Inverse_transform_sampling
@@ -121,14 +136,14 @@ defmodule Statistics.Distributions.Normal do
     # (probability of 10 ocurring in a Normal(0,1) distribution is
     # too small to calculate with the precision available to us)
     x = Math.rand() * 20 - 10
-    {rmu, rsigma} = {0, 1}
-    if pdf(x, rmu, rsigma) > Math.rand() do
-      # get z-score
-      z = (rmu - x) / rsigma
-      # transpose to specified distribution
-      mu + (z * sigma)
-    else
-      rand(mu, sigma) # keep trying
+    rmu = 0
+    rsigma = 1
+    cond do
+      pdf(rmu, rsigma).(x) > Math.rand() ->
+        z = (rmu - x) / rsigma  # get z-score
+        mu + (z * sigma)        # transpose to specified distribution
+      true -> 
+        rand(mu, sigma)         # keep trying
     end
   end
 
