@@ -23,11 +23,12 @@ defmodule BinomialDistributionTest do
   end
 
   test "return a random number from binomial distribution" do
-    r = Binom.rand(100, 0.5)
-    assert is_float r
-    assert r == Math.to_int r
-    assert r <= 100
-    assert r >= 0
+    n = 100
+    r = Binom.rand(n, 0.5)
+    assert is_float r         # will return a float
+    assert r == Math.to_int r # but it should be an integer
+    assert r <= n             # cannot be greater than number of trials
+    assert r >= 0             # cannot be less than sero
   end
 
 end
