@@ -16,12 +16,14 @@ defmodule Statistics.Distributions.Poisson do
 
   ## Examples
 
-      iex> Statistics.Distributions.Poisson.pmf(1,1)
+      iex> Statistics.Distributions.Poisson.pmf(1).(1)
       0.36787944117144233
 
   """
-  def pmf(k, lambda) do
-    Math.pow(lambda, k) / Math.factorial(k) * Math.exp(-lambda)
+  def pmf(lambda) do
+    fn k ->
+      Math.pow(lambda, k) / Math.factorial(k) * Math.exp(-lambda)
+    end
   end
 
 
@@ -30,13 +32,15 @@ defmodule Statistics.Distributions.Poisson do
 
   ## Examples
 
-    iex> Statistics.Distributions.Poisson.cdf(1, 1)
+    iex> Statistics.Distributions.Poisson.cdf(1).(1)
     0.73575888234288467
 
   """
-  def cdf(k, lambda) do
-    s = Enum.map(0..Math.to_int(k), fn x -> Math.pow(lambda, x) / Math.factorial(x) end) |> Enum.sum
-    Math.exp(-lambda) * s
+  def cdf(lambda) do
+    fn k ->
+      s = Enum.map(0..Math.to_int(k), fn x -> Math.pow(lambda, x) / Math.factorial(x) end) |> Enum.sum
+      Math.exp(-lambda) * s
+    end
   end
 
 
@@ -49,16 +53,18 @@ defmodule Statistics.Distributions.Poisson do
 
   ## Examples
 
-      iex> Statistics.Distributions.Poisson.ppf(0.95, 1)
+      iex> Statistics.Distributions.Poisson.ppf(1).(0.95)
       3.0
 
   """
-  def ppf(x, lambda) do
-    ppf_tande(x, lambda, 0.0)
+  def ppf(lambda) do
+    fn x ->
+      ppf_tande(x, lambda, 0.0)
+    end
   end
   # the trusty trial-and-error method
   defp ppf_tande(x, lambda, guess) do
-    if x > cdf(guess, lambda) do
+    if x > cdf(lambda).(guess) do
       ppf_tande(x, lambda, guess+1)
     else
       guess
@@ -79,7 +85,7 @@ defmodule Statistics.Distributions.Poisson do
   """
   def rand(lambda) do
     x = Math.rand() * 100 + lambda |> Math.floor
-    if pmf(x, lambda) > Math.rand() do
+    if pmf(lambda).(x) > Math.rand() do
       x
     else
       rand(lambda) # keep trying
