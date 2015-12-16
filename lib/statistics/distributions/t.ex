@@ -14,14 +14,16 @@ defmodule Statistics.Distributions.T do
 
   ## Examples
 
-      iex> Statistics.Distributions.T.pdf(0, 3)
+      iex> Statistics.Distributions.T.pdf(3).(0)
       0.3675525969478612
-      iex> Statistics.Distributions.T.pdf(3.2, 1)
+      iex> Statistics.Distributions.T.pdf(1).(3.2)
       0.028319384891796327
 
   """
-  def pdf(x, df) do
-    Functions.gamma((df+1)/2) / (Math.sqrt(df*Math.pi) * Functions.gamma(df/2) ) * Math.pow((1 + (x*x/df)), ((df+1)/2)*-1)
+  def pdf(df) do
+    fn x ->
+      Functions.gamma((df+1)/2) / (Math.sqrt(df*Math.pi) * Functions.gamma(df/2) ) * Math.pow((1 + (x*x/df)), ((df+1)/2)*-1)
+    end
   end
 
   @doc """
@@ -36,13 +38,14 @@ defmodule Statistics.Distributions.T do
 
   ## Examples
 
-      iex> Statistics.Distributions.T.cdf(0, 3)
+      iex> Statistics.Distributions.T.cdf(3).(0)
       0.4909182507070275
-
+      
   """
-  def cdf(x, df) do
-    f = fn y -> pdf(y, df) end
-    Functions.simpson(f, -10000, x, 10000)
+  def cdf(df) do
+    fn x ->
+      Functions.simpson(pdf(df), -10000, x, 10000)
+    end
   end
 
   # when a robust hyp2F1 materialises, use this implementation
@@ -59,8 +62,10 @@ defmodule Statistics.Distributions.T do
   NOTE: this is very slow due to the current implementation of the CDF
 
   """
-  def ppf(x, df) do
-    ppf_tande(x, df)
+  def ppf(df) do
+    fn x ->
+      ppf_tande(x, df)
+    end
   end
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
@@ -73,7 +78,7 @@ defmodule Statistics.Distributions.T do
   defp ppf_tande(x, df, g, precision, p) do
     increment = 100 / Math.pow(10, p)
     guess = g + increment
-    if x < cdf(guess, df) do
+    if x < cdf(df).(guess) do
       ppf_tande(x, df, g, precision, p+1)
     else
       ppf_tande(x, df, guess, precision, p)
@@ -85,7 +90,7 @@ defmodule Statistics.Distributions.T do
   """
   def rand(df) do
     x = Math.rand() * 50 - 25 # t-dist is fatter-tailed than normal
-    if pdf(x, df) > Math.rand() do
+    if pdf(df).(x) > Math.rand() do
       x
     else
       rand(df) # keep trying
