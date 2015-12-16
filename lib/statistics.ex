@@ -27,6 +27,7 @@ defmodule Statistics do
       2.0
 
   """
+  @spec mean(list) :: number
   def mean(list) when is_list(list), do: do_mean(list, 0, 0)
 
   defp do_mean([], 0, 0), do: nil
@@ -50,15 +51,17 @@ defmodule Statistics do
       2.5
 
   """
+  @spec median(list) :: number
   def median([]), do: nil
   def median(list) when is_list(list) do
-    list |> Enum.sort |> median(true)
+    do_median list
   end
-  def median(list, true) when is_list(list) do
+  # awkward ...
+  defp do_median(mlist) do
+    list = Enum.sort mlist
     middle = (length(list) - 1) / 2
     do_median(list, middle, :erlang.trunc(middle))
   end
-
   defp do_median(sorted_list, m, f) when m > f do
     sorted_list |> Enum.slice(f, 2) |> mean
   end
@@ -77,6 +80,7 @@ defmodule Statistics do
       2
 
   """
+  @spec mode(list) :: number
   def mode([]), do: nil
   def mode(list) do
     mode(list, {0, 0})
@@ -118,6 +122,7 @@ defmodule Statistics do
 
   If a non-empty list is provided, it is a call to Enum.min/1
   """
+  @spec min(list) :: number
   def min([]), do: nil
   def min(list) do
     Enum.min(list)
@@ -133,6 +138,7 @@ defmodule Statistics do
 
   If a non-empty list is provided, it is a call to Enum.max/1
   """
+  @spec max(list) :: number
   def max([]), do: nil
   def max(list) do
     Enum.max(list)
@@ -152,11 +158,12 @@ defmodule Statistics do
 
   """
   # TODO change these to call `percentile/2`
+  @spec quartile(list,atom) :: number
   def quartile(list, :first) do
-    list |> split |> elem(0) |> median(true)
+    list |> split |> elem(0) |> median
   end
   def quartile(list, :third) do
-    list |> split |> elem(1) |> median(true)
+    list |> split |> elem(1) |> median
   end
 
   @doc """
@@ -172,6 +179,7 @@ defmodule Statistics do
       9
 
   """
+  @spec percentile(list,number) :: number
   def percentile([], _), do: nil
   def percentile(list, 0), do: min(list)
   def percentile(list, 100), do: max(list)
@@ -193,6 +201,7 @@ defmodule Statistics do
       5
 
   """
+  @spec range(list) :: number
   def range([]), do: nil
   def range(list) when is_list(list) do
     max(list) - min(list)
@@ -209,10 +218,11 @@ defmodule Statistics do
       4
 
   """
+  @spec iqr(list) :: number
   def iqr([]), do: nil
   def iqr(list) when is_list(list) do
     {first,second} = split(list)
-    median(second, true) - median(first, true)
+    median(second) - median(first)
   end
 
   @doc """
@@ -228,12 +238,10 @@ defmodule Statistics do
       56.48979591836735
 
   """
+  @spec variance(list) :: number
   def variance([]), do: nil
   def variance(list) when is_list(list) do
-    do_variance(list, mean(list))
-  end
-
-  defp do_variance(list, list_mean) do
+    list_mean = mean(list) 
     list |> Enum.map(fn x -> (list_mean - x) * (list_mean - x) end) |> mean
   end
 
@@ -248,9 +256,10 @@ defmodule Statistics do
       0.5
 
   """
+  @spec stdev(list) :: number
   def stdev([]), do: nil
   def stdev(list) do
-    variance(list) |> Math.sqrt
+    list |> variance |> Math.sqrt
   end
 
   @doc """
@@ -268,12 +277,14 @@ defmodule Statistics do
       7.3
 
   """
+  @spec trimmed_mean(list,atom) :: number
+  @spec trimmed_mean(list,tuple) :: number
   def trimmed_mean([], _), do: nil
-  def trimmed_mean(list, cutoff) when is_list(list) and cutoff == :iqr do
+  def trimmed_mean(list, :iqr) do
     {first,second} = split(list)
-    trimmed_mean(list, {median(first,true), median(second,true)})
+    trimmed_mean(list, {median(first), median(second)})
   end
-  def trimmed_mean(list, {low, high}) when is_list(list) do
+  def trimmed_mean(list, {low, high}) do
     list |> Enum.reject(fn x -> x < low or x > high end) |> mean
   end
 
@@ -291,6 +302,7 @@ defmodule Statistics do
       4.5204836768674568
 
   """
+  @spec harmonic_mean(list) :: number
   def harmonic_mean([]), do: nil
   def harmonic_mean(list) when is_list(list) do
     do_harmonic_mean(list, 0, 0)
@@ -314,6 +326,7 @@ defmodule Statistics do
       1.8171205928321397
 
   """
+  @spec geometric_mean(list) :: number
   def geometric_mean([]), do: nil
   def geometric_mean(list) when is_list(list) do
     do_geometric_mean(list, 1, 0)
@@ -340,6 +353,7 @@ defmodule Statistics do
       nil
 
   """
+  @spec moment(list,pos_integer) :: number
   def moment(list, n \\ 1)
   # empty list has no moment
   def moment([], _), do: nil
@@ -366,6 +380,7 @@ defmodule Statistics do
       0.3436215967445454
 
   """
+  @spec skew(list) :: number
   def skew([]), do: nil
   def skew(list) do
     m2 = moment(list, 2)
@@ -386,6 +401,7 @@ defmodule Statistics do
       -1.1530612244897964
 
   """
+  @spec kurtosis(list) :: number
   def kurtosis([]), do: nil
   def kurtosis(list) do
     m2 = moment(list, 2)
@@ -405,6 +421,7 @@ defmodule Statistics do
       0.9284766908852594, 0.09284766908852597, -0.7427813527082074]
 
   """
+  @spec zscore(list) :: list
   def zscore(list) when is_list(list) do
     lmean = mean(list)
     lstdev = stdev(list)
@@ -422,6 +439,7 @@ defmodule Statistics do
       0.9897782665572894
 
   """
+  @spec correlation(list,list) :: number
   def correlation(x, y) when length(x) == length(y) do
     xmean = mean(x)
     ymean = mean(y)
@@ -450,6 +468,7 @@ defmodule Statistics do
       -17.89
 
   """
+  @spec covariance(list,list) :: number
   def covariance(x, y) when length(x) == length(y) do
     xmean = mean(x)
     ymean = mean(y)
@@ -461,16 +480,15 @@ defmodule Statistics do
     |> sum
   end
 
-
   ## helpers and other flotsam
+
+  import Integer, only: [is_even: 1, is_odd: 1]
 
   # Split a list into two equal lists.
   # Needed for getting the quartiles.
   defp split(list) when is_list(list) do
     do_split(Enum.sort(list), length(list))
   end
-
-  import Integer, only: [is_even: 1, is_odd: 1]
   defp do_split(sorted_list, l) when is_even(l) do
     m = :erlang.trunc(l / 2)
     {Enum.take(sorted_list, m), Enum.drop(sorted_list, m)}
@@ -479,4 +497,5 @@ defmodule Statistics do
     m = :erlang.trunc((l + 1) / 2)
     {Enum.take(sorted_list, m), Enum.drop(sorted_list, m - 1)}
   end
+
 end
