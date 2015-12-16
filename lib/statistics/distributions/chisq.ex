@@ -18,6 +18,7 @@ defmodule Statistics.Distributions.Chisq do
       0.10377687435514868
 
   """
+  @spec pdf(non_neg_integer) :: fun
   def pdf(df) do
     fn x ->
       1 / (Math.pow(2, df/2) * Functions.gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
@@ -33,6 +34,7 @@ defmodule Statistics.Distributions.Chisq do
       0.6321205588285578
 
   """
+  @spec cdf(non_neg_integer) :: fun
   def cdf(df) do
     fn x ->
       g = Functions.gamma(df/2.0)
@@ -50,6 +52,7 @@ defmodule Statistics.Distributions.Chisq do
       3.841458820694101
 
   """
+  @spec ppf(non_neg_integer) :: fun
   def ppf(df) do
     fn x ->
       ppf_tande(x, df)
@@ -85,6 +88,7 @@ defmodule Statistics.Distributions.Chisq do
       1.232433646523534767
 
   """
+  @spec rand(non_neg_integer) :: number
   def rand(df) do
     x = Math.rand() * 100
     if pdf(df).(x) > Math.rand() do

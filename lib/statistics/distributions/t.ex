@@ -20,6 +20,7 @@ defmodule Statistics.Distributions.T do
       0.028319384891796327
 
   """
+  @spec pdf(number) :: fun
   def pdf(df) do
     fn x ->
       Functions.gamma((df+1)/2) / (Math.sqrt(df*Math.pi) * Functions.gamma(df/2) ) * Math.pow((1 + (x*x/df)), ((df+1)/2)*-1)
@@ -42,6 +43,7 @@ defmodule Statistics.Distributions.T do
       0.4909182507070275
       
   """
+  @spec cdf(number) :: fun
   def cdf(df) do
     fn x ->
       Functions.simpson(pdf(df), -10000, x, 10000)
@@ -62,6 +64,7 @@ defmodule Statistics.Distributions.T do
   NOTE: this is very slow due to the current implementation of the CDF
 
   """
+  @spec ppf(number) :: fun
   def ppf(df) do
     fn x ->
       ppf_tande(x, df)
@@ -88,6 +91,7 @@ defmodule Statistics.Distributions.T do
   @doc """
   Draw a random number from a t distribution with specified degrees of freedom
   """
+  @spec rand(number) :: number
   def rand(df) do
     x = Math.rand() * 50 - 25 # t-dist is fatter-tailed than normal
     if pdf(df).(x) > Math.rand() do
