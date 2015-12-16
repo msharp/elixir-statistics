@@ -10,6 +10,7 @@ defmodule Statistics do
 
   Calls Enum.sum/1
   """
+  @spec sum(list) :: number
   def sum(list) when is_list(list), do: do_sum(list, 0)
 
   defp do_sum([], t), do: t
