@@ -16,6 +16,8 @@ defmodule Statistics.Distributions.Exponential do
       0.36787944117144233
 
   """
+  @spec pdf() :: fun
+  @spec pdf(number) :: fun
   def pdf() do
     pdf(1)
   end
@@ -41,6 +43,8 @@ defmodule Statistics.Distributions.Exponential do
       0.6321205588285577
 
   """
+  @spec cdf() :: fun
+  @spec cdf(number) :: fun
   def cdf() do
     cdf(1)
   end
@@ -66,6 +70,8 @@ defmodule Statistics.Distributions.Exponential do
       0.10536051565782628
 
   """
+  @spec ppf() :: fun
+  @spec ppf(number) :: fun
   def ppf() do
     ppf(1)
   end
@@ -89,10 +95,15 @@ defmodule Statistics.Distributions.Exponential do
 
   ## Examples
 
-      iex> Statistics.Distributions.Exponential.rand(1)
+      iex> Statistics.Distributions.Exponential.rand()
       0.145709384787
 
   """
+  @spec rand() :: number
+  @spec rand(number) :: number
+  def rand() do
+    rand(1)
+  end
   def rand(lambda) do
     x = Math.rand() * lambda * 100
     if pdf(lambda).(x) > Math.rand() do

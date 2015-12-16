@@ -20,6 +20,7 @@ defmodule Statistics.Distributions.Poisson do
       0.36787944117144233
 
   """
+  @spec pmf(number) :: fun
   def pmf(lambda) do
     fn k ->
       Math.pow(lambda, k) / Math.factorial(k) * Math.exp(-lambda)
@@ -36,6 +37,7 @@ defmodule Statistics.Distributions.Poisson do
     0.73575888234288467
 
   """
+  @spec cdf(number) :: fun
   def cdf(lambda) do
     fn k ->
       s = Enum.map(0..Math.to_int(k), fn x -> Math.pow(lambda, x) / Math.factorial(x) end) |> Enum.sum
@@ -57,6 +59,7 @@ defmodule Statistics.Distributions.Poisson do
       3.0
 
   """
+  @spec ppf(number) :: fun
   def ppf(lambda) do
     fn x ->
       ppf_tande(x, lambda, 0.0)
@@ -83,6 +86,7 @@ defmodule Statistics.Distributions.Poisson do
       1.0
 
   """
+  @spec rand(number) :: number
   def rand(lambda) do
     x = Math.rand() * 100 + lambda |> Math.floor
     if pmf(lambda).(x) > Math.rand() do

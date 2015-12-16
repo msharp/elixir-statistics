@@ -13,6 +13,7 @@ defmodule Statistics.Math.Functions do
       1.7724538509055159
 
   """
+  @spec gamma(number) :: number
   def gamma(x) do
     gamma_lanczos(x)
     #gamma_taylor(x)
@@ -45,6 +46,7 @@ defmodule Statistics.Math.Functions do
       1.3333333333333324
 
   """
+  @spec beta(number,number) :: number
   def beta(x, y) do
     # from https://en.wikipedia.org/wiki/Beta_function#Properties
     gamma(x) * gamma(y) / gamma(x + y)
@@ -62,6 +64,7 @@ defmodule Statistics.Math.Functions do
   #  - We could evaluate a polynomial of the form a + bx + cx^2 + dx^3 by coding as a + b*x + c*x*x + d*x*x*x.
   #  - But we can save computational power by coding it as ((d*x + c)*x + b)*x + a.
   #  - The formula below was coded this way bringing down the complexity of this algorithm from O(n2) to O(n).''
+  @spec erf(number) :: number
   def erf(x) do
     # constants
     {a1, a2, a3, a4, a5} = {0.254829592, -0.284496736, 1.421413741, -1.453152027, 1.061405429}
@@ -81,6 +84,7 @@ defmodule Statistics.Math.Functions do
   @doc """
   The  inverse 'error' function
   """
+  @spec inv_erf(number) :: number
   def inv_erf(x) do
     # constants
     {c0, c1, c2} = {2.515517, 0.802853, 0.010328}
@@ -110,6 +114,7 @@ defmodule Statistics.Math.Functions do
   #   : http://www.crbond.com/math.htm
   #
   # ###########################
+  @spec gammainc(number,number) :: number
   def gammainc(a, x) do
     Math.pow(x, a) * Math.exp(-x) * gammainc_sum(a, x, 1/a, 0, 1)
   end
@@ -129,6 +134,7 @@ defmodule Statistics.Math.Functions do
 
   """
   # from http://mhtlab.uwaterloo.ca/courses/me755/web_chap7.pdf
+  @spec hyp2f1(number,number,number,number) :: number
   def hyp2f1(a, b, c, x) do
     pb = gamma(c)/gamma(a)*gamma(b)
     pa = hyp2f1_cont(a, b, c, x)
@@ -158,6 +164,7 @@ defmodule Statistics.Math.Functions do
       40000.00000000011
 
   """
+  @spec simpson(number,number,number,number) :: number
   def simpson(f, a, b, n) do
     h = (b - a) / n
     s = f.(a) + f.(b) + (

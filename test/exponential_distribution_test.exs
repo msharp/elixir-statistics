@@ -1,6 +1,6 @@
 defmodule ExponentialDistributionTest do
   use ExUnit.Case, async: true
-  doctest Statistics.Distributions.Exponential, except: [rand: 1]
+  doctest Statistics.Distributions.Exponential, except: [rand: 1, rand: 0]
 
   alias Statistics.Distributions.Exponential
 
