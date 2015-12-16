@@ -6,7 +6,7 @@ defmodule Statistics.Distributions.Chisq do
   @moduledoc """
   Chi square distribution.
 
-   *degrees of freedom* parameter.
+  Takes a *degrees of freedom* parameter.
   """
 
   @doc """
@@ -14,12 +14,14 @@ defmodule Statistics.Distributions.Chisq do
 
   ## Examples
 
-      iex> Statistics.Distributions.Chisq.pdf(2, 1)
+      iex> Statistics.Distributions.Chisq.pdf(1).(2)
       0.10377687435514868
 
   """
-  def pdf(x, df) do
-    1 / (Math.pow(2, df/2) * Functions.gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
+  def pdf(df) do
+    fn x ->
+      1 / (Math.pow(2, df/2) * Functions.gamma(df/2)) * Math.pow(x, (df/2-1)) * Math.exp(-1*x/2)
+    end
   end
 
   @doc """
@@ -27,14 +29,16 @@ defmodule Statistics.Distributions.Chisq do
 
   ## Examples
 
-      iex> Statistics.Distributions.Chisq.cdf(2, 2)
+      iex> Statistics.Distributions.Chisq.cdf(2).(2)
       0.6321205588285578
 
   """
-  def cdf(x, df) do
-    g = Functions.gamma(df/2.0)
-    b = Functions.gammainc(df/2.0, x/2.0)
-    b / g
+  def cdf(df) do
+    fn x ->
+      g = Functions.gamma(df/2.0)
+      b = Functions.gammainc(df/2.0, x/2.0)
+      b / g
+    end
   end
 
   @doc """
@@ -42,12 +46,14 @@ defmodule Statistics.Distributions.Chisq do
 
   ## Examples
 
-      iex> Statistics.Distributions.Chisq.ppf(0.95, 1)
+      iex> Statistics.Distributions.Chisq.ppf(1).(0.95)
       3.841458820694101
 
   """
-  def ppf(x, df) do
-    ppf_tande(x, df)
+  def ppf(df) do
+    fn x ->
+      ppf_tande(x, df)
+    end
   end
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
@@ -60,7 +66,7 @@ defmodule Statistics.Distributions.Chisq do
   defp ppf_tande(x, df, g, precision, p) do
     increment = 100 / Math.pow(10, p)
     guess = g + increment
-    if x < cdf(guess, df) do
+    if x < cdf(df).(guess) do
       ppf_tande(x, df, g, precision, p+1)
     else
       ppf_tande(x, df, guess, precision, p)
@@ -81,7 +87,7 @@ defmodule Statistics.Distributions.Chisq do
   """
   def rand(df) do
     x = Math.rand() * 100
-    if pdf(x, df) > Math.rand() do
+    if pdf(df).(x) > Math.rand() do
       x
     else
       rand(df) # keep trying
