@@ -16,6 +16,7 @@ defmodule Statistics.Math do
       9.9498743710662
 
   """
+  @spec sqrt(number) :: number
   defdelegate sqrt(num), to: :math
 
   @doc """
@@ -38,15 +39,14 @@ defmodule Statistics.Math do
       0
 
   """
+  @spec pow(number,number) :: number
   def pow(_, 0), do: 1
-
   def pow(0, pow) when pow >= 0, do: 0
-
   # Erlang doesn't like raising negative numbers to non-integer powers
   def pow(num, pow) when num < 0 and is_float(pow) do
    :math.pow(-num, pow) * -1
   end
-
+  # otherwise let erlang do it
   defdelegate pow(num, pow), to: :math
 
   @doc """
@@ -58,6 +58,7 @@ defmodule Statistics.Math do
       2.718281828459045
 
   """
+  @spec e() :: number
   def e do
     @e
   end
@@ -73,6 +74,7 @@ defmodule Statistics.Math do
       3.141592653589793
 
   """
+  @spec pi() :: number
   def pi do
     @pi
   end
@@ -90,6 +92,7 @@ defmodule Statistics.Math do
       5.298317366548036
 
   """
+  @spec ln(number) :: number
   defdelegate ln(i), to: :math, as: :log
 
   @doc """
@@ -103,11 +106,13 @@ defmodule Statistics.Math do
       270.42640742615254
 
   """
+  @spec exp(number) :: number
   defdelegate exp(x), to: :math
 
   @doc """
   Get a random number from erlang
   """
+  @spec rand() :: number
   defdelegate rand(), to: :random, as: :uniform
 
   @doc """
@@ -119,6 +124,7 @@ defmodule Statistics.Math do
       0.1235
 
   """
+  @spec round(number,number) :: number
   def round(x, precision) do
     p = pow(10, precision)
     :erlang.round(x * p) / p
@@ -133,6 +139,7 @@ defmodule Statistics.Math do
       3.0
 
   """
+  @spec floor(number) :: number
   def floor(x) do
     f = :erlang.trunc(x) * 1.0
     cond do
@@ -152,6 +159,7 @@ defmodule Statistics.Math do
       4.0
 
   """
+  @spec ceil(number) :: number
   def ceil(x) do
     f = :erlang.trunc(x) * 1.0
     cond do
@@ -171,11 +179,13 @@ defmodule Statistics.Math do
       4
 
   """
+  @spec abs(number) :: number
   defdelegate abs(x), to: :erlang
 
   @doc """
   Factorial!
   """
+  @spec factorial(non_neg_integer) :: non_neg_integer
   def factorial(n) when n < 0 do
     raise ArithmeticError, message: "Argument n must be a positive number"
   end
@@ -197,6 +207,7 @@ defmodule Statistics.Math do
       66
 
   """
+  @spec to_int(number) :: integer
   defdelegate to_int(f), to: :erlang, as: :trunc
 
   @doc """
