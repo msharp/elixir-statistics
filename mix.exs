@@ -24,7 +24,7 @@ defmodule Statistics.Mixfile do
 
   defp description do
     """
-    A set of statistics functions
+    Functions for descriptive statistics and common distributions
     """
   end
 
