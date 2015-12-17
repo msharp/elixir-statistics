@@ -164,7 +164,7 @@ defmodule Statistics.Math.Functions do
       40000.00000000011
 
   """
-  @spec simpson(number,number,number,number) :: number
+  @spec simpson(fun,number,number,number) :: number
   def simpson(f, a, b, n) do
     h = (b - a) / n
     s = f.(a) + f.(b) + (
