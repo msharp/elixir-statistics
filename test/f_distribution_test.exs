@@ -17,7 +17,7 @@ defmodule FDistributionTest do
   end
 
   test "get the percentile point value" do
-    assert F.ppf(1,1).(0.05) == 0.00627291129
+    assert F.ppf(1,1).(0.05) == 0.0048621122317455395
   end
 
 end

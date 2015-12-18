@@ -6,6 +6,8 @@ defmodule Statistics.Distributions.F do
 
   @moduledoc """
   The F distribution
+
+  Note that `ppf/2` and `rand/2` here are very slow.
   """
 
   @doc """
@@ -71,15 +73,16 @@ defmodule Statistics.Distributions.F do
   defp ppf_tande(cdf, x) do
     ppf_tande(cdf, x, 0.0, 14, 0)
   end
-  defp ppf_tande(_, _, guess, precision, precision) do
+  defp ppf_tande(_, _, guess, precision, current_precision) when current_precision >= precision do
     guess
   end
   defp ppf_tande(cdf, x, guess, precision, current_precision) do
     # add 1/10**precision'th of the max value to the min
-    new_guess = guess + (100 / Math.pow(10, current_precision))
+    new_guess = guess + (100000 / Math.pow(10, current_precision))
+    cg = cdf.(new_guess) 
     # if it's less than the PPF we want, do it again
-    if cdf.(new_guess) < x do
-      ppf_tande(cdf, x, new_guess, precision, current_precision)
+    if cg < x do
+      ppf_tande(cdf, x, new_guess, precision, current_precision+0.1)
     else
       # otherwise (it's greater), increase the current_precision
       # and recurse with original guess
@@ -92,7 +95,7 @@ defmodule Statistics.Distributions.F do
   """
   @spec rand(number,number) :: number
   def rand(d1, d2) do
-    ceil = ppf(d1,d2).(0.9999)
+    ceil = ppf(d1,d2).(0.999)
     do_rand(pdf(d1, d2), ceil)
   end
   defp do_rand(pdf, ceil) do
