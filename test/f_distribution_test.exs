@@ -1,6 +1,6 @@
 defmodule FDistributionTest do
   use ExUnit.Case, async: true
-  doctest Statistics.Distributions.F, except: [rand: 2]
+  doctest Statistics.Distributions.F, except: [rand: 2, ppf: 2]
 
   alias Statistics.Distributions.F
 
@@ -13,14 +13,11 @@ defmodule FDistributionTest do
   end
 
   test "return a random number from the distribution" do
-    assert is_float F.rand(2,2)
-    # rands = for _ <- 0..10000, do: T.rand(3)
-    #assert T.rand(77) == 0.5
+    assert is_float F.rand(1,1)
   end
 
-  @tag timeout: 120000
   test "get the percentile point value" do
-    assert F.ppf(1,1).(0.5)  == 1.0
+    assert F.ppf(1,1).(0.05) == 0.00627291129
   end
 
 end

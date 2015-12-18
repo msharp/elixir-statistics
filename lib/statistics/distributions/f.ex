@@ -58,31 +58,32 @@ defmodule Statistics.Distributions.F do
   ## Examples
 
       iex> Statistics.Distributions.F.ppf(1,1).(1)
-      1.0
+      1.0180414899099999
       
   """
   @spec ppf(number,number) :: fun
   def ppf(d1, d2) do
     fn x ->
-      # ppf_tande(x, d1, d2)
-      1.0
+      ppf_tande(cdf(d1, d2), x)
     end
   end
   # trial-and-error method which refines guesses
-  # to arbitrary number of decimal places
-  defp ppf_tande(x, d1, d2, precision \\ 4) do
-    ppf_tande(x, d1, d2, -10, precision+2, 0)
+  defp ppf_tande(cdf, x) do
+    ppf_tande(cdf, x, 0.0, 14, 0)
   end
-  defp ppf_tande(_, _, _, g, precision, precision) do
-    g
+  defp ppf_tande(_, _, guess, precision, precision) do
+    guess
   end
-  defp ppf_tande(x, d1, d2, g, precision, p) do
-    increment = 100 / Math.pow(10, p)
-    guess = g + increment
-    if x < cdf(d1, d2).(guess) do
-      ppf_tande(x, d1, d2, g, precision, p+1)
+  defp ppf_tande(cdf, x, guess, precision, current_precision) do
+    # add 1/10**precision'th of the max value to the min
+    new_guess = guess + (100 / Math.pow(10, current_precision))
+    # if it's less than the PPF we want, do it again
+    if cdf.(new_guess) < x do
+      ppf_tande(cdf, x, new_guess, precision, current_precision)
     else
-      ppf_tande(x, d1, d2, guess, precision, p)
+      # otherwise (it's greater), increase the current_precision
+      # and recurse with original guess
+      ppf_tande(cdf, x, guess, precision, current_precision+1)
     end
   end
 
@@ -91,11 +92,15 @@ defmodule Statistics.Distributions.F do
   """
   @spec rand(number,number) :: number
   def rand(d1, d2) do
-    x = Math.rand() * ppf(d1,d2).(0.9999)
-    if pdf(d1, d2).(x) > Math.rand() do
+    ceil = ppf(d1,d2).(0.9999)
+    do_rand(pdf(d1, d2), ceil)
+  end
+  defp do_rand(pdf, ceil) do
+    x = Math.rand() * ceil
+    if pdf.(x) > Math.rand() do
       x
     else
-      rand(d1, d2) # keep trying
+      do_rand(pdf, ceil)  # keep trying
     end
   end
 

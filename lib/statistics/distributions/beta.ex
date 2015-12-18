@@ -60,21 +60,21 @@ defmodule Statistics.Distributions.Beta do
     end
   end
   defp ppf_tande(cdf, x) do
-    ppf_tande(cdf, x, 0.0, 0.0, 1.0, 14, 0)
+    ppf_tande(cdf, x, 0.0, 14, 0)
   end
-  defp ppf_tande(_, _, guess, _, _, precision, precision) do
+  defp ppf_tande(_, _, guess, precision, precision) do
     guess
   end
-  defp ppf_tande(cdf, x, guess, min, max, precision, current_precision) do
+  defp ppf_tande(cdf, x, guess, precision, current_precision) do
     # add 1/10**precision'th of the max value to the min
     new_guess = guess + (1/ Math.pow(10, current_precision))
     # if it's less than the PPF we want, do it again
     if cdf.(new_guess) < x do
-      ppf_tande(cdf, x, new_guess, min, max, precision, current_precision)
+      ppf_tande(cdf, x, new_guess, precision, current_precision)
     else
       # otherwise (it's greater), increase the current_precision
       # and recurse with original guess
-      ppf_tande(cdf, x, guess, min, max, precision, current_precision+1)
+      ppf_tande(cdf, x, guess, precision, current_precision+1)
     end
   end
 
