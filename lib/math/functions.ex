@@ -154,7 +154,7 @@ defmodule Statistics.Math.Functions do
 
 
   @doc """
-  Simpsons rule for numerical intergation of a function
+  Simpsons rule for numerical integration of a function
 
   see: http://en.wikipedia.org/wiki/Simpson's_rule
 
@@ -167,16 +167,14 @@ defmodule Statistics.Math.Functions do
   @spec simpson(fun,number,number,number) :: number
   def simpson(f, a, b, n) do
     h = (b - a) / n
-    s = f.(a) + f.(b) + (
-      Stream.take_every(1..n-1, 2)
-        |> Enum.map(fn i -> 4 * f.(a + i * h) end)
-        |> Enum.sum
-      ) + (
-      Stream.take_every(2..n-2, 2)
-        |> Enum.map(fn i -> 2 * f.(a + i * h) end)
-        |> Enum.sum
-      )
-    s * h / 3
+    s1 = f.(a) + f.(b) 
+    s2 = Stream.take_every(1..n-1, 2)
+         |> Enum.map(fn i -> 4 * f.(a + i * h) end)
+         |> Enum.sum
+    s3 = Stream.take_every(2..n-2, 2)
+         |> Enum.map(fn i -> 2 * f.(a + i * h) end)
+         |> Enum.sum
+    (s1 + s2 + s3) * h / 3
   end
 
 end

@@ -2,6 +2,7 @@ defmodule Statistics.Distributions.F do
 
   alias Statistics.Math
   alias Statistics.Math.Functions
+  alias Statistics.Distributions.Beta
 
   @moduledoc """
   The F distribution
@@ -34,14 +35,20 @@ defmodule Statistics.Distributions.F do
   ## Examples
 
       iex> Statistics.Distributions.F.cdf(1,1).(1)
-      0.5
+      0.4971668763845647
       
+  NOTE this is rather imprecise owing to the use
+  of numerical integration of `Beta.pdf/2` to 
+  approximate the regularised incomplete beta function
   """
+  # NOTE the cdf is defined in terms of 
+  # the regularised incomplete Beta function
+  # which is the CDF of the Beta distribution
   @spec cdf(number,number) :: fun
   def cdf(d1, d2) do
     fn x ->
-      #Functions.simpson(pdf(d1,d2), 0, x, 1000)
-      0.5
+      xx = (d1*x) / ((d1*x) + d2)
+      Beta.cdf(d1/2, d2/2).(xx)
     end
   end
 

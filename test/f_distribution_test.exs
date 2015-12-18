@@ -9,7 +9,7 @@ defmodule FDistributionTest do
   end
 
   test "return a cdf " do
-    assert F.cdf(1,1).(1) == 0.5
+    assert F.cdf(1,1).(1) == 0.4971668763845647
   end
 
   test "return a random number from the distribution" do
@@ -24,3 +24,5 @@ defmodule FDistributionTest do
   end
 
 end
+
+
