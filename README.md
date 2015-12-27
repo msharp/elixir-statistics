@@ -12,7 +12,7 @@ Add Statistics as a dependency in your `mix.exs` file to install from [hex.pm](h
 ```elixir
 def deps do
   [
-    { :statistics, "~> 0.3.0"}
+    { :statistics, "~> 0.4.0"}
   ]
 end
 ```
@@ -35,7 +35,7 @@ iex> Statistics.variance([1,2,3,4])
 1.25
 ```
 
-Or draw a random number from a Gaussian distribution
+Or draw a random number from a Gaussian distribution with a mean of 1 and standard deviation of 2.
 
 ```
 iex> Statistics.Distributions.Normal.rand(1, 2)
@@ -48,15 +48,23 @@ Elixir has great documentation tools using `ex_doc`.
 
 The docs are hosted on [hexdocs.pm/statistics](http://hexdocs.pm/statistics/).
 
+## Performance
+
+This is not a library to use if you need fast computation.
+
+Everything is implemented in Elixir. Many of the implementations use slow approximations, numerical function integration, or trial-and-error methods.
+
+There is much room for improvement. To make this library really fast (and precise), we would probably need to interface with existing C libraries.
+
 ## Roadmap
 
 This library is evolving.
 
-I plan to add most common statistical tests and a more complete set of distributions.
+I plan to add common statistical tests and most common distributions.
 
 ## Contributing
 
-I'd love to accept pull requests.
+I will accept pull requests.
 
 If you want to contribute, please create a topic branch with tests.
 
