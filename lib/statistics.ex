@@ -93,10 +93,11 @@ defmodule Statistics do
     {count, list} = mode_count_and_remove(h, t)
     {_, champ_count} = champ
     {_, new_count} = count
-    if new_count > champ_count do
-      champ = count
-    end
-    mode(list, champ)
+    rec_champ = case new_count > champ_count do
+        true -> count
+        false -> champ
+      end
+    mode(list, rec_champ)
   end
   defp mode_count_and_remove(val, list) do
     {count, new_list} = mode_count_and_remove(val, 1, list, [])

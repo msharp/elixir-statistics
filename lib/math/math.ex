@@ -113,7 +113,7 @@ defmodule Statistics.Math do
   Get a random number from erlang
   """
   @spec rand() :: number
-  defdelegate rand(), to: :random, as: :uniform
+  defdelegate rand(), to: :rand, as: :uniform
 
   @doc """
   Round a decimal to a specific precision
