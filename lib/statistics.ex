@@ -98,12 +98,14 @@ defmodule Statistics do
   end
 
   defp mode_acc({val, _}, acc) do
-    case Map.has_key?(acc, val) do
-      true -> 
-        {_, a} = Map.get_and_update(acc, val, fn(x) -> {x, x+1} end)
-        a
-      false ->
-        Map.merge(acc, %{val => 1})
+    {_, a} = Map.get_and_update(acc, val, &mode_incr/1)
+    a
+  end
+
+  defp mode_incr(x) do
+    case x do
+      nil -> {x, 1}
+      _ -> {x, x+1}
     end
   end
 
