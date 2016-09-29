@@ -82,35 +82,29 @@ defmodule Statistics do
   """
   @spec mode(list) :: number
   def mode([]), do: nil
+
   def mode(list) do
-    mode(list, {0, 0})
+    list 
+    |> Enum.map(fn(x) -> {x, 1} end)
+    |> Enum.reduce(fn(x, acc) -> mode_acc(x, acc) end)
+    |> Enum.max_by(fn({_, c}) -> c end) 
+    |> mode_val
   end
-  defp mode([], champ) do
-    {val, _} = champ
-    val
+
+  defp mode_val({val, _}), do: val
+
+  defp mode_acc(_, {x, y}) do
+    %{x => y}
   end
-  defp mode([h|t], champ) do
-    {count, list} = mode_count_and_remove(h, t)
-    {_, champ_count} = champ
-    {_, new_count} = count
-    rec_champ = case new_count > champ_count do
-        true -> count
-        false -> champ
-      end
-    mode(list, rec_champ)
-  end
-  defp mode_count_and_remove(val, list) do
-    {count, new_list} = mode_count_and_remove(val, 1, list, [])
-    {{val,count}, new_list}
-  end
-  defp mode_count_and_remove(h, count, [h|t], new_list) do
-    mode_count_and_remove(h, count+1, t, new_list)
-  end
-  defp mode_count_and_remove(val, count, [h|t], new_list) do
-    mode_count_and_remove(val, count, t, [h|new_list])
-  end
-  defp mode_count_and_remove(_, count, [], new_list) do
-    {count, new_list}
+
+  defp mode_acc({val, _}, acc) do
+    case Map.has_key?(acc, val) do
+      true -> 
+        {_, a} = Map.get_and_update(acc, val, fn(x) -> {x, x+1} end)
+        a
+      false ->
+        Map.merge(acc, %{val => 1})
+    end
   end
 
   @doc """
