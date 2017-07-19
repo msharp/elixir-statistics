@@ -39,8 +39,6 @@ defmodule Statistics do
   @doc """
   Get the median value from a list.
 
-  Pass in `true` as a 2nd parameter if you know your list to be already sorted.
-
   ## Examples
 
       iex> Statistics.median([])
@@ -52,23 +50,28 @@ defmodule Statistics do
 
   """
   @spec median(list) :: number
-  def median([]), do: nil
+  def median([]), do: nil 
   def median(list) when is_list(list) do
-    do_median list
-  end
-  # awkward ...
-  defp do_median(mlist) do
-    list = Enum.sort mlist
-    middle = (length(list) - 1) / 2
-    do_median(list, middle, :erlang.trunc(middle))
-  end
-  defp do_median(sorted_list, m, f) when m > f do
-    sorted_list |> Enum.slice(f, 2) |> mean
-  end
-  defp do_median(sorted_list, _, f) do
-    sorted_list |> Enum.at(f)
-  end
+    midpoint =
+    length(list)/2
+    |> Float.floor
+    |> round
 
+    {l1, l2} = 
+    Enum.sort(list)
+    |> Enum.split(midpoint)
+
+    case length(l2) > length(l1) do
+      true ->
+        [med|_] = l2
+        med
+      false ->
+        [m1|_] = l2
+        [m2|_] = Enum.reverse(l1)
+        mean([m1,m2])
+    end
+  end
+  
   @doc """
   Get the most frequently occuring value
 
