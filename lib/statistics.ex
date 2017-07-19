@@ -85,31 +85,28 @@ defmodule Statistics do
   """
   @spec mode(list) :: number
   def mode([]), do: nil
-
-  def mode(list) do
-    list 
-    |> Enum.map(fn(x) -> {x, 1} end)
-    |> Enum.reduce(fn(x, acc) -> mode_acc(x, acc) end)
-    |> Enum.max_by(fn({_, c}) -> c end) 
-    |> mode_val
+  def mode(list) when is_list(list) do
+    h = hist(list)
+    max = Map.values(h) |> Enum.max()
+    h |> Enum.find(fn {_,val} -> val == max end) |> elem(0)
   end
+ 
+  @doc """
+  Get a frequency count of the values in a list
 
-  defp mode_val({val, _}), do: val
+  ## Examples
 
-  defp mode_acc(_, {x, y}) do
-    %{x => y}
-  end
+      iex> Statistics.hist([])
+      nil
+      iex> Statistics.hist([1,2,3,2,4,5,2,5,1,2,5,5])
+      %{1 => 2, 2 => 4, 3 => 1, 4 => 1, 5 => 4}
 
-  defp mode_acc({val, _}, acc) do
-    {_, a} = Map.get_and_update(acc, val, &mode_incr/1)
-    a
-  end
-
-  defp mode_incr(x) do
-    case x do
-      nil -> {x, 1}
-      _ -> {x, x+1}
-    end
+  """
+  @spec hist(list) :: map
+  def hist([]), do: nil
+  def hist(list) when is_list(list) do
+    list
+    |> Enum.reduce(%{}, fn(tag, acc) -> Map.update(acc, tag, 1, &(&1 + 1)) end)
   end
 
   @doc """
