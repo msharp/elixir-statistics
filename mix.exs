@@ -1,9 +1,11 @@
 defmodule Statistics.Mixfile do
   use Mix.Project
 
+  @version "0.5.0"
+
   def project do
     [ app: :statistics,
-      version: File.read!("VERSION") |> String.strip(),
+      version: @version,
       elixir: ">= 1.1.0",
       description: description(),
       package: package(),
@@ -17,8 +19,7 @@ defmodule Statistics.Mixfile do
 
   defp deps do
     [
-      { :ex_doc, "~> 0.11.0", only: :dev },
-      { :earmark, "~> 0.1.0", only: :dev }
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 
@@ -30,7 +31,7 @@ defmodule Statistics.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*", "LICENSE*", "VERSION"],
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Max Sharples", "Kash Nouroozi"],
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/msharp/elixir-statistics"}
