@@ -178,6 +178,7 @@ defmodule Statistics do
   """
   @spec percentile(list,number) :: number
   def percentile([], _), do: nil
+  def percentile([x], _), do: x
   def percentile(list, 0), do: min(list)
   def percentile(list, 100), do: max(list)
   def percentile(list, n) when is_list(list) and is_number(n) do
