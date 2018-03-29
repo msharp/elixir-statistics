@@ -10,6 +10,7 @@ defmodule DescriptiveTest do
   @d @a ++ [8,7,6,5,4,3]
   @e [1,2,3,2,1]
   @f Enum.to_list(1..6)
+  @g [1]
 
   @x [1,2,3,4,12,4,2,4,6,3,5,6,7,4,7,8,2,5]
   @y [1,3,5,6,5,2,7,4,6,8,2,3,9,5,2,8,9,4]
@@ -62,6 +63,7 @@ defmodule DescriptiveTest do
     assert Statistics.percentile(@a, 20) == 2.6
     assert Statistics.percentile(@a, 80) == 7.4
     assert Statistics.percentile(@a, 100) == 9
+    assert Statistics.percentile(@g, 50) == 1
   end
 
   test "get range" do
