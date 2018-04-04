@@ -13,15 +13,15 @@ defmodule MathTest do
     assert Math.pow(3, 2) == 9
     assert Math.pow(2, -1) == 0.5
     assert Math.pow(-0.5, -0.5) == -1.4142135623730951
-    assert Math.pow(99, 3) == 970299
+    assert Math.pow(99, 3) == 970_299
   end
 
   test "constant e" do
-    assert Math.e == 2.718281828459045
+    assert Math.e() == 2.718281828459045
   end
 
   test "constant pi" do
-    assert Math.pi == 3.141592653589793
+    assert Math.pi() == 3.141592653589793
   end
 
   test "natural log" do
@@ -49,7 +49,7 @@ defmodule MathTest do
     assert Math.factorial(0) == 1
     assert Math.factorial(1.0) == 1
     assert Math.factorial(5) == 120
-    assert Math.factorial(11) == 39916800
+    assert Math.factorial(11) == 39_916_800
   end
 
   test "get the floor as a float" do
@@ -69,5 +69,4 @@ defmodule MathTest do
     assert Math.to_int(2.2) == 2
     assert Math.to_int(599.9) == 599
   end
-
 end

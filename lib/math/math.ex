@@ -1,7 +1,6 @@
 defmodule Statistics.Math do
-
   @e :math.exp(1)
-  @pi :math.pi
+  @pi :math.pi()
 
   @doc """
   Get square root
@@ -39,13 +38,14 @@ defmodule Statistics.Math do
       0
 
   """
-  @spec pow(number,number) :: number
+  @spec pow(number, number) :: number
   def pow(_, 0), do: 1
   def pow(0, pow) when pow >= 0, do: 0
   # Erlang doesn't like raising negative numbers to non-integer powers
   def pow(num, pow) when num < 0 and is_float(pow) do
-   :math.pow(-num, pow) * -1
+    :math.pow(-num, pow) * -1
   end
+
   # otherwise let erlang do it
   defdelegate pow(num, pow), to: :math
 
@@ -124,7 +124,7 @@ defmodule Statistics.Math do
       0.1235
 
   """
-  @spec round(number,number) :: number
+  @spec round(number, number) :: number
   def round(x, precision) do
     p = pow(10, precision)
     :erlang.round(x * p) / p
@@ -142,9 +142,11 @@ defmodule Statistics.Math do
   @spec floor(number) :: number
   def floor(x) do
     f = :erlang.trunc(x) * 1.0
+
     cond do
       x - f >= 0 ->
         f
+
       x - f < 0 ->
         f - 1
     end
@@ -162,9 +164,11 @@ defmodule Statistics.Math do
   @spec ceil(number) :: number
   def ceil(x) do
     f = :erlang.trunc(x) * 1.0
+
     cond do
       x - f > 0 ->
         f + 1
+
       x - f <= 0 ->
         f
     end
@@ -189,13 +193,15 @@ defmodule Statistics.Math do
   def factorial(n) when n < 0 do
     raise ArithmeticError, message: "Argument n must be a positive number"
   end
+
   def factorial(n) when n == 0 or n == 1 do
     1
   end
+
   def factorial(n) do
-    to_int(n)-1..1
-    |> Enum.to_list 
-    |> List.foldl(n, fn(x, acc) -> x*acc end)
+    (to_int(n) - 1)..1
+    |> Enum.to_list()
+    |> List.foldl(n, fn x, acc -> x * acc end)
   end
 
   @doc """
@@ -216,28 +222,27 @@ defmodule Statistics.Math do
   Both arguments must be integers
 
   ## Examples
-  
+
       iex> Statistics.Math.combination(10, 3)
       120
 
   """
   @spec combination(non_neg_integer, non_neg_integer) :: non_neg_integer
   def combination(n, k) do
-    :erlang.div(factorial(n), factorial(k)*factorial(n-k))
+    :erlang.div(factorial(n), factorial(k) * factorial(n - k))
   end
 
   @doc """
   The number of k permuations of n
 
   ## Examples
-  
+
       iex> Statistics.Math.permutation(10, 3)
       720
 
   """
   @spec permutation(non_neg_integer, non_neg_integer) :: non_neg_integer
   def permutation(n, k) do
-    :erlang.div(factorial(n), factorial(n-k))
+    :erlang.div(factorial(n), factorial(n - k))
   end
-
 end

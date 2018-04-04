@@ -5,21 +5,18 @@ defmodule FDistributionTest do
   alias Statistics.Distributions.F
 
   test "output of the pdf function" do
-    assert F.pdf(1,1).(1) == 0.15915494309189537
+    assert F.pdf(1, 1).(1) == 0.15915494309189537
   end
 
   test "return a cdf " do
-    assert F.cdf(1,1).(1) == 0.4971668763845647
+    assert F.cdf(1, 1).(1) == 0.4971668763845647
   end
 
   test "return a random number from the distribution" do
-    assert is_float F.rand(1,1)
+    assert is_float(F.rand(1, 1))
   end
 
   test "get the percentile point value" do
-    assert F.ppf(1,1).(0.05) == 0.0048621122317455395
+    assert F.ppf(1, 1).(0.05) == 0.0048621122317455395
   end
-
 end
-
-

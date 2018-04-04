@@ -5,15 +5,15 @@ defmodule DescriptiveTest do
   @null []
 
   @a Enum.to_list(1..9)
-  @b [4,3,3,4,5,6,7,6,5]
+  @b [4, 3, 3, 4, 5, 6, 7, 6, 5]
   @c Enum.to_list(1..15)
-  @d @a ++ [8,7,6,5,4,3]
-  @e [1,2,3,2,1]
+  @d @a ++ [8, 7, 6, 5, 4, 3]
+  @e [1, 2, 3, 2, 1]
   @f Enum.to_list(1..6)
   @g [1]
 
-  @x [1,2,3,4,12,4,2,4,6,3,5,6,7,4,7,8,2,5]
-  @y [1,3,5,6,5,2,7,4,6,8,2,3,9,5,2,8,9,4]
+  @x [1, 2, 3, 4, 12, 4, 2, 4, 6, 3, 5, 6, 7, 4, 7, 8, 2, 5]
+  @y [1, 3, 5, 6, 5, 2, 7, 4, 6, 8, 2, 3, 9, 5, 2, 8, 9, 4]
 
   test "sum a list" do
     assert Statistics.sum(@a) == 45
@@ -43,7 +43,7 @@ defmodule DescriptiveTest do
 
   test "get minimum" do
     assert Statistics.min(@null) == nil
-    assert Statistics.min([23,45,34,53,44,65,99,1,74,32,69]) == 1
+    assert Statistics.min([23, 45, 34, 53, 44, 65, 99, 1, 74, 32, 69]) == 1
   end
 
   test "get first quartile point" do
@@ -87,8 +87,8 @@ defmodule DescriptiveTest do
   end
 
   test "calculate trimmed mean" do
-    assert Statistics.trimmed_mean(@null, {1,4}) == nil
-    assert Statistics.trimmed_mean(@c, {4,9}) == 6.5
+    assert Statistics.trimmed_mean(@null, {1, 4}) == nil
+    assert Statistics.trimmed_mean(@c, {4, 9}) == 6.5
     assert Statistics.trimmed_mean((@c ++ [5, 6, 7, 8]) -- [9], :iqr) == 7.3
   end
 
@@ -123,14 +123,23 @@ defmodule DescriptiveTest do
   end
 
   test "calculate standard score for items in a list" do
-    expected =  [-0.7427813527082074, -1.5784103745049407, -0.7427813527082074,
-                  0.09284766908852597, 0.9284766908852594, 1.7641057126819928,
-                  0.9284766908852594, 0.09284766908852597, -0.7427813527082074]
-    assert Statistics.zscore([3,2,3,4,5,6,5,4,3]) == expected
+    expected = [
+      -0.7427813527082074,
+      -1.5784103745049407,
+      -0.7427813527082074,
+      0.09284766908852597,
+      0.9284766908852594,
+      1.7641057126819928,
+      0.9284766908852594,
+      0.09284766908852597,
+      -0.7427813527082074
+    ]
+
+    assert Statistics.zscore([3, 2, 3, 4, 5, 6, 5, 4, 3]) == expected
   end
 
   test "calculate the correlation of 2 lists" do
-    assert Statistics.correlation(@x, @y) ==  0.09315273948675289
+    assert Statistics.correlation(@x, @y) == 0.09315273948675289
     assert_raise FunctionClauseError, fn -> Statistics.correlation(@x, @null) end
   end
 

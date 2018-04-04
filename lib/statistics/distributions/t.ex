@@ -1,5 +1,4 @@
 defmodule Statistics.Distributions.T do
-
   alias Statistics.Math
   alias Statistics.Math.Functions
 
@@ -23,7 +22,8 @@ defmodule Statistics.Distributions.T do
   @spec pdf(number) :: fun
   def pdf(df) do
     fn x ->
-      Functions.gamma((df+1)/2) / (Math.sqrt(df*Math.pi) * Functions.gamma(df/2) ) * Math.pow((1 + (x*x/df)), ((df+1)/2)*-1)
+      Functions.gamma((df + 1) / 2) / (Math.sqrt(df * Math.pi()) * Functions.gamma(df / 2)) *
+        Math.pow(1 + x * x / df, (df + 1) / 2 * -1)
     end
   end
 
@@ -51,12 +51,12 @@ defmodule Statistics.Distributions.T do
   end
 
   # when a robust hyp2F1 materialises, use this implementation
-  #defp cdf_hyp2f1(x, df) do
+  # defp cdf_hyp2f1(x, df) do
   #  p1 = 0.5 + x * Functions.gamma((df+1)/2)
   #  p2n = Math.hyp2f1(0.5, ((df+1)/2), 1.5, -1*Math.pow(x,2)/df)
   #  p2d = Math.sqrt(Math.pi*df) * Functions.gamma(df/2)
   #  p1 * (p2n / p2d)
-  #end
+  # end
 
   @doc """
   The percentile-point function
@@ -70,19 +70,23 @@ defmodule Statistics.Distributions.T do
       ppf_tande(x, df)
     end
   end
+
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
   defp ppf_tande(x, df, precision \\ 4) do
-    ppf_tande(x, df, -10, precision+2, 0)
+    ppf_tande(x, df, -10, precision + 2, 0)
   end
+
   defp ppf_tande(_, _, g, precision, precision) do
     g
   end
+
   defp ppf_tande(x, df, g, precision, p) do
     increment = 100 / Math.pow(10, p)
     guess = g + increment
+
     if x < cdf(df).(guess) do
-      ppf_tande(x, df, g, precision, p+1)
+      ppf_tande(x, df, g, precision, p + 1)
     else
       ppf_tande(x, df, guess, precision, p)
     end
@@ -93,12 +97,14 @@ defmodule Statistics.Distributions.T do
   """
   @spec rand(number) :: number
   def rand(df) do
-    x = Math.rand() * 50 - 25 # t-dist is fatter-tailed than normal
+    # t-dist is fatter-tailed than normal
+    x = Math.rand() * 50 - 25
+
     if pdf(df).(x) > Math.rand() do
       x
     else
-      rand(df) # keep trying
+      # keep trying
+      rand(df)
     end
   end
-
 end

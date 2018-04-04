@@ -1,5 +1,4 @@
 defmodule Statistics.Distributions.Binomial do
-
   alias Statistics.Math
 
   @moduledoc """
@@ -23,13 +22,15 @@ defmodule Statistics.Distributions.Binomial do
   def pmf(n, p) do
     fn k ->
       cond do
-        k < 1.0 -> 
+        k < 1.0 ->
           0.0
+
         n < k ->
           0.0
-        true -> 
+
+        true ->
           xk = Math.to_int(k)
-          Math.combination(n, xk) * Math.pow(p, xk) * Math.pow(1-p, n-xk)
+          Math.combination(n, xk) * Math.pow(p, xk) * Math.pow(1 - p, n - xk)
       end
     end
   end
@@ -41,15 +42,15 @@ defmodule Statistics.Distributions.Binomial do
 
       iex> Statistics.Distributions.Binomial.cdf(4, 0.5).(2)
       0.6875
-  
+
   """
   @spec ppf(non_neg_integer, number) :: fun
   def cdf(n, p) do
     fn k ->
       0..Math.to_int(Math.floor(k))
-      |> Enum.to_list
-      |> Enum.map(fn i -> Math.combination(n, i) * Math.pow(p, i) * Math.pow(1-p, n-i) end)
-      |> Enum.sum
+      |> Enum.to_list()
+      |> Enum.map(fn i -> Math.combination(n, i) * Math.pow(p, i) * Math.pow(1 - p, n - i) end)
+      |> Enum.sum()
     end
   end
 
@@ -72,15 +73,16 @@ defmodule Statistics.Distributions.Binomial do
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
   defp ppf_tande(x, n, p, g \\ 0) do
-    g_cdf = cdf(n, p).(g) 
+    g_cdf = cdf(n, p).(g)
+
     cond do
       x > g_cdf ->
-        ppf_tande(x, n, p, g+1)
+        ppf_tande(x, n, p, g + 1)
+
       x <= g_cdf ->
         g
     end
   end
-
 
   @doc """
   Draw a random number from a t distribution with specified degrees of freedom
@@ -95,12 +97,13 @@ defmodule Statistics.Distributions.Binomial do
   """
   @spec rand(non_neg_integer, number) :: non_neg_integer
   def rand(n, p) do
-    x = Math.rand() * n 
+    x = Math.rand() * n
+
     if pmf(n, p).(x) > Math.rand() do
       Float.round(x)
     else
-      rand(n, p) # keep trying
+      # keep trying
+      rand(n, p)
     end
   end
-
 end

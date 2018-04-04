@@ -14,7 +14,7 @@ defmodule Statistics do
   def sum(list) when is_list(list), do: do_sum(list, 0)
 
   defp do_sum([], t), do: t
-  defp do_sum([x|xs], t), do: do_sum(xs, t + x)
+  defp do_sum([x | xs], t), do: do_sum(xs, t + x)
 
   @doc """
   Calculate the mean from a list of numbers
@@ -32,7 +32,8 @@ defmodule Statistics do
 
   defp do_mean([], 0, 0), do: nil
   defp do_mean([], t, l), do: t / l
-  defp do_mean([x|xs], t, l) do
+
+  defp do_mean([x | xs], t, l) do
     do_mean(xs, t + x, l + 1)
   end
 
@@ -50,28 +51,30 @@ defmodule Statistics do
 
   """
   @spec median(list) :: number
-  def median([]), do: nil 
+  def median([]), do: nil
+
   def median(list) when is_list(list) do
     midpoint =
-    length(list)/2
-    |> Float.floor
-    |> round
+      (length(list) / 2)
+      |> Float.floor()
+      |> round
 
-    {l1, l2} = 
-    Enum.sort(list)
-    |> Enum.split(midpoint)
+    {l1, l2} =
+      Enum.sort(list)
+      |> Enum.split(midpoint)
 
     case length(l2) > length(l1) do
       true ->
-        [med|_] = l2
+        [med | _] = l2
         med
+
       false ->
-        [m1|_] = l2
-        [m2|_] = Enum.reverse(l1)
-        mean([m1,m2])
+        [m1 | _] = l2
+        [m2 | _] = Enum.reverse(l1)
+        mean([m1, m2])
     end
   end
-  
+
   @doc """
   Get the most frequently occuring value
 
@@ -85,12 +88,13 @@ defmodule Statistics do
   """
   @spec mode(list) :: number
   def mode([]), do: nil
+
   def mode(list) when is_list(list) do
     h = hist(list)
     max = Map.values(h) |> Enum.max()
-    h |> Enum.find(fn {_,val} -> val == max end) |> elem(0)
+    h |> Enum.find(fn {_, val} -> val == max end) |> elem(0)
   end
- 
+
   @doc """
   Get a frequency count of the values in a list
 
@@ -104,9 +108,10 @@ defmodule Statistics do
   """
   @spec hist(list) :: map
   def hist([]), do: nil
+
   def hist(list) when is_list(list) do
     list
-    |> Enum.reduce(%{}, fn(tag, acc) -> Map.update(acc, tag, 1, &(&1 + 1)) end)
+    |> Enum.reduce(%{}, fn tag, acc -> Map.update(acc, tag, 1, &(&1 + 1)) end)
   end
 
   @doc """
@@ -121,6 +126,7 @@ defmodule Statistics do
   """
   @spec min(list) :: number
   def min([]), do: nil
+
   def min(list) do
     Enum.min(list)
   end
@@ -137,6 +143,7 @@ defmodule Statistics do
   """
   @spec max(list) :: number
   def max([]), do: nil
+
   def max(list) do
     Enum.max(list)
   end
@@ -155,10 +162,11 @@ defmodule Statistics do
 
   """
   # TODO change these to call `percentile/2`
-  @spec quartile(list,atom) :: number
+  @spec quartile(list, atom) :: number
   def quartile(list, :first) do
     list |> split |> elem(0) |> median
   end
+
   def quartile(list, :third) do
     list |> split |> elem(1) |> median
   end
@@ -178,14 +186,15 @@ defmodule Statistics do
       9
 
   """
-  @spec percentile(list,number) :: number
+  @spec percentile(list, number) :: number
   def percentile([], _), do: nil
   def percentile([x], _), do: x
   def percentile(list, 0), do: min(list)
   def percentile(list, 100), do: max(list)
+
   def percentile(list, n) when is_list(list) and is_number(n) do
     s = Enum.sort(list)
-    r = n/100.0 * (length(list) - 1)
+    r = n / 100.0 * (length(list) - 1)
     f = :erlang.trunc(r)
     lower = Enum.at(s, f)
     upper = Enum.at(s, f + 1)
@@ -203,6 +212,7 @@ defmodule Statistics do
   """
   @spec range(list) :: number
   def range([]), do: nil
+
   def range(list) when is_list(list) do
     max(list) - min(list)
   end
@@ -220,8 +230,9 @@ defmodule Statistics do
   """
   @spec iqr(list) :: number
   def iqr([]), do: nil
+
   def iqr(list) when is_list(list) do
-    {first,second} = split(list)
+    {first, second} = split(list)
     median(second) - median(first)
   end
 
@@ -240,8 +251,9 @@ defmodule Statistics do
   """
   @spec variance(list) :: number
   def variance([]), do: nil
+
   def variance(list) when is_list(list) do
-    list_mean = mean(list) 
+    list_mean = mean(list)
     list |> Enum.map(fn x -> (list_mean - x) * (list_mean - x) end) |> mean
   end
 
@@ -258,8 +270,9 @@ defmodule Statistics do
   """
   @spec stdev(list) :: number
   def stdev([]), do: nil
+
   def stdev(list) do
-    list |> variance |> Math.sqrt
+    list |> variance |> Math.sqrt()
   end
 
   @doc """
@@ -277,13 +290,15 @@ defmodule Statistics do
       7.3
 
   """
-  @spec trimmed_mean(list,atom) :: number
-  @spec trimmed_mean(list,tuple) :: number
+  @spec trimmed_mean(list, atom) :: number
+  @spec trimmed_mean(list, tuple) :: number
   def trimmed_mean([], _), do: nil
+
   def trimmed_mean(list, :iqr) do
-    {first,second} = split(list)
+    {first, second} = split(list)
     trimmed_mean(list, {median(first), median(second)})
   end
+
   def trimmed_mean(list, {low, high}) do
     list |> Enum.reject(fn x -> x < low or x > high end) |> mean
   end
@@ -304,13 +319,15 @@ defmodule Statistics do
   """
   @spec harmonic_mean(list) :: number
   def harmonic_mean([]), do: nil
+
   def harmonic_mean(list) when is_list(list) do
     do_harmonic_mean(list, 0, 0)
   end
 
   defp do_harmonic_mean([], t, l), do: l / t
-  defp do_harmonic_mean([x|xs], t, l) do
-    do_harmonic_mean(xs, t + 1/x, l + 1)
+
+  defp do_harmonic_mean([x | xs], t, l) do
+    do_harmonic_mean(xs, t + 1 / x, l + 1)
   end
 
   @doc """
@@ -328,12 +345,14 @@ defmodule Statistics do
   """
   @spec geometric_mean(list) :: number
   def geometric_mean([]), do: nil
+
   def geometric_mean(list) when is_list(list) do
     do_geometric_mean(list, 1, 0)
   end
 
-  defp do_geometric_mean([], p, l), do: Math.pow(p, 1/l)
-  defp do_geometric_mean([x|xs], p, l) do
+  defp do_geometric_mean([], p, l), do: Math.pow(p, 1 / l)
+
+  defp do_geometric_mean([x | xs], p, l) do
     do_geometric_mean(xs, p * x, l + 1)
   end
 
@@ -353,7 +372,7 @@ defmodule Statistics do
       nil
 
   """
-  @spec moment(list,pos_integer) :: number
+  @spec moment(list, pos_integer) :: number
   def moment(list, n \\ 1)
   # empty list has no moment
   def moment([], _), do: nil
@@ -382,6 +401,7 @@ defmodule Statistics do
   """
   @spec skew(list) :: number
   def skew([]), do: nil
+
   def skew(list) do
     m2 = moment(list, 2)
     m3 = moment(list, 3)
@@ -403,11 +423,14 @@ defmodule Statistics do
   """
   @spec kurtosis(list) :: number
   def kurtosis([]), do: nil
+
   def kurtosis(list) do
     m2 = moment(list, 2)
     m4 = moment(list, 4)
-    p = m4 / Math.pow(m2, 2.0) # pearson
-    p - 3                 # fisher
+    # pearson
+    p = m4 / Math.pow(m2, 2.0)
+    # fisher
+    p - 3
   end
 
   @doc """
@@ -425,7 +448,7 @@ defmodule Statistics do
   def zscore(list) when is_list(list) do
     lmean = mean(list)
     lstdev = stdev(list)
-    for n <- list, do: (n - lmean)/lstdev
+    for n <- list, do: (n - lmean) / lstdev
   end
 
   @doc """
@@ -439,19 +462,25 @@ defmodule Statistics do
       0.9897782665572894
 
   """
-  @spec correlation(list,list) :: number
+  @spec correlation(list, list) :: number
   def correlation(x, y) when length(x) == length(y) do
     xmean = mean(x)
     ymean = mean(y)
-    numer = Enum.zip(x, y)
-            |> Enum.map(fn {xi, yi} -> (xi - xmean) * (yi - ymean) end)
-            |> sum
-    denom_x = x
-              |> Enum.map(fn xi -> (xi - xmean) * (xi - xmean) end)
-              |> sum
-    denom_y = y
-              |> Enum.map(fn yi -> (yi - ymean) * (yi - ymean) end)
-              |> sum
+
+    numer =
+      Enum.zip(x, y)
+      |> Enum.map(fn {xi, yi} -> (xi - xmean) * (yi - ymean) end)
+      |> sum
+
+    denom_x =
+      x
+      |> Enum.map(fn xi -> (xi - xmean) * (xi - xmean) end)
+      |> sum
+
+    denom_y =
+      y
+      |> Enum.map(fn yi -> (yi - ymean) * (yi - ymean) end)
+      |> sum
 
     numer / Math.sqrt(denom_x * denom_y)
   end
@@ -468,7 +497,7 @@ defmodule Statistics do
       -17.89
 
   """
-  @spec covariance(list,list) :: number
+  @spec covariance(list, list) :: number
   def covariance(x, y) when length(x) == length(y) do
     xmean = mean(x)
     ymean = mean(y)
@@ -489,13 +518,14 @@ defmodule Statistics do
   defp split(list) when is_list(list) do
     do_split(Enum.sort(list), length(list))
   end
+
   defp do_split(sorted_list, l) when is_even(l) do
     m = :erlang.trunc(l / 2)
     {Enum.take(sorted_list, m), Enum.drop(sorted_list, m)}
   end
+
   defp do_split(sorted_list, l) when is_odd(l) do
     m = :erlang.trunc((l + 1) / 2)
     {Enum.take(sorted_list, m), Enum.drop(sorted_list, m - 1)}
   end
-
 end

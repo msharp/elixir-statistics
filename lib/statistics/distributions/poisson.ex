@@ -1,5 +1,4 @@
 defmodule Statistics.Distributions.Poisson do
-
   @moduledoc """
   The Poisson distribution is a discrete probablility distribution.
 
@@ -27,7 +26,6 @@ defmodule Statistics.Distributions.Poisson do
     end
   end
 
-
   @doc """
   Get the probability that a value lies below `k`
 
@@ -40,11 +38,13 @@ defmodule Statistics.Distributions.Poisson do
   @spec cdf(number) :: fun
   def cdf(lambda) do
     fn k ->
-      s = Enum.map(0..Math.to_int(k), fn x -> Math.pow(lambda, x) / Math.factorial(x) end) |> Enum.sum
+      s =
+        Enum.map(0..Math.to_int(k), fn x -> Math.pow(lambda, x) / Math.factorial(x) end)
+        |> Enum.sum()
+
       Math.exp(-lambda) * s
     end
   end
-
 
   @doc """
   The percentile-point function
@@ -65,15 +65,15 @@ defmodule Statistics.Distributions.Poisson do
       ppf_tande(x, lambda, 0.0)
     end
   end
+
   # the trusty trial-and-error method
   defp ppf_tande(x, lambda, guess) do
     if x > cdf(lambda).(guess) do
-      ppf_tande(x, lambda, guess+1)
+      ppf_tande(x, lambda, guess + 1)
     else
       guess
     end
   end
-
 
   @doc """
   Draw a random number from this distribution
@@ -88,12 +88,13 @@ defmodule Statistics.Distributions.Poisson do
   """
   @spec rand(number) :: number
   def rand(lambda) do
-    x = Math.rand() * 100 + lambda |> Math.floor
+    x = (Math.rand() * 100 + lambda) |> Math.floor()
+
     if pmf(lambda).(x) > Math.rand() do
       x
     else
-      rand(lambda) # keep trying
+      # keep trying
+      rand(lambda)
     end
   end
-
 end

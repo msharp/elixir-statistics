@@ -1,5 +1,4 @@
 defmodule Statistics.Distributions.Normal do
-
   @moduledoc """
   The normal, or gaussian, distribution
 
@@ -31,13 +30,12 @@ defmodule Statistics.Distributions.Normal do
   @spec pdf(number, number) :: fun
   def pdf(mu, sigma) do
     fn x ->
-      numexp = Math.pow((x - mu), 2) / (2 * Math.pow(sigma, 2))
-      denom = sigma * Math.sqrt((2 * Math.pi))
-      numer = Math.pow(Math.e, (numexp * -1))
+      numexp = Math.pow(x - mu, 2) / (2 * Math.pow(sigma, 2))
+      denom = sigma * Math.sqrt(2 * Math.pi())
+      numer = Math.pow(Math.e(), numexp * -1)
       numer / denom
     end
   end
-
 
   @doc """
   The cumulative density function
@@ -68,7 +66,6 @@ defmodule Statistics.Distributions.Normal do
     end
   end
 
-
   @doc """
   The percentile-point function
 
@@ -91,14 +88,16 @@ defmodule Statistics.Distributions.Normal do
   @spec ppf(number, number) :: fun
   def ppf(mu, sigma) do
     res = fn p ->
-      mu + (p * sigma)
+      mu + p * sigma
     end
+
     fn x ->
       cond do
         x < 0.5 ->
-          res.(-Functions.inv_erf(Math.sqrt(-2.0*Math.ln(x))))
+          res.(-Functions.inv_erf(Math.sqrt(-2.0 * Math.ln(x))))
+
         x >= 0.5 ->
-          res.(Functions.inv_erf(Math.sqrt(-2.0*Math.ln(1-x))))
+          res.(Functions.inv_erf(Math.sqrt(-2.0 * Math.ln(1 - x))))
       end
     end
   end
@@ -138,13 +137,17 @@ defmodule Statistics.Distributions.Normal do
     x = Math.rand() * 20 - 10
     rmu = 0
     rsigma = 1
+
     cond do
       pdf(rmu, rsigma).(x) > Math.rand() ->
-        z = (rmu - x) / rsigma  # get z-score
-        mu + (z * sigma)        # transpose to specified distribution
-      true -> 
-        rand(mu, sigma)         # keep trying
+        # get z-score
+        z = (rmu - x) / rsigma
+        # transpose to specified distribution
+        mu + z * sigma
+
+      true ->
+        # keep trying
+        rand(mu, sigma)
     end
   end
-
 end

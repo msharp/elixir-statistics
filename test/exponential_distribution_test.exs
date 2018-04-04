@@ -4,7 +4,6 @@ defmodule ExponentialDistributionTest do
 
   alias Statistics.Distributions.Exponential
 
-
   test "output of the pdf function" do
     assert Exponential.pdf().(-1) == 0
     assert Exponential.pdf(0).(1) == :nan
@@ -24,7 +23,7 @@ defmodule ExponentialDistributionTest do
   end
 
   test "return a random number from the distribution" do
-    assert is_float Exponential.rand(2)
+    assert is_float(Exponential.rand(2))
   end
 
   test "get the percentile point value" do
@@ -35,5 +34,4 @@ defmodule ExponentialDistributionTest do
     assert Exponential.ppf(1).(0.5) == 0.6931471805599453
     assert Exponential.ppf(4).(0.9) == 0.57564627324851148
   end
-
 end

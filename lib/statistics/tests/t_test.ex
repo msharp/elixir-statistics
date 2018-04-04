@@ -1,14 +1,13 @@
 defmodule Statistics.Tests.TTest do
-
   import Statistics
   import Statistics.Math
   alias Statistics.Distributions.T
 
   @moduledoc """
   Student's t test
-  
+
   """
-  
+
   @doc """
   A two-sided test for the null hypothesis that the 
   expected value (mean) of a sample of independent
@@ -23,13 +22,12 @@ defmodule Statistics.Tests.TTest do
 
   """
   def one_sample(list, popmean) do
-    df = length(list)-1
+    df = length(list) - 1
     t = (mean(list) - popmean) / (stdev(list) / sqrt(length(list)))
     p = get_t_prob(t, df)
     %{t: t, p: p}
   end
 
- 
   @doc """
   A two-sided test for the null hypothesis that the 
   mean of `list1` is different to the mean of `list2`.
@@ -55,35 +53,40 @@ defmodule Statistics.Tests.TTest do
     # calculate pooled standard deviation and
     # sample proportion differently when 
     # sample sizes are unequal
-    {sp, sz} = case length(list1) == length(list2) do
-      true ->
-        spt = sqrt((variance(list1) + variance(list2)) / 2)
-        szt = sqrt(2/length(list1))
-        {spt, szt}
-      false ->
-        # weight variances by sample size
-        adj_var1 = (length(list1)-1) * variance(list1)
-        adj_var2 = (length(list2)-1) * variance(list2)
-        spf = sqrt((adj_var1 + adj_var2) / df)
-        szf = sqrt((1 / length(list1)) + (1 / length(list2)))
-        {spf, szf}
-    end
+    {sp, sz} =
+      case length(list1) == length(list2) do
+        true ->
+          spt = sqrt((variance(list1) + variance(list2)) / 2)
+          szt = sqrt(2 / length(list1))
+          {spt, szt}
+
+        false ->
+          # weight variances by sample size
+          adj_var1 = (length(list1) - 1) * variance(list1)
+          adj_var2 = (length(list2) - 1) * variance(list2)
+          spf = sqrt((adj_var1 + adj_var2) / df)
+          szf = sqrt(1 / length(list1) + 1 / length(list2))
+          {spf, szf}
+      end
+
     t = (mu1 - mu2) / (sp * sz)
     p = get_t_prob(t, df)
     %{t: t, p: p}
   end
 
-
   defp get_t_prob(t, df) do
-    c = T.cdf(df).(t) 
-    p = case t < 0.0 do 
-      true -> c
-      false -> 1 - c
-    end
-    case p < 0.5 do # two-sided test
+    c = T.cdf(df).(t)
+
+    p =
+      case t < 0.0 do
+        true -> c
+        false -> 1 - c
+      end
+
+    # two-sided test
+    case p < 0.5 do
       true -> 2 * p
       false -> 1.0
     end
   end
-
 end
