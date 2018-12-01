@@ -43,7 +43,7 @@ defmodule Statistics.Distributions.Binomial do
       0.6875
   
   """
-  @spec ppf(non_neg_integer, number) :: fun
+  @spec cdf(non_neg_integer, number) :: fun
   def cdf(n, p) do
     fn k ->
       0..Math.to_int(Math.floor(k))
