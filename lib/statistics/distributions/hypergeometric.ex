@@ -56,8 +56,8 @@ defmodule Statistics.Distributions.Hypergeometric do
   @doc """
   The percentile-point function
   ## Examples
-      iex> Statistics.Distributions.Binomial.ppf(10, 0.5).(0.5)
-      5
+      iex> Statistics.Distributions.Hypergeometric.ppf(80, 20, 50).(0.1)
+      10
   """
   @spec ppf(non_neg_integer, non_neg_integer, non_neg_integer) :: fun
   def ppf(pn, pk, n) do
