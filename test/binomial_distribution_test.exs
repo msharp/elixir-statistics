@@ -31,7 +31,7 @@ defmodule BinomialDistributionTest do
     assert r == Math.to_int(r)
     # cannot be greater than number of trials
     assert r <= n
-    # cannot be less than sero
+    # cannot be less than zero
     assert r >= 0
   end
 end
