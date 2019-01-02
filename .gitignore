@@ -8,3 +8,4 @@ mix.lock
 TODO
 *.txt
 priv/
+.idea/
