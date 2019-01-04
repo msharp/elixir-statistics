@@ -1,25 +1,24 @@
 defmodule Statistics.Mixfile do
   use Mix.Project
 
-  @version "0.5.1"
+  @version "0.6.0"
 
   def project do
     [ app: :statistics,
       version: @version,
-      elixir: ">= 1.1.0",
+      elixir: ">= 1.5.0",
       description: description(),
       package: package(),
       deps: deps() ]
   end
 
-  # Configuration for the OTP application
   def application do
     []
   end
 
   defp deps do
     [
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev}
     ]
   end
 

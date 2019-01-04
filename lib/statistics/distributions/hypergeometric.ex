@@ -1,12 +1,13 @@
 defmodule Statistics.Distributions.Hypergeometric do
-  alias Statistics.Math
-
   @moduledoc """
   Hypergeometric distribution.
+
   It models the probability that an n numbers of trials
   result in exactly k successes, with a population of pn items,
   where pk are considered as successes.
   """
+
+  alias Statistics.Math
 
   @doc """
   The probability mass function

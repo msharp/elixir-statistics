@@ -3,7 +3,7 @@
 erl_crash.dump
 *.ez
 /_build
-/docs
+/doc
 mix.lock
 TODO
 *.txt
