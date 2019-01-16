@@ -34,4 +34,14 @@ defmodule ExponentialDistributionTest do
     assert Exponential.ppf(1).(0.5) == 0.6931471805599453
     assert Exponential.ppf(4).(0.9) == 0.57564627324851148
   end
+
+  test "generating many random variates gives roughly the expected mean" do
+    n = 100_000
+    lambda = 0.002
+    expected_mean = 1/lambda
+    sample_mean = Enum.sum(Enum.map(1..n, fn _ -> Exponential.rand(lambda) end))/n
+
+    assert 0.95 * expected_mean <= sample_mean
+    assert sample_mean <= 1.05 * expected_mean
+  end
 end

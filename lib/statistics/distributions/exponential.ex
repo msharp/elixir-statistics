@@ -98,9 +98,9 @@ defmodule Statistics.Distributions.Exponential do
   end
 
   @doc """
-  Draw a random number from the distribution with specified lambda
+  Draw a random variate from the distribution with specified lambda
 
-  Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
+  Uses the closed-form inverse CDF (PPF) evaluated with uniform number between 0.0 and 1.0
 
   ## Examples
 
@@ -115,13 +115,6 @@ defmodule Statistics.Distributions.Exponential do
   end
 
   def rand(lambda) do
-    x = Math.rand() * lambda * 100
-
-    if pdf(lambda).(x) > Math.rand() do
-      x
-    else
-      # keep trying
-      rand(lambda)
-    end
+    ppf(lambda).(Math.rand())
   end
 end
