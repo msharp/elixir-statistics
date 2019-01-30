@@ -1,7 +1,7 @@
 defmodule Statistics.Mixfile do
   use Mix.Project
 
-  @version "0.6.0"
+  @version "0.6.1"
 
   def project do
     [ app: :statistics,
