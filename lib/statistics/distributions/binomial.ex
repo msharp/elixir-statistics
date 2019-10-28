@@ -66,18 +66,18 @@ defmodule Statistics.Distributions.Binomial do
   @spec ppf(non_neg_integer, number) :: fun
   def ppf(n, p) do
     fn x ->
-      ppf_tande(x, n, p)
+      ppf_tande(x, n, p, cdf(n, p), 0)
     end
   end
 
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
-  defp ppf_tande(x, n, p, g \\ 0) do
-    g_cdf = cdf(n, p).(g)
+  defp ppf_tande(x, n, p, npcdf, g) do
+    g_cdf = npcdf.(g)
 
     cond do
       x > g_cdf ->
-        ppf_tande(x, n, p, g + 1)
+        ppf_tande(x, n, p, npcdf, g + 1)
 
       x <= g_cdf ->
         g
@@ -96,14 +96,16 @@ defmodule Statistics.Distributions.Binomial do
 
   """
   @spec rand(non_neg_integer, number) :: non_neg_integer
-  def rand(n, p) do
+  def rand(n, p), do: rand(n, p, pmf(n, p))
+
+  defp rand(n, p, rpmf) do
     x = Math.rand() * n
 
-    if pmf(n, p).(x) > Math.rand() do
+    if rpmf.(x) > Math.rand() do
       Float.round(x)
     else
       # keep trying
-      rand(n, p)
+      rand(n, p, rpmf)
     end
   end
 end

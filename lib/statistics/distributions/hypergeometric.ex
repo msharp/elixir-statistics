@@ -17,6 +17,8 @@ defmodule Statistics.Distributions.Hypergeometric do
   """
   @spec pmf(non_neg_integer, non_neg_integer, non_neg_integer) :: fun
   def pmf(pn, pk, n) do
+    combos = Math.combination(pn, n)
+
     fn k ->
       cond do
         n < k ->
@@ -33,7 +35,7 @@ defmodule Statistics.Distributions.Hypergeometric do
 
         true ->
           xk = Math.to_int(k)
-          Math.combination(pk, xk) * Math.combination(pn - pk, n - xk) / Math.combination(pn, n)
+          Math.combination(pk, xk) * Math.combination(pn - pk, n - xk) / combos
       end
     end
   end
@@ -46,10 +48,12 @@ defmodule Statistics.Distributions.Hypergeometric do
   """
   @spec cdf(non_neg_integer, non_neg_integer, non_neg_integer) :: fun
   def cdf(pn, pk, n) do
+    cpmf = pmf(pn, pk, n)
+
     fn k ->
       0..Math.to_int(Math.floor(k))
       |> Enum.to_list()
-      |> Enum.map(fn i -> pmf(pn, pk, n).(i) end)
+      |> Enum.map(fn i -> cpmf.(i) end)
       |> Enum.sum()
     end
   end
@@ -63,19 +67,19 @@ defmodule Statistics.Distributions.Hypergeometric do
   @spec ppf(non_neg_integer, non_neg_integer, non_neg_integer) :: fun
   def ppf(pn, pk, n) do
     fn x ->
-      ppf_tande(x, pn, pk, n)
+      ppf_tande(x, cdf(pn, pk, n), 0)
     end
   end
 
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
 
-  defp ppf_tande(x, pn, pk, n, guess \\ 0) do
-    g_cdf = cdf(pn, pk, n).(guess)
+  defp ppf_tande(x, tcdf, guess) do
+    g_cdf = tcdf.(guess)
 
     cond do
       x > g_cdf ->
-        ppf_tande(x, pn, pk, n, guess + 1)
+        ppf_tande(x, tcdf, guess + 1)
 
       x <= g_cdf ->
         guess
@@ -86,14 +90,16 @@ defmodule Statistics.Distributions.Hypergeometric do
   Draw a random number from hypergeometric distribution
   """
   @spec rand(non_neg_integer, non_neg_integer, non_neg_integer) :: non_neg_integer
-  def rand(pn, pk, n) do
+  def rand(pn, pk, n), do: rand(pk, pmf(pn, pk, n))
+
+  defp rand(pk, rpmf) do
     x = Math.floor(Math.rand() * pk)
 
-    if pmf(pn, pk, n).(x) > Math.rand() do
+    if rpmf.(x) > Math.rand() do
       Float.round(x)
     else
       # keep trying
-      rand(pn, pk, n)
+      rand(pk, rpmf)
     end
   end
 end

@@ -20,11 +20,14 @@ defmodule Statistics.Distributions.F do
   """
   @spec pdf(number, number) :: fun
   def pdf(d1, d2) do
+    powa = Math.pow(d2, d2)
+    cfac = Functions.beta(d1 / 2, d2 / 2)
+
     fn x ->
       # create components
-      a = Math.pow(d1 * x, d1) * Math.pow(d2, d2)
+      a = Math.pow(d1 * x, d1) * powa
       b = Math.pow(d1 * x + d2, d1 + d2)
-      c = x * Functions.beta(d1 / 2, d2 / 2)
+      c = x * cfac
       # for the equation
       Math.sqrt(a / b) / c
     end
@@ -47,9 +50,11 @@ defmodule Statistics.Distributions.F do
   # which is the CDF of the Beta distribution
   @spec cdf(number, number) :: fun
   def cdf(d1, d2) do
+    bcdf = Beta.cdf(d1 / 2, d2 / 2)
+
     fn x ->
       xx = d1 * x / (d1 * x + d2)
-      Beta.cdf(d1 / 2, d2 / 2).(xx)
+      bcdf.(xx)
     end
   end
 

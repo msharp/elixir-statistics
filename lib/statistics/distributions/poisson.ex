@@ -21,8 +21,10 @@ defmodule Statistics.Distributions.Poisson do
   """
   @spec pmf(number) :: fun
   def pmf(lambda) do
+    nexp = Math.exp(-lambda)
+
     fn k ->
-      Math.pow(lambda, k) / Math.factorial(k) * Math.exp(-lambda)
+      Math.pow(lambda, k) / Math.factorial(k) * nexp
     end
   end
 
@@ -37,12 +39,14 @@ defmodule Statistics.Distributions.Poisson do
   """
   @spec cdf(number) :: fun
   def cdf(lambda) do
+    nexp = Math.exp(-1 * lambda)
+
     fn k ->
       s =
         Enum.map(0..Math.to_int(k), fn x -> Math.pow(lambda, x) / Math.factorial(x) end)
         |> Enum.sum()
 
-      Math.exp(-lambda) * s
+      nexp * s
     end
   end
 
@@ -61,15 +65,17 @@ defmodule Statistics.Distributions.Poisson do
   """
   @spec ppf(number) :: fun
   def ppf(lambda) do
+    lcdf = cdf(lambda)
+
     fn x ->
-      ppf_tande(x, lambda, 0.0)
+      ppf_tande(x, lcdf, 0.0)
     end
   end
 
   # the trusty trial-and-error method
-  defp ppf_tande(x, lambda, guess) do
-    if x > cdf(lambda).(guess) do
-      ppf_tande(x, lambda, guess + 1)
+  defp ppf_tande(x, lcdf, guess) do
+    if x > lcdf.(guess) do
+      ppf_tande(x, lcdf, guess + 1)
     else
       guess
     end
@@ -87,14 +93,16 @@ defmodule Statistics.Distributions.Poisson do
 
   """
   @spec rand(number) :: number
-  def rand(lambda) do
+  def rand(lambda), do: rand(lambda, pmf(lambda))
+
+  defp rand(lambda, lpmf) do
     x = (Math.rand() * 100 + lambda) |> Math.floor()
 
-    if pmf(lambda).(x) > Math.rand() do
+    if lpmf.(x) > Math.rand() do
       x
     else
       # keep trying
-      rand(lambda)
+      rand(lambda, lpmf)
     end
   end
 end

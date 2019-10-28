@@ -21,10 +21,10 @@ defmodule Statistics.Distributions.T do
   """
   @spec pdf(number) :: fun
   def pdf(df) do
-    fn x ->
-      Functions.gamma((df + 1) / 2) / (Math.sqrt(df * Math.pi()) * Functions.gamma(df / 2)) *
-        Math.pow(1 + x * x / df, (df + 1) / 2 * -1)
-    end
+    fac = Functions.gamma((df + 1) / 2) / (Math.sqrt(df * Math.pi()) * Functions.gamma(df / 2))
+    exp = (df + 1) / 2 * -1
+
+    fn x -> fac * Math.pow(1 + x * x / df, exp) end
   end
 
   @doc """
@@ -45,9 +45,8 @@ defmodule Statistics.Distributions.T do
   """
   @spec cdf(number) :: fun
   def cdf(df) do
-    fn x ->
-      Functions.simpson(pdf(df), -10000, x, 10000)
-    end
+    cpdf = pdf(df)
+    fn x -> Functions.simpson(cpdf, -10000, x, 10000) end
   end
 
   # when a robust hyp2F1 materialises, use this implementation
@@ -67,28 +66,28 @@ defmodule Statistics.Distributions.T do
   @spec ppf(number) :: fun
   def ppf(df) do
     fn x ->
-      ppf_tande(x, df)
+      ppf_tande(x, cdf(df), 4)
     end
   end
 
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
-  defp ppf_tande(x, df, precision \\ 4) do
-    ppf_tande(x, df, -10, precision + 2, 0)
+  defp ppf_tande(x, pcdf, precision) do
+    ppf_tande(x, pcdf, -10, precision + 2, 0)
   end
 
   defp ppf_tande(_, _, g, precision, precision) do
     g
   end
 
-  defp ppf_tande(x, df, g, precision, p) do
+  defp ppf_tande(x, pcdf, g, precision, p) do
     increment = 100 / Math.pow(10, p)
     guess = g + increment
 
-    if x < cdf(df).(guess) do
-      ppf_tande(x, df, g, precision, p + 1)
+    if x < pcdf.(guess) do
+      ppf_tande(x, pcdf, g, precision, p + 1)
     else
-      ppf_tande(x, df, guess, precision, p)
+      ppf_tande(x, pcdf, guess, precision, p)
     end
   end
 
@@ -96,15 +95,17 @@ defmodule Statistics.Distributions.T do
   Draw a random number from a t distribution with specified degrees of freedom
   """
   @spec rand(number) :: number
-  def rand(df) do
+  def rand(df), do: randf(pdf(df))
+
+  defp randf(rpdf) do
     # t-dist is fatter-tailed than normal
     x = Math.rand() * 50 - 25
 
-    if pdf(df).(x) > Math.rand() do
+    if rpdf.(x) > Math.rand() do
       x
     else
       # keep trying
-      rand(df)
+      randf(rpdf)
     end
   end
 end

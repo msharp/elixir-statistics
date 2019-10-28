@@ -61,8 +61,10 @@ defmodule Statistics.Distributions.Normal do
 
   @spec cdf(number, number) :: fun
   def cdf(mu, sigma) do
+    denom = sigma * Math.sqrt(2)
+
     fn x ->
-      0.5 * (1.0 + Functions.erf((x - mu) / (sigma * Math.sqrt(2))))
+      0.5 * (1.0 + Functions.erf((x - mu) / denom))
     end
   end
 
@@ -127,7 +129,9 @@ defmodule Statistics.Distributions.Normal do
   end
 
   @spec rand(number, number) :: number
-  def rand(mu, sigma) do
+  def rand(mu, sigma), do: rand(mu, sigma, pdf(0, 1))
+
+  defp rand(mu, sigma, rpdf) do
     # Note: an alternate method exists and may be better
     # Inverse transform sampling - https://en.wikipedia.org/wiki/Inverse_transform_sampling
     # ----
@@ -135,19 +139,15 @@ defmodule Statistics.Distributions.Normal do
     # (probability of 10 ocurring in a Normal(0,1) distribution is
     # too small to calculate with the precision available to us)
     x = Math.rand() * 20 - 10
-    rmu = 0
-    rsigma = 1
 
     cond do
-      pdf(rmu, rsigma).(x) > Math.rand() ->
-        # get z-score
-        z = (rmu - x) / rsigma
+      rpdf.(x) > Math.rand() ->
         # transpose to specified distribution
-        mu + z * sigma
+        mu - x * sigma
 
       true ->
         # keep trying
-        rand(mu, sigma)
+        rand(mu, sigma, rpdf)
     end
   end
 end

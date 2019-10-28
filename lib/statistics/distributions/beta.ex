@@ -17,13 +17,15 @@ defmodule Statistics.Distributions.Beta do
   """
   @spec pdf(number, number) :: fun
   def pdf(a, b) do
+    bab = Functions.beta(a, b)
+
     fn x ->
       cond do
         x <= 0.0 ->
           0.0
 
         true ->
-          Math.pow(x, a - 1) * Math.pow(1 - x, b - 1) / Functions.beta(a, b)
+          Math.pow(x, a - 1) * Math.pow(1 - x, b - 1) / bab
       end
     end
   end
@@ -91,15 +93,17 @@ defmodule Statistics.Distributions.Beta do
 
   """
   @spec rand(number, number) :: number
-  def rand(a, b) do
+  def rand(a, b), do: rand(pdf(a, b))
+
+  defp rand(rpdf) do
     # beta only exists between 0 and 1
     x = Math.rand()
 
-    if pdf(a, b).(x) > Math.rand() do
+    if rpdf.(x) > Math.rand() do
       x
     else
       # keep trying
-      rand(a, b)
+      rand(rpdf)
     end
   end
 end

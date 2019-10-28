@@ -19,10 +19,10 @@ defmodule Statistics.Distributions.Chisq do
   """
   @spec pdf(non_neg_integer) :: fun
   def pdf(df) do
-    fn x ->
-      1 / (Math.pow(2, df / 2) * Functions.gamma(df / 2)) * Math.pow(x, df / 2 - 1) *
-        Math.exp(-1 * x / 2)
-    end
+    hdf = df / 2
+    g = Math.pow(2, hdf) * Functions.gamma(hdf)
+
+    fn x -> 1 / g * Math.pow(x, hdf - 1) * Math.exp(-1 * x / 2) end
   end
 
   @doc """
@@ -36,9 +36,11 @@ defmodule Statistics.Distributions.Chisq do
   """
   @spec cdf(non_neg_integer) :: fun
   def cdf(df) do
+    hdf = df / 2.0
+    g = Functions.gamma(hdf)
+
     fn x ->
-      g = Functions.gamma(df / 2.0)
-      b = Functions.gammainc(df / 2.0, x / 2.0)
+      b = Functions.gammainc(hdf, x / 2.0)
       b / g
     end
   end
@@ -55,28 +57,28 @@ defmodule Statistics.Distributions.Chisq do
   @spec ppf(non_neg_integer) :: fun
   def ppf(df) do
     fn x ->
-      ppf_tande(x, df)
+      ppf_tande(x, cdf(df))
     end
   end
 
   # trial-and-error method which refines guesses
   # to arbitrary number of decimal places
-  defp ppf_tande(x, df, precision \\ 14) do
-    ppf_tande(x, df, 0, precision + 2, 0)
+  defp ppf_tande(x, tcdf, precision \\ 14) do
+    ppf_tande(x, tcdf, 0, precision + 2, 0)
   end
 
   defp ppf_tande(_, _, g, precision, precision) do
     g
   end
 
-  defp ppf_tande(x, df, g, precision, p) do
+  defp ppf_tande(x, tcdf, g, precision, p) do
     increment = 100 / Math.pow(10, p)
     guess = g + increment
 
-    if x < cdf(df).(guess) do
-      ppf_tande(x, df, g, precision, p + 1)
+    if x < tcdf.(guess) do
+      ppf_tande(x, tcdf, g, precision, p + 1)
     else
-      ppf_tande(x, df, guess, precision, p)
+      ppf_tande(x, tcdf, guess, precision, p)
     end
   end
 
@@ -92,14 +94,16 @@ defmodule Statistics.Distributions.Chisq do
 
   """
   @spec rand(non_neg_integer) :: number
-  def rand(df) do
+  def rand(df), do: rand(df, cdf(df))
+
+  defp rand(df, rcdf) do
     x = Math.rand() * 100
 
-    if pdf(df).(x) > Math.rand() do
+    if rcdf.(x) > Math.rand() do
       x
     else
       # keep trying
-      rand(df)
+      rand(df, rcdf)
     end
   end
 end
