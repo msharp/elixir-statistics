@@ -4,12 +4,14 @@ defmodule Statistics.Mixfile do
   @version "0.6.1"
 
   def project do
-    [ app: :statistics,
+    [
+      app: :statistics,
       version: @version,
       elixir: ">= 1.5.0",
       description: description(),
       package: package(),
-      deps: deps() ]
+      deps: deps()
+    ]
   end
 
   def application do
@@ -36,5 +38,4 @@ defmodule Statistics.Mixfile do
       links: %{"GitHub" => "https://github.com/msharp/elixir-statistics"}
     ]
   end
-
 end

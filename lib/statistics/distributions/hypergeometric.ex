@@ -33,7 +33,7 @@ defmodule Statistics.Distributions.Hypergeometric do
 
         true ->
           xk = Math.to_int(k)
-          Math.combination(pk, xk) * Math.combination(pn-pk, n-xk) / Math.combination(pn, n)
+          Math.combination(pk, xk) * Math.combination(pn - pk, n - xk) / Math.combination(pn, n)
       end
     end
   end

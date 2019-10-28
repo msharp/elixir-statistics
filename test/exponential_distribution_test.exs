@@ -38,8 +38,8 @@ defmodule ExponentialDistributionTest do
   test "generating many random variates gives roughly the expected mean" do
     n = 100_000
     lambda = 0.002
-    expected_mean = 1/lambda
-    sample_mean = Enum.sum(Enum.map(1..n, fn _ -> Exponential.rand(lambda) end))/n
+    expected_mean = 1 / lambda
+    sample_mean = Enum.sum(Enum.map(1..n, fn _ -> Exponential.rand(lambda) end)) / n
 
     assert 0.95 * expected_mean <= sample_mean
     assert sample_mean <= 1.05 * expected_mean
