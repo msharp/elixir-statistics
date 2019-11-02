@@ -12,7 +12,7 @@ Add Statistics as a dependency in your `mix.exs` file to install from [hex.pm](h
 ```elixir
 def deps do
   [
-    { :statistics, "~> 0.5.0"}
+    { :statistics, "~> 0.6.2"}
   ]
 end
 ```
@@ -56,17 +56,11 @@ Everything is implemented in Elixir. Many of the implementations use slow approx
 
 There is much room for improvement. To make this library really fast (and precise), we would probably need to interface with existing C libraries.
 
-## Roadmap
-
-This library is evolving.
-
-I plan to add common statistical tests and most common distributions.
-
 ## Contributing
 
 I will accept pull requests.
 
-If you want to contribute, please create a topic branch with tests.
+If you want to contribute, please create a topic branch with tests and submit a pull request.
 
 ## License
 
