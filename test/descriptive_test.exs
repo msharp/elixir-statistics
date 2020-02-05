@@ -32,8 +32,10 @@ defmodule DescriptiveTest do
 
   test "calculate median" do
     assert Statistics.median(@null) == nil
+    assert Statistics.median(@g) == 1
     assert Statistics.median(@a) == 5
     assert Statistics.median(@a -- [9]) == 4.5
+    assert Statistics.median(@e) == 2
   end
 
   test "get maximum" do

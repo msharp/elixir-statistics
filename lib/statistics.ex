@@ -52,26 +52,23 @@ defmodule Statistics do
   """
   @spec median(list) :: number
   def median([]), do: nil
+  def median([m]), do: m
 
   def median(list) when is_list(list) do
-    midpoint =
-      (length(list) / 2)
-      |> Float.floor()
-      |> round
+    list = Enum.sort(list)
+    len = length(list)
 
-    {l1, l2} =
-      Enum.sort(list)
-      |> Enum.split(midpoint)
-
-    case length(l2) > length(l1) do
-      true ->
-        [med | _] = l2
-        med
-
-      false ->
-        [m1 | _] = l2
-        [m2 | _] = Enum.reverse(l1)
+    case rem(len, 2) do
+      0 ->
+        # even number of elements, take mean of "left mid" and "right mid"
+        left_mid_index = div(len, 2) - 1
+        [m1, m2] = Enum.slice(list, left_mid_index, 2)
         mean([m1, m2])
+
+      1 ->
+        # odd number of elements, take the middle one.
+        mid_index = div(len, 2)
+        Enum.at(list, mid_index)
     end
   end
 
