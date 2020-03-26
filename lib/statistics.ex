@@ -27,7 +27,7 @@ defmodule Statistics do
       2.0
 
   """
-  @spec mean(list) :: number
+  @spec mean(list(number)) :: float() | nil
   def mean(list) when is_list(list), do: do_mean(list, 0, 0)
 
   defp do_mean([], 0, 0), do: nil
