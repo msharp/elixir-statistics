@@ -19,14 +19,9 @@ defmodule Statistics.Distributions.Beta do
   def pdf(a, b) do
     bab = Functions.beta(a, b)
 
-    fn x ->
-      cond do
-        x <= 0.0 ->
-          0.0
-
-        true ->
-          Math.pow(x, a - 1) * Math.pow(1 - x, b - 1) / bab
-      end
+    fn
+      x when x <= 0.0 -> 0.0
+      x -> Math.pow(x, a - 1) * Math.pow(1 - x, b - 1) / bab
     end
   end
 
@@ -37,7 +32,7 @@ defmodule Statistics.Distributions.Beta do
 
       iex> Statistics.Distributions.Beta.cdf(1,100).(0.1)
       0.9996401052677814
-      
+
   """
   @spec cdf(number, number) :: fun
   def cdf(a, b) do
@@ -53,7 +48,7 @@ defmodule Statistics.Distributions.Beta do
 
       iex> Statistics.Distributions.Beta.ppf(1,100).(0.1)
       0.001053089271799999
-      
+
   """
   @spec ppf(number, number) :: fun
   def ppf(a, b) do

@@ -126,10 +126,7 @@ defmodule Statistics do
   """
   @spec min(list) :: number
   def min([]), do: nil
-
-  def min(list) do
-    Enum.min(list)
-  end
+  def min(list), do: Enum.min(list)
 
   @doc """
   Get the maximum value from a list
@@ -143,10 +140,7 @@ defmodule Statistics do
   """
   @spec max(list) :: number
   def max([]), do: nil
-
-  def max(list) do
-    Enum.max(list)
-  end
+  def max(list), do: Enum.max(list)
 
   @doc """
   Get the quartile cutoff value from a list

@@ -23,17 +23,12 @@ defmodule Statistics.Distributions.Exponential do
   end
 
   def pdf(lambda) do
-    fn x ->
-      cond do
-        x < 0 ->
-          0
+    fn
+      x < 0 ->
+        0
 
-        lambda <= 0 ->
-          :nan
-
-        true ->
-          lambda * Math.exp(-lambda * x)
-      end
+      x ->
+        if lambda <= 0, do: :nan, else: lambda * Math.exp(-lambda * x)
     end
   end
 
@@ -53,17 +48,12 @@ defmodule Statistics.Distributions.Exponential do
   end
 
   def cdf(lambda) do
-    fn x ->
-      cond do
-        x < 0 ->
-          0
+    fn
+      x < 0 ->
+        0
 
-        lambda <= 0 ->
-          :nan
-
-        true ->
-          1 - Math.exp(-lambda * x)
-      end
+      x ->
+        if lambda <= 0, do: :nan, else: 1 - Math.exp(-lambda * x)
     end
   end
 
@@ -83,17 +73,16 @@ defmodule Statistics.Distributions.Exponential do
   end
 
   def ppf(lambda) do
-    fn x ->
-      cond do
-        x == 1 ->
-          :inf
+    fn
+      x == 1 ->
+        :inf
 
-        x < 0 or x > 1 or lambda < 0 ->
+      x ->
+        if x < 0 or x > 1 or lambda < 0 do
           :nan
-
-        true ->
-          -1 * Math.ln(1 - x) / lambda
-      end
+        else
+          -1 * Match.ln(1 - x) / lambda
+        end
     end
   end
 

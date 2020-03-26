@@ -5,7 +5,7 @@ defmodule Statistics.Distributions.Binomial do
   Binomial distribution.
 
   This models the expected outcome of a number
-  of binary trials, each with known probability, 
+  of binary trials, each with known probability,
   (often called a Bernoulli trial)
   """
 
@@ -20,18 +20,17 @@ defmodule Statistics.Distributions.Binomial do
   """
   @spec pmf(non_neg_integer, number) :: fun
   def pmf(n, p) do
-    fn k ->
-      cond do
-        k < 1.0 ->
-          0.0
+    fn
+      k when k < 1.0 ->
+        0.0
 
-        n < k ->
+      k ->
+        if n < k do
           0.0
-
-        true ->
+        else
           xk = Math.to_int(k)
           Math.combination(n, xk) * Math.pow(p, xk) * Math.pow(1 - p, n - xk)
-      end
+        end
     end
   end
 

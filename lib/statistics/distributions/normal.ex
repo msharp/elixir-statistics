@@ -2,7 +2,7 @@ defmodule Statistics.Distributions.Normal do
   @moduledoc """
   The normal, or gaussian, distribution
 
-  When invoking the distibution functions without parameters, 
+  When invoking the distibution functions without parameters,
   a distribution with mean of 0 and standard deviation of 1 is assumed.
   """
 
@@ -89,18 +89,11 @@ defmodule Statistics.Distributions.Normal do
 
   @spec ppf(number, number) :: fun
   def ppf(mu, sigma) do
-    res = fn p ->
-      mu + p * sigma
-    end
+    res = &(mu + &1 * sigma)
 
-    fn x ->
-      cond do
-        x < 0.5 ->
-          res.(-Functions.inv_erf(Math.sqrt(-2.0 * Math.ln(x))))
-
-        x >= 0.5 ->
-          res.(Functions.inv_erf(Math.sqrt(-2.0 * Math.ln(1 - x))))
-      end
+    fn
+      x < 0.5 -> res.(-Functions.inv_erf(Math.sqrt(-2.0 * Math.ln(x))))
+      x >= 0.5 -> res.(Functions.inv_erf(Math.sqrt(-2.0 * Math.ln(1 - x))))
     end
   end
 
@@ -140,14 +133,12 @@ defmodule Statistics.Distributions.Normal do
     # too small to calculate with the precision available to us)
     x = Math.rand() * 20 - 10
 
-    cond do
-      rpdf.(x) > Math.rand() ->
-        # transpose to specified distribution
-        mu - x * sigma
-
-      true ->
-        # keep trying
-        rand(mu, sigma, rpdf)
+    if rpdf.(x) > Math.rand() do
+      # transpose to specified distribution
+      mu - x * sigma
+    else
+      # keep trying
+      rand(mu, sigma, rpdf)
     end
   end
 end

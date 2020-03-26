@@ -43,7 +43,8 @@ defmodule Statistics.Distributions.Poisson do
 
     fn k ->
       s =
-        Enum.map(0..Math.to_int(k), fn x -> Math.pow(lambda, x) / Math.factorial(x) end)
+        0..Math.to_int(k)
+        |> Enum.map(fn x -> Math.pow(lambda, x) / Math.factorial(x) end)
         |> Enum.sum()
 
       nexp * s
@@ -66,10 +67,7 @@ defmodule Statistics.Distributions.Poisson do
   @spec ppf(number) :: fun
   def ppf(lambda) do
     lcdf = cdf(lambda)
-
-    fn x ->
-      ppf_tande(x, lcdf, 0.0)
-    end
+    &ppf_tande(&1, lcdf, 0.0)
   end
 
   # the trusty trial-and-error method

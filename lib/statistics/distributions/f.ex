@@ -40,12 +40,12 @@ defmodule Statistics.Distributions.F do
 
       iex> Statistics.Distributions.F.cdf(1,1).(1)
       0.4971668763845647
-      
+
   NOTE this is rather imprecise owing to the use
-  of numerical integration of `Beta.pdf/2` to 
+  of numerical integration of `Beta.pdf/2` to
   approximate the regularised incomplete beta function
   """
-  # NOTE the cdf is defined in terms of 
+  # NOTE the cdf is defined in terms of
   # the regularised incomplete Beta function
   # which is the CDF of the Beta distribution
   @spec cdf(number, number) :: fun
@@ -65,7 +65,7 @@ defmodule Statistics.Distributions.F do
 
       iex> Statistics.Distributions.F.ppf(1,1).(1)
       1.0180414899099999
-      
+
   """
   @spec ppf(number, number) :: fun
   def ppf(d1, d2) do
@@ -98,7 +98,7 @@ defmodule Statistics.Distributions.F do
   end
 
   @doc """
-  Draw a random number from an F distribution 
+  Draw a random number from an F distribution
   """
   @spec rand(number, number) :: number
   def rand(d1, d2) do
