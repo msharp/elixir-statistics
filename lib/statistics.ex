@@ -10,7 +10,7 @@ defmodule Statistics do
 
   Calls Enum.sum/1
   """
-  @spec sum(list) :: number
+  @spec sum([number]) :: number
   def sum(list) when is_list(list), do: do_sum(list, 0)
 
   defp do_sum([], t), do: t
@@ -27,7 +27,7 @@ defmodule Statistics do
       2.0
 
   """
-  @spec mean(list(number)) :: float() | nil
+  @spec mean([number]) :: float() | nil
   def mean(list) when is_list(list), do: do_mean(list, 0, 0)
 
   defp do_mean([], 0, 0), do: nil
@@ -50,7 +50,7 @@ defmodule Statistics do
       2.5
 
   """
-  @spec median(list) :: number
+  @spec median([number]) :: number | nil
   def median([]), do: nil
 
   def median(list) when is_list(list) do
@@ -86,7 +86,7 @@ defmodule Statistics do
       2
 
   """
-  @spec mode(list) :: number
+  @spec mode([number]) :: number | nil
   def mode([]), do: nil
 
   def mode(list) when is_list(list) do
@@ -106,7 +106,7 @@ defmodule Statistics do
       %{1 => 2, 2 => 4, 3 => 1, 4 => 1, 5 => 4}
 
   """
-  @spec hist(list) :: map
+  @spec hist([number]) :: map | nil
   def hist([]), do: nil
 
   def hist(list) when is_list(list) do
@@ -124,7 +124,7 @@ defmodule Statistics do
 
   If a non-empty list is provided, it is a call to Enum.min/1
   """
-  @spec min(list) :: number
+  @spec min([number]) :: number | nil
   def min([]), do: nil
 
   def min(list) do
@@ -141,7 +141,7 @@ defmodule Statistics do
 
   If a non-empty list is provided, it is a call to Enum.max/1
   """
-  @spec max(list) :: number
+  @spec max([number]) :: number |nil
   def max([]), do: nil
 
   def max(list) do
@@ -162,7 +162,7 @@ defmodule Statistics do
 
   """
   # TODO change these to call `percentile/2`
-  @spec quartile(list, atom) :: number
+  @spec quartile([number], :first | :third) :: number
   def quartile(list, :first) do
     list |> split |> elem(0) |> median
   end
@@ -186,7 +186,7 @@ defmodule Statistics do
       9
 
   """
-  @spec percentile(list, number) :: number
+  @spec percentile([number], number) :: number | nil
   def percentile([], _), do: nil
   def percentile([x], _), do: x
   def percentile(list, 0), do: min(list)
@@ -210,7 +210,7 @@ defmodule Statistics do
       5
 
   """
-  @spec range(list) :: number
+  @spec range([number]) :: number | nil
   def range([]), do: nil
 
   def range(list) when is_list(list) do
@@ -228,7 +228,7 @@ defmodule Statistics do
       4
 
   """
-  @spec iqr(list) :: number
+  @spec iqr([number]) :: number | nil
   def iqr([]), do: nil
 
   def iqr(list) when is_list(list) do
@@ -249,7 +249,7 @@ defmodule Statistics do
       56.48979591836735
 
   """
-  @spec variance(list) :: number
+  @spec variance([number]) :: number | nil
   def variance([]), do: nil
 
   def variance(list) when is_list(list) do
@@ -268,7 +268,7 @@ defmodule Statistics do
       0.5
 
   """
-  @spec stdev(list) :: number
+  @spec stdev([number]) :: number | nil
   def stdev([]), do: nil
 
   def stdev(list) do
@@ -290,8 +290,7 @@ defmodule Statistics do
       7.3
 
   """
-  @spec trimmed_mean(list, atom) :: number
-  @spec trimmed_mean(list, tuple) :: number
+  @spec trimmed_mean([number], atom | tuple) :: number | nil
   def trimmed_mean([], _), do: nil
 
   def trimmed_mean(list, :iqr) do
@@ -317,7 +316,7 @@ defmodule Statistics do
       4.5204836768674568
 
   """
-  @spec harmonic_mean(list) :: number
+  @spec harmonic_mean([number]) :: number | nil
   def harmonic_mean([]), do: nil
 
   def harmonic_mean(list) when is_list(list) do
@@ -343,7 +342,7 @@ defmodule Statistics do
       1.8171205928321397
 
   """
-  @spec geometric_mean(list) :: number
+  @spec geometric_mean([number]) :: number | nil
   def geometric_mean([]), do: nil
 
   def geometric_mean(list) when is_list(list) do
@@ -372,7 +371,7 @@ defmodule Statistics do
       nil
 
   """
-  @spec moment(list, pos_integer) :: number
+  @spec moment([number], pos_integer) :: number | nil
   def moment(list, n \\ 1)
   # empty list has no moment
   def moment([], _), do: nil
@@ -399,7 +398,7 @@ defmodule Statistics do
       0.3436215967445454
 
   """
-  @spec skew(list) :: number
+  @spec skew([number]) :: number | nil
   def skew([]), do: nil
 
   def skew(list) do
@@ -421,7 +420,7 @@ defmodule Statistics do
       -1.1530612244897964
 
   """
-  @spec kurtosis(list) :: number
+  @spec kurtosis([number]) :: number | nil
   def kurtosis([]), do: nil
 
   def kurtosis(list) do
@@ -444,7 +443,7 @@ defmodule Statistics do
       0.9284766908852594, 0.09284766908852597, -0.7427813527082074]
 
   """
-  @spec zscore(list) :: list
+  @spec zscore([number]) :: list | nil
   def zscore(list) when is_list(list) do
     lmean = mean(list)
     lstdev = stdev(list)
@@ -462,7 +461,7 @@ defmodule Statistics do
       0.9897782665572894
 
   """
-  @spec correlation(list, list) :: number
+  @spec correlation([number], [number]) :: number
   def correlation(x, y) when length(x) == length(y) do
     xmean = mean(x)
     ymean = mean(y)
@@ -497,7 +496,7 @@ defmodule Statistics do
       -17.89
 
   """
-  @spec covariance(list, list) :: number
+  @spec covariance([number], [number]) :: number
   def covariance(x, y) when length(x) == length(y) do
     xmean = mean(x)
     ymean = mean(y)
