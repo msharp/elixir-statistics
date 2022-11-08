@@ -31,13 +31,31 @@ defmodule Statistics.Distributions.Beta do
   end
 
   @doc """
+  The maximum value of the probability density function
+
+  ## Examples
+
+      iex> Statistics.Distributions.Beta.pdf_max(2,6)
+      0.1666666666666666666
+
+  """
+  @spec pdf_max(number, number) :: number
+  def pdf_max(a, b) do
+    if a == 1 || b == 1 || (a+b) == 2 do
+      1.0
+    else
+      (a - 1) / (a + b - 2)
+    end
+  end
+
+  @doc """
   The cumulative density function
 
   ## Examples
 
       iex> Statistics.Distributions.Beta.cdf(1,100).(0.1)
       0.9996401052677814
-      
+
   """
   @spec cdf(number, number) :: fun
   def cdf(a, b) do
@@ -53,7 +71,7 @@ defmodule Statistics.Distributions.Beta do
 
       iex> Statistics.Distributions.Beta.ppf(1,100).(0.1)
       0.001053089271799999
-      
+
   """
   @spec ppf(number, number) :: fun
   def ppf(a, b) do
@@ -93,17 +111,21 @@ defmodule Statistics.Distributions.Beta do
 
   """
   @spec rand(number, number) :: number
-  def rand(a, b), do: rand(pdf(a, b))
+  def rand(a, b) do
+    rpdf = pdf(a, b)
+    rpdf_max = pdf_max(a, b)
+    rand_sampling(rpdf, rpdf_max)
+  end
 
-  defp rand(rpdf) do
+  defp rand_sampling(rpdf, rpdf_max) do
     # beta only exists between 0 and 1
     x = Math.rand()
 
-    if rpdf.(x) > Math.rand() do
+    if rpdf.(x) > Math.rand() * rpdf_max do
       x
     else
       # keep trying
-      rand(rpdf)
+      rand_sampling(rpdf, rpdf_max)
     end
   end
 end
