@@ -36,15 +36,17 @@ defmodule Statistics.Distributions.Beta do
   ## Examples
 
       iex> Statistics.Distributions.Beta.pdf_max(2,6)
-      0.1666666666666666666
+      2.813143004115228
 
   """
   @spec pdf_max(number, number) :: number
   def pdf_max(a, b) do
+    rpdf = pdf(a, b)
+
     if a == 1 || b == 1 || (a+b) == 2 do
       1.0
     else
-      (a - 1) / (a + b - 2)
+      rpdf.((a - 1) / (a + b - 2))
     end
   end
 
