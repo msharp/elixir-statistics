@@ -78,18 +78,18 @@ defmodule DescriptiveTest do
 
   test "calculate variance" do
     assert Statistics.variance(@null) == nil
-    assert Statistics.variance(@b) == 1.7283950617283952
+    assert Statistics.variance(@b) == 1.7283949851989746
   end
 
   test "calculate standard deviation" do
     assert Statistics.stdev(@null) == nil
-    assert Statistics.stdev(@b) == 1.314684396244359
+    assert Statistics.stdev(@b) == 1.3146843910217285
   end
 
   test "calculate trimmed mean" do
     assert Statistics.trimmed_mean(@null, {1, 4}) == nil
     assert Statistics.trimmed_mean(@c, {4, 9}) == 6.5
-    assert Statistics.trimmed_mean((@c ++ [5, 6, 7, 8]) -- [9], :iqr) == 7.3
+    assert Statistics.trimmed_mean((@c ++ [5, 6, 7, 8]) -- [9], :iqr) == 7.300000190734863
   end
 
   test "calculate harmonic mean" do
@@ -108,43 +108,43 @@ defmodule DescriptiveTest do
     assert Statistics.moment(@null, 3) == nil
 
     assert Statistics.moment(@d, 1) == 0.0
-    assert Statistics.moment(@d, 2) == 5.2266666666666675
-    assert Statistics.moment(@d, 3) == -1.3440000000000025
+    assert Statistics.moment(@d, 2) == 5.2266669273376465
+    assert Statistics.moment(@d, 3) == -1.3439967632293701
   end
 
   test "calculate skewness" do
     assert Statistics.skew(@null) == nil
-    assert Statistics.skew(@e) == 0.3436215967445454
+    assert Statistics.skew(@e) == 0.3436217931063174
   end
 
   test "calculate kurtosis (fisher)" do
     assert Statistics.kurtosis(@null) == nil
-    assert Statistics.kurtosis(@e) == -1.1530612244897964
+    assert Statistics.kurtosis(@e) == -1.1530611465519447
   end
 
   test "calculate standard score for items in a list" do
     expected = [
-      -0.7427813527082074,
-      -1.5784103745049407,
-      -0.7427813527082074,
-      0.09284766908852597,
-      0.9284766908852594,
-      1.7641057126819928,
-      0.9284766908852594,
-      0.09284766908852597,
-      -0.7427813527082074
+      -0.7427812933479767,
+      -1.5784102981718204,
+      -0.7427812933479767,
+      0.09284771147586708,
+      0.9284767162997108,
+      1.7641057211235547,
+      0.9284767162997108,
+      0.09284771147586708,
+      -0.7427812933479767
     ]
 
     assert Statistics.zscore([3, 2, 3, 4, 5, 6, 5, 4, 3]) == expected
   end
 
   test "calculate the correlation of 2 lists" do
-    assert Statistics.correlation(@x, @y) == 0.09315273948675289
+    assert Statistics.correlation(@x, @y) == 0.09315274811885829
     assert_raise FunctionClauseError, fn -> Statistics.correlation(@x, @null) end
   end
 
   test "calculate the covariance of 2 lists" do
-    assert Statistics.covariance(@x, @y) == 0.6307189542483661
+    assert Statistics.covariance(@x, @y) == 0.630719006061554
     assert_raise FunctionClauseError, fn -> Statistics.covariance(@x, @null) end
   end
 end

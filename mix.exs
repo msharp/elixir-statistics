@@ -20,7 +20,8 @@ defmodule Statistics.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.19", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev},
+      {:nx, "~> 0.6.4"}
     ]
   end
 

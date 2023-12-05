@@ -1,6 +1,8 @@
 defmodule Statistics do
   alias Statistics.Math
 
+  import Nx.Defn
+
   @moduledoc """
   Descriptive statistics functions
   """
@@ -11,10 +13,16 @@ defmodule Statistics do
   Calls Enum.sum/1
   """
   @spec sum([number]) :: number
-  def sum(list) when is_list(list), do: do_sum(list, 0)
+  def sum([]), do: 0
 
-  defp do_sum([], t), do: t
-  defp do_sum([x | xs], t), do: do_sum(xs, t + x)
+  def sum(list) do
+    list
+    |> Nx.tensor()
+    |> do_sum()
+    |> Nx.to_number()
+  end
+
+  defn(do_sum(t), do: Nx.sum(t))
 
   @doc """
   Calculate the mean from a list of numbers
@@ -28,14 +36,16 @@ defmodule Statistics do
 
   """
   @spec mean([number]) :: float() | nil
-  def mean(list) when is_list(list), do: do_mean(list, 0, 0)
+  def mean([]), do: nil
 
-  defp do_mean([], 0, 0), do: nil
-  defp do_mean([], t, l), do: t / l
-
-  defp do_mean([x | xs], t, l) do
-    do_mean(xs, t + x, l + 1)
+  def mean(data) do
+    data
+    |> Nx.tensor()
+    |> do_mean()
+    |> Nx.to_number()
   end
+
+  defn(do_mean(t), do: Nx.mean(t))
 
   @doc """
   Get the median value from a list.
@@ -54,26 +64,13 @@ defmodule Statistics do
   def median([]), do: nil
 
   def median(list) when is_list(list) do
-    midpoint =
-      (length(list) / 2)
-      |> Float.floor()
-      |> round
-
-    {l1, l2} =
-      Enum.sort(list)
-      |> Enum.split(midpoint)
-
-    case length(l2) > length(l1) do
-      true ->
-        [med | _] = l2
-        med
-
-      false ->
-        [m1 | _] = l2
-        [m2 | _] = Enum.reverse(l1)
-        mean([m1, m2])
-    end
+    list
+    |> Nx.tensor()
+    |> do_median()
+    |> Nx.to_number()
   end
+
+  defn(do_median(t), do: Nx.median(t))
 
   @doc """
   Get the most frequently occuring value
@@ -90,10 +87,13 @@ defmodule Statistics do
   def mode([]), do: nil
 
   def mode(list) when is_list(list) do
-    h = hist(list)
-    max = Map.values(h) |> Enum.max()
-    h |> Enum.find(fn {_, val} -> val == max end) |> elem(0)
+    list
+    |> Nx.tensor()
+    |> do_mode()
+    |> Nx.to_number()
   end
+
+  defn(do_mode(t), do: Nx.mode(t))
 
   @doc """
   Get a frequency count of the values in a list
@@ -141,7 +141,7 @@ defmodule Statistics do
 
   If a non-empty list is provided, it is a call to Enum.max/1
   """
-  @spec max([number]) :: number |nil
+  @spec max([number]) :: number | nil
   def max([]), do: nil
 
   def max(list) do
@@ -246,16 +246,20 @@ defmodule Statistics do
       iex> Statistics.variance([1,2,3,4])
       1.25
       iex> Statistics.variance([55,56,60,65,54,51,39])
-      56.48979591836735
+      56.48979949951172
 
   """
   @spec variance([number]) :: number | nil
   def variance([]), do: nil
 
   def variance(list) when is_list(list) do
-    list_mean = mean(list)
-    list |> Enum.map(fn x -> (list_mean - x) * (list_mean - x) end) |> mean
+    list
+    |> Nx.tensor()
+    |> do_variance()
+    |> Nx.to_number()
   end
+
+  defn(do_variance(t), do: Nx.variance(t))
 
   @doc """
   Calculate the standard deviation of a list
@@ -272,8 +276,13 @@ defmodule Statistics do
   def stdev([]), do: nil
 
   def stdev(list) do
-    list |> variance |> Math.sqrt()
+    list
+    |> Nx.tensor()
+    |> do_stdev()
+    |> Nx.to_number()
   end
+
+  defn(do_stdev(t), do: Nx.standard_deviation(t))
 
   @doc """
   Calculate the trimmed mean of a list.
@@ -287,7 +296,7 @@ defmodule Statistics do
       iex> Statistics.trimmed_mean([1,2,3], {1,3})
       2.0
       iex> Statistics.trimmed_mean([1,2,3,4,5,5,6,6,7,7,8,8,10,11,12,13,14,15], :iqr)
-      7.3
+      7.300000190734863
 
   """
   @spec trimmed_mean([number], atom | tuple) :: number | nil
@@ -366,7 +375,7 @@ defmodule Statistics do
   ## Examples
 
       iex> Statistics.moment([1,2,3,4,5,6,7,8,9,8,7,6,5,4,3],3)
-      -1.3440000000000025
+      -1.3439967632293701
       iex> Statistics.moment([], 2)
       nil
 
@@ -395,7 +404,7 @@ defmodule Statistics do
       iex> Statistics.skew([])
       nil
       iex> Statistics.skew([1,2,3,2,1])
-      0.3436215967445454
+      0.3436217931063174
 
   """
   @spec skew([number]) :: number | nil
@@ -417,7 +426,7 @@ defmodule Statistics do
       iex> Statistics.kurtosis([])
       nil
       iex> Statistics.kurtosis([1,2,3,2,1])
-      -1.1530612244897964
+      -1.1530611465519447
 
   """
   @spec kurtosis([number]) :: number | nil
@@ -438,9 +447,7 @@ defmodule Statistics do
   ## Examples
 
       iex> Statistics.zscore([3,2,3,4,5,6,5,4,3])
-      [-0.7427813527082074, -1.5784103745049407, -0.7427813527082074,
-      0.09284766908852597, 0.9284766908852594, 1.7641057126819928,
-      0.9284766908852594, 0.09284766908852597, -0.7427813527082074]
+      [-0.7427812933479767, -1.5784102981718204, -0.7427812933479767, 0.09284771147586708, 0.9284767162997108, 1.7641057211235547, 0.9284767162997108, 0.09284771147586708, -0.7427812933479767]
 
   """
   @spec zscore([number]) :: list | nil
@@ -493,7 +500,7 @@ defmodule Statistics do
   ## Examples
 
       iex> Statistics.covariance([1,2,3,2,1], [1,4,5.2,7,99])
-      -17.89
+      -17.89000129699707
 
   """
   @spec covariance([number], [number]) :: number
