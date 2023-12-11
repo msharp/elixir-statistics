@@ -41,12 +41,10 @@ defmodule Statistics.Distributions.Beta do
   """
   @spec pdf_max(number, number) :: number
   def pdf_max(a, b) do
-    rpdf = pdf(a, b)
-
     if a == 1 || b == 1 || (a+b) == 2 do
       1.0
     else
-      rpdf.((a - 1) / (a + b - 2))
+      pdf(a, b).((a - 1) / (a + b - 2))
     end
   end
 
