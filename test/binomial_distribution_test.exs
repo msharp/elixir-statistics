@@ -6,10 +6,13 @@ defmodule BinomialDistributionTest do
   alias Statistics.Math
 
   test "output of the pmf function" do
+    assert Binom.pmf(1, 0.5).(0) == 0.5
+    assert Binom.pmf(1, 0.5).(1) == 0.5
     assert Binom.pmf(4, 0.5).(4) == 0.0625
     assert Binom.pmf(4, 0.5).(2) == 0.375
-    assert Binom.pmf(4, 0.5).(0.9) == 0.0
+    assert Binom.pmf(4, 0.5).(0.9) == nil
     assert Binom.pmf(100, 0.2).(20) == 0.09930021480882524
+    assert Binom.pmf(5000, 0.0001).(1) == 0.30328807662005114
   end
 
   test "return a cdf " do

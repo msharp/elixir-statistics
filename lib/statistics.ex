@@ -141,7 +141,7 @@ defmodule Statistics do
 
   If a non-empty list is provided, it is a call to Enum.max/1
   """
-  @spec max([number]) :: number |nil
+  @spec max([number]) :: number | nil
   def max([]), do: nil
 
   def max(list) do

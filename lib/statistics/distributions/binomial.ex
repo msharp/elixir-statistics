@@ -5,32 +5,39 @@ defmodule Statistics.Distributions.Binomial do
   Binomial distribution.
 
   This models the expected outcome of a number
-  of binary trials, each with known probability, 
+  of binary trials, each with known probability,
   (often called a Bernoulli trial)
   """
 
   @doc """
-  The probability mass function
+  The probability mass function.
+
+  Note that calling the mass function with a `Float` will return `nil` because
+  this is a discrete probability distribution which only includes integer values.
 
   ## Examples
 
       iex> Statistics.Distributions.Binomial.pmf(4, 0.5).(2)
       0.375
+      iex> Statistics.Distributions.Binomial.pmf(4, 0.5).(0.2)
+      nil
 
   """
   @spec pmf(non_neg_integer, number) :: fun
   def pmf(n, p) do
     fn k ->
       cond do
-        k < 1.0 ->
+        k < 0.0 ->
           0.0
 
         n < k ->
           0.0
 
+        k != Math.to_int(k) ->
+          nil
+
         true ->
-          xk = Math.to_int(k)
-          Math.combination(n, xk) * Math.pow(p, xk) * Math.pow(1 - p, n - xk)
+          Math.combination(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k)
       end
     end
   end
@@ -85,9 +92,10 @@ defmodule Statistics.Distributions.Binomial do
   end
 
   @doc """
-  Draw a random number from a t distribution with specified degrees of freedom
+  Draw a random number from a binomial distribution
 
   Uses the [rejection sampling method](https://en.wikipedia.org/wiki/Rejection_sampling)
+  and returns a rounded `Float`.
 
   ## Examples
 
