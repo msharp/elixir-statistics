@@ -34,7 +34,7 @@ defmodule Statistics.Mixfile do
     [
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Max Sharples", "Kash Nouroozi"],
-      licenses: ["Apache 2.0"],
+      licenses: ["Apache-2.0"],
       links: %{"GitHub" => "https://github.com/msharp/elixir-statistics"}
     ]
   end
