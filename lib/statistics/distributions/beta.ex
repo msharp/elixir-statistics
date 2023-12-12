@@ -16,8 +16,8 @@ defmodule Statistics.Distributions.Beta do
 
   """
   @spec pdf(number, number) :: fun
-  def pdf(a, b) do
-    bab = Functions.beta(a, b)
+  def pdf(alpha, beta) do
+    bab = Functions.beta(alpha, beta)
 
     fn x ->
       cond do
@@ -25,7 +25,7 @@ defmodule Statistics.Distributions.Beta do
           0.0
 
         true ->
-          Math.pow(x, a - 1) * Math.pow(1 - x, b - 1) / bab
+          (Math.pow(x, alpha - 1) * Math.pow(1 - x, beta - 1)) / bab
       end
     end
   end
@@ -40,11 +40,11 @@ defmodule Statistics.Distributions.Beta do
 
   """
   @spec pdf_max(number, number) :: number
-  def pdf_max(a, b) do
-    if a == 1 || b == 1 || (a+b) == 2 do
+  def pdf_max(alpha, beta) do
+    if alpha <= 1 || beta <= 1 || (alpha+beta) <= 2 do
       1.0
     else
-      pdf(a, b).((a - 1) / (a + b - 2))
+      pdf(alpha, beta).((alpha - 1) / (alpha + beta - 2))
     end
   end
 
@@ -58,9 +58,9 @@ defmodule Statistics.Distributions.Beta do
 
   """
   @spec cdf(number, number) :: fun
-  def cdf(a, b) do
+  def cdf(alpha, beta) do
     fn x ->
-      Functions.simpson(pdf(a, b), 0, x, 10000)
+      Functions.simpson(pdf(alpha, beta), 0, x, 10000)
     end
   end
 
@@ -74,9 +74,9 @@ defmodule Statistics.Distributions.Beta do
 
   """
   @spec ppf(number, number) :: fun
-  def ppf(a, b) do
+  def ppf(alpha, beta) do
     fn x ->
-      ppf_tande(cdf(a, b), x)
+      ppf_tande(cdf(alpha, beta), x)
     end
   end
 
@@ -111,9 +111,9 @@ defmodule Statistics.Distributions.Beta do
 
   """
   @spec rand(number, number) :: number
-  def rand(a, b) do
-    rpdf = pdf(a, b)
-    rpdf_max = pdf_max(a, b)
+  def rand(alpha, beta) do
+    rpdf = pdf(alpha, beta)
+    rpdf_max = pdf_max(alpha, beta)
     rand_sampling(rpdf, rpdf_max)
   end
 
