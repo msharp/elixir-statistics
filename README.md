@@ -1,6 +1,6 @@
 #  Statistics
 
-[![Build Status](https://travis-ci.org/msharp/elixir-statistics.svg?branch=master)](https://travis-ci.org/msharp/elixir-statistics)
+[![Build Status](https://github.com/msharp/elixir-statistics/actions/workflows/elixir.yml/badge.svg)](https://github.com/msharp/elixir-statistics/actions/workflows/elixir.yml)
 [![hex.pm version](https://img.shields.io/hexpm/v/statistics.svg?style=flat)](https://hex.pm/packages/statistics)
 
 Statistics functions and distributions for [Elixir](https://github.com/elixir-lang/elixir).
@@ -12,7 +12,7 @@ Add Statistics as a dependency in your `mix.exs` file to install from [hex.pm](h
 ```elixir
 def deps do
   [
-    { :statistics, "~> 0.6.2"}
+    { :statistics, "~> 0.6"}
   ]
 end
 ```
