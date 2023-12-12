@@ -1,13 +1,13 @@
 defmodule Statistics.Mixfile do
   use Mix.Project
 
-  @version "0.6.2"
+  @version "0.6.3"
 
   def project do
     [
       app: :statistics,
       version: @version,
-      elixir: ">= 1.5.0",
+      elixir: ">= 1.11.4",
       description: description(),
       package: package(),
       deps: deps()
