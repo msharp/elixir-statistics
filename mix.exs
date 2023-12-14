@@ -1,13 +1,13 @@
 defmodule Statistics.Mixfile do
   use Mix.Project
 
-  @version "0.6.3"
+  @version "0.7.0"
 
   def project do
     [
       app: :statistics,
       version: @version,
-      elixir: ">= 1.11.4",
+      elixir: ">= 1.15.0",
       description: description(),
       package: package(),
       deps: deps()
@@ -26,7 +26,7 @@ defmodule Statistics.Mixfile do
 
   defp description do
     """
-    Functions for descriptive statistics and common distributions
+    Functions for descriptive statistics, common distributions, and tests
     """
   end
 

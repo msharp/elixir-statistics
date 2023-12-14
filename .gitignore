@@ -9,3 +9,5 @@ TODO
 *.txt
 priv/
 .idea/
+.livebooks/
+.tool-versions
