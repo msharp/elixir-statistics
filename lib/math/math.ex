@@ -219,7 +219,7 @@ defmodule Statistics.Math do
   @doc """
   The number of k combinations of n
 
-  Both arguments must be integers
+  Both arguments must be integers greater than zero. `k` may not be larger than `n`.
 
   ## Examples
 
@@ -228,12 +228,18 @@ defmodule Statistics.Math do
 
   """
   @spec combination(non_neg_integer, non_neg_integer) :: non_neg_integer
+  def combination(n, k) when k > n, do: 0
+  def combination(n, _) when n < 0, do: 0
+  def combination(_, k) when k < 0, do: 0
+
   def combination(n, k) do
     :erlang.div(factorial(n), factorial(k) * factorial(n - k))
   end
 
   @doc """
   The number of k permuations of n
+
+  Both arguments must be integers greater than zero. `k` may not be larger than `n`.
 
   ## Examples
 
@@ -242,6 +248,9 @@ defmodule Statistics.Math do
 
   """
   @spec permutation(non_neg_integer, non_neg_integer) :: non_neg_integer
+  def permutation(n, k) when k > n, do: 0
+  def permutation(n, _) when n < 0, do: 0
+  # def permutation(_, k) when k < 0, do: 0
   def permutation(n, k) do
     :erlang.div(factorial(n), factorial(n - k))
   end

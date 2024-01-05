@@ -15,6 +15,7 @@ defmodule HypergeometricDistributionTest do
   test "return a cdf " do
     assert Hyper.cdf(52, 5, 13).(2) == 0.9072328931572629
     assert Hyper.cdf(80, 50, 23).(10) == 0.02480510161897441
+    assert Hyper.cdf(22, 9, 14).(2) == 0.0014916971573318324
   end
 
   test "get the percentile point value" do

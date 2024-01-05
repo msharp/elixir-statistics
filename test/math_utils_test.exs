@@ -69,4 +69,20 @@ defmodule MathTest do
     assert Math.to_int(2.2) == 2
     assert Math.to_int(599.9) == 599
   end
+
+  test "calculate K permutations for n items" do
+    assert Math.permutation(1, 2) == 0
+    assert Math.permutation(1, -1) == 0
+    assert Math.permutation(-1, 1) == 0
+    assert Math.permutation(2, 2) == 2
+    assert Math.permutation(20, 5) == 1_860_480
+  end
+
+  test "calculate K combinations for n items" do
+    assert Math.combination(1, 2) == 0
+    assert Math.combination(1, -1) == 0
+    assert Math.combination(-1, 1) == 0
+    assert Math.combination(2, 2) == 1
+    assert Math.combination(20, 5) == 15504
+  end
 end
