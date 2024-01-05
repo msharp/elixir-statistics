@@ -5,18 +5,27 @@ defmodule TTestTest do
   alias Statistics.Tests.TTest
 
   test "one sample t-test" do
-    assert TTest.one_sample([1, 2, 1, 2, 1, 2], 1.5) == %TTest{p: 1.0, t: 0.0}
+    assert TTest.one_sample([1, 2, 1, 2, 1, 2], 1.5) == %TTest{df: 5, mean: 1.5, p: 1.0, t: 0.0}
 
     assert TTest.one_sample([4, 1, 2, 3, 1, 2, 3, 4], 2) == %TTest{
+             df: 7,
+             mean: 2.5,
              p: 0.23032680249555892,
              t: 1.2649110640673518
            }
   end
 
   test "independent samples t-test" do
-    assert TTest.ind_samples([1, 2, 1, 2, 1, 2], [2, 1, 2, 1, 2, 1]) == %TTest{t: 0.0, p: 1.0}
+    assert TTest.ind_samples([1, 2, 1, 2, 1, 2], [2, 1, 2, 1, 2, 1]) == %TTest{
+             df: 10,
+             mean: {1.5, 1.5},
+             t: 0.0,
+             p: 1.0
+           }
 
     assert TTest.ind_samples([1, 2, 1, 2, 1, 2], [5, 6, 7, 6, 7, 5]) == %TTest{
+             df: 10,
+             mean: {1.5, 6.0},
              p: 4.3244470028110745e-7,
              t: -11.512838683202965
            }

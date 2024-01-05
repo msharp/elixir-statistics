@@ -9,10 +9,10 @@ defmodule Statistics.Tests.TTest do
   Student's _t_ test
   """
 
-  defstruct [
-    p: nil,
-    t: nil
-  ]
+  defstruct p: nil,
+            t: nil,
+            df: nil,
+            mean: nil
 
   @doc """
   A two-sided test for the null hypothesis that the 
@@ -24,14 +24,15 @@ defmodule Statistics.Tests.TTest do
   ## Example
 
       iex> Statistics.Tests.TTest.one_sample([1,2,3,2,1], 3)
-      %Statistics.Tests.TTest{p: 0.023206570788795993, t: -3.585685828003181}
+      %Statistics.Tests.TTest{df: 4, mean: 1.8, p: 0.023206570788795993, t: -3.585685828003181}
 
   """
   def one_sample(list, popmean) do
     df = length(list) - 1
-    t = (mean(list) - popmean) / (stdev(list) / sqrt(length(list)))
+    m = mean(list)
+    t = (m - popmean) / (stdev(list) / sqrt(length(list)))
     p = get_t_prob(t, df)
-    %TTest{t: t, p: p}
+    %TTest{t: t, p: p, df: df, mean: m}
   end
 
   @doc """
@@ -46,10 +47,10 @@ defmodule Statistics.Tests.TTest do
   ## Example
 
       iex> Statistics.Tests.TTest.ind_samples([1,2,3,2,1], [3,2,4,3,5])
-      %Statistics.Tests.TTest{p: 0.022802155958137702, t: -2.82842712474619}
+      %Statistics.Tests.TTest{df: 8, mean: {1.8, 3.4}, p: 0.022802155958137702, t: -2.82842712474619}
 
       iex> Statistics.Tests.TTest.ind_samples([1,2,3,2,1], [3,2,4,3,5,4,5,6])
-      %Statistics.Tests.TTest{p: 0.0044530673387188, t: -3.5858542135407596}
+      %Statistics.Tests.TTest{df: 11, mean: {1.8, 4.0}, p: 0.0044530673387188, t: -3.5858542135407596}
 
   """
   def ind_samples(list1, list2) do
@@ -77,7 +78,7 @@ defmodule Statistics.Tests.TTest do
 
     t = (mu1 - mu2) / (sp * sz)
     p = get_t_prob(t, df)
-    %TTest{t: t, p: p}
+    %TTest{t: t, p: p, df: df, mean: {mu1, mu2}}
   end
 
   defp get_t_prob(t, df) do
